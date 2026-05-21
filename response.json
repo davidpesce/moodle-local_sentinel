@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-05-21T14:51:49+00:00",
+  "generated_at": "2026-05-21T14:55:40+00:00",
   "site": {
     "wwwroot": "http://localhost:8080",
     "siteidentifier": "whGmK2ne5EoLxoksgOZaaTFg2REa8YYylocalhost",
@@ -93,13 +93,13 @@
     },
     "opcache": {
       "enabled": true,
-      "used_memory": 82086680,
-      "free_memory": 50642472,
-      "wasted_memory": 1488576,
+      "used_memory": 82104792,
+      "free_memory": 50191744,
+      "wasted_memory": 1921192,
       "num_cached_scripts": 3864,
-      "hits": 57707,
-      "misses": 4055,
-      "hit_rate": 93.43447427220622
+      "hits": 60345,
+      "misses": 4060,
+      "hit_rate": 93.69614160391274
     },
     "extensions": [
       "apache2handler",
@@ -172,6 +172,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -184,6 +186,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -196,6 +200,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -208,6 +214,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -220,6 +228,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -232,6 +242,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -244,6 +256,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -256,6 +270,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -268,6 +284,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -280,6 +298,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -292,6 +312,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -304,6 +326,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -316,6 +340,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -328,6 +354,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -340,6 +368,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -352,6 +382,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -364,6 +396,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -376,6 +410,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -388,6 +424,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -400,6 +438,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -412,6 +452,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -424,6 +466,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -436,6 +480,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -448,6 +494,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -460,6 +508,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -472,6 +522,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -484,6 +536,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -496,6 +550,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -508,6 +564,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -520,6 +578,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -532,6 +592,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -544,6 +606,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -556,6 +620,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -568,6 +634,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -580,6 +648,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -592,6 +662,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -604,6 +676,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -616,6 +690,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -628,6 +704,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -640,6 +718,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -652,6 +732,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -664,6 +746,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -676,6 +760,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -688,6 +774,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -700,6 +788,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -712,6 +802,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -724,6 +816,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -736,6 +830,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -748,6 +844,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -760,6 +858,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -772,6 +872,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -784,6 +886,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -796,6 +900,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -808,6 +914,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -820,6 +928,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -832,6 +942,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -844,6 +956,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -856,6 +970,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -868,6 +984,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -880,6 +998,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -892,6 +1012,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -904,6 +1026,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -916,6 +1040,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -928,6 +1054,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -940,6 +1068,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -952,6 +1082,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -964,6 +1096,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -976,6 +1110,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -988,6 +1124,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1000,6 +1138,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1012,6 +1152,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1024,6 +1166,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1036,6 +1180,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1048,6 +1194,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1060,6 +1208,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1072,6 +1222,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1084,6 +1236,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1096,6 +1250,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1108,6 +1264,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1120,6 +1278,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1132,6 +1292,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1144,6 +1306,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -1156,6 +1320,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1168,6 +1334,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1180,6 +1348,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1192,6 +1362,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1204,6 +1376,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1216,6 +1390,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1228,6 +1404,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1240,6 +1418,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1252,6 +1432,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1264,6 +1446,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1276,6 +1460,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1288,6 +1474,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1300,6 +1488,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1312,6 +1502,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -1324,6 +1516,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -1336,6 +1530,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1348,6 +1544,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1360,6 +1558,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1372,6 +1572,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1384,6 +1586,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1396,6 +1600,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1408,6 +1614,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1420,6 +1628,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1432,6 +1642,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1444,6 +1656,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1456,6 +1670,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1468,6 +1684,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1480,6 +1698,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1492,6 +1712,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1504,6 +1726,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1516,6 +1740,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1528,6 +1754,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -1540,6 +1768,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1552,6 +1782,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1564,6 +1796,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -1576,6 +1810,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1588,6 +1824,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1600,6 +1838,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1612,6 +1852,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1624,6 +1866,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1636,6 +1880,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -1648,6 +1894,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1660,6 +1908,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1672,6 +1922,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1684,6 +1936,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1696,6 +1950,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1708,6 +1964,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1720,6 +1978,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1732,6 +1992,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1744,6 +2006,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1756,6 +2020,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1768,6 +2034,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1780,6 +2048,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1792,6 +2062,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1804,6 +2076,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1816,6 +2090,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1828,6 +2104,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1840,6 +2118,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1852,6 +2132,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1864,6 +2146,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1876,6 +2160,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1888,6 +2174,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1900,6 +2188,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1912,6 +2202,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1924,6 +2216,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1936,6 +2230,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1948,6 +2244,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1960,6 +2258,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1972,6 +2272,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1984,6 +2286,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -1996,6 +2300,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2008,6 +2314,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2020,6 +2328,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2032,6 +2342,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2044,6 +2356,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2056,6 +2370,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2068,6 +2384,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2080,6 +2398,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2092,6 +2412,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2104,6 +2426,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2116,6 +2440,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2128,6 +2454,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2140,6 +2468,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2152,6 +2482,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2164,6 +2496,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2176,6 +2510,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2188,6 +2524,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2200,6 +2538,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2212,6 +2552,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2224,6 +2566,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2236,6 +2580,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -2248,6 +2594,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2260,6 +2608,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2272,6 +2622,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2284,6 +2636,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2296,6 +2650,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2308,6 +2664,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2320,6 +2678,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2332,6 +2692,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2344,6 +2706,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2356,6 +2720,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -2368,6 +2734,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -2380,6 +2748,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -2392,6 +2762,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2404,6 +2776,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -2416,6 +2790,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2428,6 +2804,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -2440,6 +2818,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2452,6 +2832,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2464,6 +2846,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -2476,6 +2860,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -2488,6 +2874,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2500,6 +2888,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2512,6 +2902,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2524,6 +2916,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2536,6 +2930,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2548,6 +2944,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2560,6 +2958,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2572,6 +2972,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2584,6 +2986,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2596,6 +3000,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2608,6 +3014,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2620,6 +3028,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2632,6 +3042,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2644,6 +3056,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2656,6 +3070,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2668,6 +3084,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2680,6 +3098,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2692,6 +3112,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2704,6 +3126,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2716,6 +3140,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2728,6 +3154,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2740,6 +3168,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2752,6 +3182,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2764,6 +3196,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2776,6 +3210,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2788,6 +3224,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2800,6 +3238,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2812,6 +3252,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2824,6 +3266,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2836,6 +3280,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2848,6 +3294,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2860,6 +3308,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2872,6 +3322,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2884,6 +3336,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2896,6 +3350,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2908,6 +3364,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -2920,6 +3378,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2932,6 +3392,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2944,6 +3406,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2956,6 +3420,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2968,6 +3434,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2980,6 +3448,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -2992,6 +3462,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3004,6 +3476,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3016,6 +3490,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3028,6 +3504,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3040,6 +3518,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3052,6 +3532,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3064,6 +3546,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3076,6 +3560,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3088,6 +3574,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3100,6 +3588,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3112,6 +3602,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3124,6 +3616,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3136,6 +3630,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3148,6 +3644,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3160,6 +3658,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3172,6 +3672,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3184,6 +3686,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3196,6 +3700,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3208,6 +3714,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3220,6 +3728,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3232,6 +3742,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3244,6 +3756,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3256,6 +3770,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3268,6 +3784,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3280,6 +3798,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3292,6 +3812,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3304,6 +3826,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3316,6 +3840,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3328,6 +3854,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3340,6 +3868,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3352,6 +3882,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3364,6 +3896,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3376,6 +3910,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3388,6 +3924,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3400,6 +3938,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3412,6 +3952,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3424,6 +3966,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3436,6 +3980,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3448,6 +3994,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3460,6 +4008,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3472,6 +4022,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3484,6 +4036,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3496,6 +4050,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3508,6 +4064,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3520,6 +4078,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3532,6 +4092,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3544,6 +4106,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3556,6 +4120,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3568,6 +4134,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3580,6 +4148,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3592,6 +4162,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3604,6 +4176,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3616,6 +4190,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3628,6 +4204,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3640,6 +4218,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3652,6 +4232,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3664,6 +4246,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3676,6 +4260,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3688,6 +4274,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3700,6 +4288,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3712,6 +4302,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3724,6 +4316,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3736,6 +4330,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3748,6 +4344,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3760,6 +4358,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3772,6 +4372,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3784,6 +4386,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3796,6 +4400,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3808,6 +4414,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3820,6 +4428,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3832,6 +4442,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3844,6 +4456,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3856,6 +4470,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3868,6 +4484,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -3880,6 +4498,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3892,6 +4512,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3904,6 +4526,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3916,6 +4540,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3928,6 +4554,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3940,6 +4568,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3952,6 +4582,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3964,6 +4596,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3976,6 +4610,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -3988,6 +4624,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -4000,6 +4638,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -4012,6 +4652,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -4024,6 +4666,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -4036,6 +4680,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -4048,6 +4694,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -4060,6 +4708,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -4072,6 +4722,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -4084,6 +4736,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -4096,6 +4750,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4108,6 +4764,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4120,6 +4778,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4132,6 +4792,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4144,6 +4806,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4156,6 +4820,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4168,6 +4834,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4180,6 +4848,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4192,6 +4862,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4204,6 +4876,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4216,6 +4890,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4228,6 +4904,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4240,6 +4918,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4252,6 +4932,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4264,6 +4946,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4276,6 +4960,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4288,6 +4974,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4300,6 +4988,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4312,6 +5002,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -4324,6 +5016,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -4336,6 +5030,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4348,6 +5044,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -4360,6 +5058,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4372,6 +5072,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4384,6 +5086,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4396,6 +5100,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4408,6 +5114,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4420,6 +5128,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4432,6 +5142,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4444,6 +5156,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4456,6 +5170,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4468,6 +5184,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4480,6 +5198,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -4492,6 +5212,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4504,6 +5226,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4516,6 +5240,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4528,6 +5254,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4540,6 +5268,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4552,6 +5282,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4564,6 +5296,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4576,6 +5310,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4588,6 +5324,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4600,6 +5338,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4612,6 +5352,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4624,6 +5366,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4636,6 +5380,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4648,6 +5394,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4660,6 +5408,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4672,6 +5422,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4684,6 +5436,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4696,6 +5450,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4708,6 +5464,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4720,6 +5478,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4732,6 +5492,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4744,6 +5506,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4756,6 +5520,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4768,6 +5534,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4780,6 +5548,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4792,6 +5562,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4804,6 +5576,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4816,6 +5590,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4828,6 +5604,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4840,6 +5618,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4852,6 +5632,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4864,6 +5646,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4876,6 +5660,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4888,6 +5674,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4900,6 +5688,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4912,6 +5702,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4924,6 +5716,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4936,6 +5730,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4948,6 +5744,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4960,6 +5758,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4972,6 +5772,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4984,6 +5786,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -4996,6 +5800,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5008,6 +5814,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5020,6 +5828,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5032,6 +5842,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5044,6 +5856,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5056,6 +5870,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5068,6 +5884,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5080,6 +5898,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5092,6 +5912,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5104,6 +5926,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5116,6 +5940,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5128,6 +5954,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5140,6 +5968,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5152,6 +5982,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5164,6 +5996,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5176,6 +6010,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5188,6 +6024,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5200,6 +6038,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5212,6 +6052,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5224,6 +6066,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5236,6 +6080,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5248,6 +6094,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5260,6 +6108,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5272,6 +6122,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5284,6 +6136,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5296,6 +6150,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5308,6 +6164,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5320,6 +6178,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5332,6 +6192,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5344,6 +6206,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5356,6 +6220,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5368,6 +6234,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5380,6 +6248,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5392,6 +6262,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5404,6 +6276,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5416,6 +6290,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5428,6 +6304,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5440,6 +6318,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5452,6 +6332,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5464,6 +6346,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5476,6 +6360,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5488,6 +6374,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5500,6 +6388,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5512,6 +6402,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5524,6 +6416,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5536,6 +6430,8 @@
         "source": "std",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       }
     ],
@@ -5550,6 +6446,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5562,6 +6460,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5574,6 +6474,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": true
       },
       {
@@ -5586,6 +6488,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5598,6 +6502,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": true,
+        "version_latest": 2026031300,
         "enabled": true
       },
       {
@@ -5610,6 +6516,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5622,6 +6530,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5634,6 +6544,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5646,6 +6558,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5658,6 +6572,8 @@
         "source": "ext",
         "status": "missing",
         "missing_from_disk": true,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5670,6 +6586,8 @@
         "source": "ext",
         "status": "missing",
         "missing_from_disk": true,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5682,6 +6600,8 @@
         "source": "ext",
         "status": "missing",
         "missing_from_disk": true,
+        "update_available": false,
+        "version_latest": null,
         "enabled": false
       },
       {
@@ -5694,6 +6614,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5706,18 +6628,22 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
         "type": "local",
         "component": "local_fleetmonitor",
         "name": "Fleet Monitor",
-        "version_disk": 2026052106,
-        "version_db": 2026052106,
-        "release": "0.7.0",
+        "version_disk": 2026052107,
+        "version_db": 2026052107,
+        "release": "0.7.1",
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5730,6 +6656,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5742,6 +6670,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       },
       {
@@ -5754,6 +6684,8 @@
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
+        "update_available": false,
+        "version_latest": null,
         "enabled": null
       }
     ],
@@ -5770,7 +6702,7 @@
     "update_check": {
       "enabled": true,
       "last_fetched": 1779372279,
-      "age_seconds": 2830
+      "age_seconds": 3061
     },
     "theme": {
       "name": "boost",
@@ -5783,7 +6715,7 @@
     "cron": {
       "last_run": 0,
       "seconds_since_last_run": null,
-      "now": 1779375109
+      "now": 1779375340
     },
     "tasks": {
       "scheduled_failed_count": 0,
@@ -5799,12 +6731,12 @@
     "disk": {
       "dataroot": {
         "path": "/var/www/moodledata",
-        "free_bytes": 54888390656,
+        "free_bytes": 54888361984,
         "total_bytes": 62671097856
       },
       "dirroot": {
         "path": "/var/www/html",
-        "free_bytes": 387400691712,
+        "free_bytes": 387392106496,
         "total_bytes": 994662584320
       }
     },

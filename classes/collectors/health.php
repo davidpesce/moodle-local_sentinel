@@ -42,7 +42,58 @@ class health {
             'mail' => self::collect_mail(),
             'admins' => self::collect_admins(),
             'backup' => self::collect_backup(),
+            'upgrade_log' => self::collect_upgrade_log(),
             'flags' => self::collect_footgun_flags(),
+        ];
+    }
+
+    /**
+     * Tail of mdl_upgrade_log: recent install/upgrade activity with type-named severity.
+     *
+     * @return array
+     */
+    protected static function collect_upgrade_log(): array {
+        global $CFG, $DB;
+
+        // Constants live in upgradelib.php which is not autoloaded in every context.
+        require_once($CFG->libdir . '/upgradelib.php');
+
+        $typelabels = [
+            UPGRADE_LOG_NORMAL => 'normal',
+            UPGRADE_LOG_NOTICE => 'notice',
+            UPGRADE_LOG_ERROR => 'error',
+        ];
+
+        $rows = $DB->get_records_sql(
+            'SELECT id, type, plugin, version, targetversion, info, timemodified, userid
+               FROM {upgrade_log}
+              ORDER BY timemodified DESC, id DESC',
+            null,
+            0,
+            25
+        );
+
+        $entries = [];
+        foreach ($rows as $row) {
+            $type = (int) $row->type;
+            $entries[] = [
+                'id' => (int) $row->id,
+                'time' => (int) $row->timemodified,
+                'type' => $type,
+                'type_label' => $typelabels[$type] ?? 'unknown',
+                'plugin' => $row->plugin,
+                'version' => $row->version,
+                'targetversion' => $row->targetversion,
+                'info' => $row->info,
+                'userid' => (int) $row->userid,
+            ];
+        }
+
+        $errorcount = (int) $DB->count_records('upgrade_log', ['type' => UPGRADE_LOG_ERROR]);
+
+        return [
+            'recent' => $entries,
+            'total_errors' => $errorcount,
         ];
     }
 
@@ -264,7 +315,46 @@ class health {
                 'suspended' => (bool) $row->suspended,
             ];
         }
-        return ['count' => count($admins), 'admins' => $admins];
+        return [
+            'count' => count($admins),
+            'admins' => $admins,
+            'last_changed' => self::collect_admins_last_changed(),
+        ];
+    }
+
+    /**
+     * When did the siteadmins configuration value last change?
+     *
+     * Reads from mdl_config_log; the row records both the previous and new
+     * comma-separated user-ID lists, so a dashboard can compute the diff.
+     *
+     * @return array
+     */
+    protected static function collect_admins_last_changed(): array {
+        global $DB;
+
+        $row = $DB->get_record_sql(
+            "SELECT timemodified, userid, oldvalue, value
+               FROM {config_log}
+              WHERE name = 'siteadmins' AND plugin IS NULL
+              ORDER BY timemodified DESC, id DESC",
+            null,
+            IGNORE_MULTIPLE
+        );
+        if (!$row) {
+            return [
+                'time' => null,
+                'userid' => null,
+                'oldvalue' => null,
+                'newvalue' => null,
+            ];
+        }
+        return [
+            'time' => (int) $row->timemodified,
+            'userid' => (int) $row->userid,
+            'oldvalue' => $row->oldvalue,
+            'newvalue' => $row->value,
+        ];
     }
 
     /**

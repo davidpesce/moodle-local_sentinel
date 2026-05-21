@@ -115,10 +115,8 @@ abstract class base extends external_api {
         return new external_value(PARAM_INT, $desc, VALUE_OPTIONAL, null, NULL_ALLOWED);
     }
 
-    // ----------------------------------------------------------------------
-    // Slice structure builders. Keep these aligned with the matching
-    // collector class outputs in \local_fleetmonitor\collectors\*.
-    // ----------------------------------------------------------------------
+    // Slice structure builders below. Each must stay aligned with the
+    // matching collector class output in \local_fleetmonitor\collectors\.
 
     /**
      * Stable site identifiers.
@@ -336,6 +334,12 @@ abstract class base extends external_api {
                         'suspended' => new external_value(PARAM_BOOL, 'Suspended flag.'),
                     ])
                 ),
+                'last_changed' => new external_single_structure([
+                    'time' => self::nullable_int('When the siteadmins list last changed.'),
+                    'userid' => self::nullable_int('Who made the change.'),
+                    'oldvalue' => self::nullable_text('Previous siteadmins value (comma-separated user IDs).'),
+                    'newvalue' => self::nullable_text('Current siteadmins value (comma-separated user IDs).'),
+                ]),
             ]),
             'backup' => new external_single_structure([
                 'automated_state' => new external_value(PARAM_INT, 'backup_auto_active setting.'),
@@ -350,6 +354,22 @@ abstract class base extends external_api {
                 ]),
                 'last_success' => self::nullable_int('Last successful automated backup timestamp.'),
                 'total_courses_tracked' => new external_value(PARAM_INT, 'Total rows in mdl_backup_courses.'),
+            ]),
+            'upgrade_log' => new external_single_structure([
+                'total_errors' => new external_value(PARAM_INT, 'Lifetime count of upgrade_log rows with type=error.'),
+                'recent' => new external_multiple_structure(
+                    new external_single_structure([
+                        'id' => new external_value(PARAM_INT, 'upgrade_log row id.'),
+                        'time' => new external_value(PARAM_INT, 'Modification timestamp.'),
+                        'type' => new external_value(PARAM_INT, 'Severity: 0=normal, 1=notice, 2=error.'),
+                        'type_label' => new external_value(PARAM_RAW, 'Severity label.'),
+                        'plugin' => self::nullable_text('Plugin component.'),
+                        'version' => self::nullable_text('Recorded version.'),
+                        'targetversion' => self::nullable_text('Target version.'),
+                        'info' => new external_value(PARAM_RAW, 'Log message.'),
+                        'userid' => new external_value(PARAM_INT, 'User who triggered the upgrade step.'),
+                    ])
+                ),
             ]),
             'flags' => new external_single_structure([
                 'debug' => self::nullable_int('$CFG->debug level.'),
@@ -379,6 +399,25 @@ abstract class base extends external_api {
                 ])
             ),
             'distinct_methods_in_use' => new external_value(PARAM_INT, 'Distinct auth values across all users.'),
+            'failed_logins' => new external_single_structure([
+                'total_failed_count' => new external_value(
+                    PARAM_INT,
+                    'Sum of login_failed_count_since_success across all users.'
+                ),
+                'accounts_with_failures' => new external_value(PARAM_INT, 'Distinct accounts with failures since last success.'),
+                'locked_accounts' => new external_value(PARAM_INT, 'Accounts currently locked (login_lockout set).'),
+                'top_accounts' => new external_multiple_structure(
+                    new external_single_structure([
+                        'id' => new external_value(PARAM_INT, 'User ID.'),
+                        'username' => new external_value(PARAM_RAW, 'Username.'),
+                        'failed_count' => new external_value(PARAM_INT, 'Failures since last successful login.'),
+                        'last_failure' => self::nullable_int('Most recent failure timestamp.'),
+                        'last_login' => new external_value(PARAM_INT, 'Last successful login timestamp.'),
+                        'locked' => new external_value(PARAM_BOOL, 'True if the account is currently locked.'),
+                        'suspended' => new external_value(PARAM_BOOL, 'Suspended flag.'),
+                    ])
+                ),
+            ]),
         ]);
     }
 
