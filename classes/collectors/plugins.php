@@ -1,0 +1,113 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Plugin inventory collector.
+ *
+ * @package    local_fleetmonitor
+ * @copyright  2026 David Pesce - Exputo Inc.
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+namespace local_fleetmonitor\collectors;
+
+use core_plugin_manager;
+
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Inventories installed plugins, separating standard core plugins from extensions.
+ */
+class plugins {
+
+    /**
+     * @return array
+     */
+    public static function collect(): array {
+        $pluginman = core_plugin_manager::instance();
+        $standard = [];
+        $thirdparty = [];
+
+        foreach ($pluginman->get_plugins() as $type => $plugintypes) {
+            foreach ($plugintypes as $plugin) {
+                $entry = [
+                    'type' => $type,
+                    'component' => $plugin->component,
+                    'name' => $plugin->displayname,
+                    'version' => isset($plugin->versiondisk) ? (int) $plugin->versiondisk : null,
+                    'release' => $plugin->release ?? null,
+                    'source' => $plugin->source ?? null,
+                    'enabled' => $pluginman->get_plugin_info($plugin->component)->is_enabled(),
+                ];
+                if (($plugin->source ?? '') === core_plugin_manager::PLUGIN_SOURCE_STANDARD) {
+                    $standard[] = $entry;
+                } else {
+                    $thirdparty[] = $entry;
+                }
+            }
+        }
+
+        return [
+            'standard' => $standard,
+            'third_party' => $thirdparty,
+            'updates_available' => self::collect_updates($pluginman),
+            'theme' => self::collect_theme(),
+        ];
+    }
+
+    /**
+     * Available updates known to core_plugin_manager (driven by Moodle's plugin update check).
+     *
+     * @param core_plugin_manager $pluginman
+     * @return array
+     */
+    protected static function collect_updates(core_plugin_manager $pluginman): array {
+        $updates = $pluginman->available_updates();
+        if (empty($updates)) {
+            return [];
+        }
+        $out = [];
+        foreach ($updates as $component => $componentupdates) {
+            foreach ($componentupdates as $update) {
+                $out[] = [
+                    'component' => $component,
+                    'version' => $update->version ?? null,
+                    'release' => $update->release ?? null,
+                    'maturity' => $update->maturity ?? null,
+                    'download' => $update->download ?? null,
+                ];
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * @return array
+     */
+    protected static function collect_theme(): array {
+        global $CFG;
+
+        $name = $CFG->theme;
+        $pluginman = core_plugin_manager::instance();
+        $info = $pluginman->get_plugin_info('theme_' . $name);
+        return [
+            'name' => $name,
+            'version' => $info ? (int) $info->versiondisk : null,
+            'release' => $info->release ?? null,
+            'source' => $info->source ?? null,
+        ];
+    }
+}
