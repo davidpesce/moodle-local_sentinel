@@ -121,6 +121,13 @@ final class collector_test extends \advanced_testcase {
         $this->assertArrayHasKey('updates_available', $plugins);
         $this->assertArrayHasKey('theme', $plugins);
         $this->assertNotEmpty($plugins['standard']);
+
+        $first = $plugins['standard'][0];
+        $this->assertArrayHasKey('status', $first);
+        $this->assertArrayHasKey('missing_from_disk', $first);
+        $this->assertArrayHasKey('version_disk', $first);
+        $this->assertArrayHasKey('version_db', $first);
+        $this->assertIsBool($first['missing_from_disk']);
     }
 
     public function test_health_keys(): void {

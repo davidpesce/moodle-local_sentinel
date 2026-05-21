@@ -42,13 +42,17 @@ class plugins {
 
         foreach ($pluginman->get_plugins() as $type => $plugintypes) {
             foreach ($plugintypes as $plugin) {
+                $status = $plugin->get_status();
                 $entry = [
                     'type' => $type,
                     'component' => $plugin->component,
                     'name' => $plugin->displayname,
-                    'version' => isset($plugin->versiondisk) ? (int) $plugin->versiondisk : null,
+                    'version_disk' => isset($plugin->versiondisk) ? (int) $plugin->versiondisk : null,
+                    'version_db' => isset($plugin->versiondb) ? (int) $plugin->versiondb : null,
                     'release' => $plugin->release ?? null,
                     'source' => $plugin->source ?? null,
+                    'status' => $status,
+                    'missing_from_disk' => $status === core_plugin_manager::PLUGIN_STATUS_MISSING,
                     'enabled' => $pluginman->get_plugin_info($plugin->component)->is_enabled(),
                 ];
                 if (($plugin->source ?? '') === core_plugin_manager::PLUGIN_SOURCE_STANDARD) {

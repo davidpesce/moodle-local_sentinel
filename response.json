@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-05-21T13:33:30+00:00",
+  "generated_at": "2026-05-21T14:27:13+00:00",
   "payload": {
     "schema_version": 1,
-    "generated_at": "2026-05-21T13:33:30+00:00",
+    "generated_at": "2026-05-21T14:27:13+00:00",
     "site": {
       "wwwroot": "http://localhost:8080",
       "siteidentifier": "whGmK2ne5EoLxoksgOZaaTFg2REa8YYylocalhost",
@@ -15,7 +15,10 @@
       "branch": 405,
       "release": "4.5.10+ (Build: 20260306)",
       "maintenance_enabled": false,
-      "maintenance_message": ""
+      "maintenance_message": "",
+      "branch_eol_date": "2027-12-13",
+      "branch_eol_days_remaining": 571,
+      "build_age_days": 591
     },
     "environment": {
       "php": {
@@ -46,17 +49,60 @@
         "description": "15.17",
         "host": "db",
         "name": "moodle",
-        "prefix": "mdl_"
+        "prefix": "mdl_",
+        "size_bytes": 84827495,
+        "largest_tables": [
+          {
+            "name": "mdl_role_capabilities",
+            "size_bytes": 622592
+          },
+          {
+            "name": "mdl_config_plugins",
+            "size_bytes": 516096
+          },
+          {
+            "name": "mdl_config_log",
+            "size_bytes": 401408
+          },
+          {
+            "name": "mdl_profilefield_iproccn",
+            "size_bytes": 385024
+          },
+          {
+            "name": "mdl_upgrade_log",
+            "size_bytes": 385024
+          },
+          {
+            "name": "mdl_external_functions",
+            "size_bytes": 278528
+          },
+          {
+            "name": "mdl_user",
+            "size_bytes": 278528
+          },
+          {
+            "name": "mdl_logstore_standard_log",
+            "size_bytes": 245760
+          },
+          {
+            "name": "mdl_capabilities",
+            "size_bytes": 204800
+          },
+          {
+            "name": "mdl_files",
+            "size_bytes": 163840
+          }
+        ]
       },
       "opcache": {
         "enabled": true,
-        "used_memory": 78281712,
-        "free_memory": 55936016,
-        "wasted_memory": 0,
-        "num_cached_scripts": 3167,
-        "hits": 16537,
-        "misses": 3276,
-        "hit_rate": 83.46540150406298
+        "used_memory": 76335536,
+        "free_memory": 56813448,
+        "wasted_memory": 1068744,
+        "num_cached_scripts": 2833,
+        "hits": 25128,
+        "misses": 2999,
+        "hit_rate": 89.33764710065061
       },
       "extensions": [
         "apache2handler",
@@ -3771,7 +3817,7 @@
           "version": 2024100700,
           "release": null,
           "source": "std",
-          "enabled": false
+          "enabled": true
         },
         {
           "type": "webservice",
@@ -4283,8 +4329,8 @@
           "type": "local",
           "component": "local_fleetmonitor",
           "name": "Fleet Monitor",
-          "version": 2026052100,
-          "release": "0.1.0",
+          "version": 2026052104,
+          "release": "0.5.0",
           "source": "ext",
           "enabled": null
         },
@@ -4316,7 +4362,21 @@
           "enabled": null
         }
       ],
-      "updates_available": [],
+      "updates_available": [
+        {
+          "component": "tool_dynamic_cohorts",
+          "version": "2026031300",
+          "release": "2026031300",
+          "maturity": 200,
+          "download": "https://moodle.org/plugins/download.php/40916/tool_dynamic_cohorts_moodle51_2026031300.zip",
+          "source_url": "https://github.com/catalyst/moodle-tool_dynamic_cohorts"
+        }
+      ],
+      "update_check": {
+        "enabled": true,
+        "last_fetched": 1779372279,
+        "age_seconds": 1354
+      },
       "theme": {
         "name": "boost",
         "version": 2024100700,
@@ -4328,7 +4388,7 @@
       "cron": {
         "last_run": 0,
         "seconds_since_last_run": null,
-        "now": 1779370410
+        "now": 1779373633
       },
       "tasks": {
         "scheduled_failed_count": 0,
@@ -4337,19 +4397,19 @@
         "adhoc_oldest_nextruntime": 1772131374
       },
       "sessions": {
-        "active_last_5_min": 4,
+        "active_last_5_min": 1,
         "active_last_hour": 4,
         "total_rows": 7
       },
       "disk": {
         "dataroot": {
           "path": "/var/www/moodledata",
-          "free_bytes": 54882541568,
+          "free_bytes": 54885707776,
           "total_bytes": 62671097856
         },
         "dirroot": {
           "path": "/var/www/html",
-          "free_bytes": 387481108480,
+          "free_bytes": 387406770176,
           "total_bytes": 994662584320
         }
       },
@@ -4365,11 +4425,25 @@
           {
             "id": 2,
             "username": "admin",
-            "last_access": 1779370350,
+            "last_access": 1779373588,
             "last_login": 1775587436,
             "suspended": false
           }
         ]
+      },
+      "backup": {
+        "automated_state": 0,
+        "status_counts": {
+          "error": 0,
+          "ok": 0,
+          "unfinished": 0,
+          "skipped": 0,
+          "warning": 0,
+          "notyetrun": 0,
+          "queued": 0
+        },
+        "last_success": null,
+        "total_courses_tracked": 0
       },
       "flags": {
         "debug": 0,
@@ -4379,10 +4453,34 @@
         "perfdebug": 7
       }
     },
+    "auth": {
+      "enabled": [
+        "email"
+      ],
+      "methods": [
+        {
+          "plugin": "email",
+          "total_users": 0,
+          "active_users": 0
+        }
+      ],
+      "distinct_methods_in_use": 2
+    },
     "config_changes": {
       "limit": 50,
       "count": 50,
       "entries": [
+        {
+          "id": 2126,
+          "time": 1779371313,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_ldap",
+          "name": "fleetmonitorcontext",
+          "oldvalue": null,
+          "newvalue": ""
+        },
         {
           "id": 2125,
           "time": 1779369443,
@@ -4921,17 +5019,321 @@
           "name": "field_map_profile_field_sn712",
           "oldvalue": null,
           "newvalue": ""
+        }
+      ]
+    },
+    "config_drift": {
+      "count": 34,
+      "skipped": {
+        "sensitive": 55,
+        "no_default": 5
+      },
+      "entries": [
+        {
+          "plugin": "aiprovider_azureai",
+          "name": "savebutton",
+          "fullname": "aiprovider_azureai/savebutton",
+          "visible_name": "",
+          "class": "admin_setting_savebutton",
+          "current": "1",
+          "default": ""
         },
         {
-          "id": 2076,
-          "time": 1772198124,
-          "userid": 2,
-          "username": "admin",
-          "fullname": "Admin User",
+          "plugin": "aiprovider_openai",
+          "name": "savebutton",
+          "fullname": "aiprovider_openai/savebutton",
+          "visible_name": "",
+          "class": "admin_setting_savebutton",
+          "current": "1",
+          "default": ""
+        },
+        {
+          "plugin": "analytics",
+          "name": "percentonline",
+          "fullname": "analytics/percentonline",
+          "visible_name": "Percent online",
+          "class": "admin_setting_configtext_with_maxlength",
+          "current": "0",
+          "default": ""
+        },
+        {
+          "plugin": "antivirus",
+          "name": "checkantivirus",
+          "fullname": "antivirus/checkantivirus",
+          "visible_name": "Antivirus",
+          "class": "admin_setting_check",
+          "current": "1",
+          "default": ""
+        },
+        {
           "plugin": "auth_cas",
-          "name": "field_lock_profile_field_sn16",
-          "oldvalue": null,
-          "newvalue": "unlocked"
+          "name": "port",
+          "fullname": "auth_cas/port",
+          "visible_name": "Port",
+          "class": "admin_setting_configtext",
+          "current": "0",
+          "default": ""
+        },
+        {
+          "plugin": "",
+          "name": "badges_defaultissuercontact",
+          "fullname": "badges_defaultissuercontact",
+          "visible_name": "Badge issuer email address",
+          "class": "admin_setting_configtext",
+          "current": "",
+          "default": "admin@example.com"
+        },
+        {
+          "plugin": "",
+          "name": "badges_defaultissuername",
+          "fullname": "badges_defaultissuername",
+          "visible_name": "Badge issuer name",
+          "class": "admin_setting_configtext",
+          "current": "",
+          "default": "Dev Site"
+        },
+        {
+          "plugin": "",
+          "name": "bigbluebuttonbn_disablecam_default",
+          "fullname": "bigbluebuttonbn_disablecam_default",
+          "visible_name": "Disable webcam enabled by default",
+          "class": "admin_setting_configcheckbox",
+          "current": "0",
+          "default": ""
+        },
+        {
+          "plugin": "",
+          "name": "bigbluebuttonbn_disablemic_default",
+          "fullname": "bigbluebuttonbn_disablemic_default",
+          "visible_name": "Disable mic enabled by default",
+          "class": "admin_setting_configcheckbox",
+          "current": "0",
+          "default": ""
+        },
+        {
+          "plugin": "",
+          "name": "bigbluebuttonbn_disablenote_default",
+          "fullname": "bigbluebuttonbn_disablenote_default",
+          "visible_name": "Disable shared notes enabled by default",
+          "class": "admin_setting_configcheckbox",
+          "current": "0",
+          "default": ""
+        },
+        {
+          "plugin": "",
+          "name": "bigbluebuttonbn_disableprivatechat_default",
+          "fullname": "bigbluebuttonbn_disableprivatechat_default",
+          "visible_name": "Disable private chat enabled by default",
+          "class": "admin_setting_configcheckbox",
+          "current": "0",
+          "default": ""
+        },
+        {
+          "plugin": "",
+          "name": "bigbluebuttonbn_disablepublicchat_default",
+          "fullname": "bigbluebuttonbn_disablepublicchat_default",
+          "visible_name": "Disable public chat enabled by default",
+          "class": "admin_setting_configcheckbox",
+          "current": "0",
+          "default": ""
+        },
+        {
+          "plugin": "",
+          "name": "bigbluebuttonbn_hideuserlist_default",
+          "fullname": "bigbluebuttonbn_hideuserlist_default",
+          "visible_name": "Hide user list enabled by default",
+          "class": "admin_setting_configcheckbox",
+          "current": "0",
+          "default": ""
+        },
+        {
+          "plugin": "block_myoverview",
+          "name": "layouts",
+          "fullname": "block_myoverview/layouts",
+          "visible_name": "Available layouts",
+          "class": "admin_setting_configmulticheckbox",
+          "current": "[card=1,list=1,summary=1]",
+          "default": "[card=Card,list=List,summary=Summary]"
+        },
+        {
+          "plugin": "",
+          "name": "enablewebservices",
+          "fullname": "enablewebservices",
+          "visible_name": "Enable web services",
+          "class": "admin_setting_configcheckbox",
+          "current": "1",
+          "default": "0"
+        },
+        {
+          "plugin": "enrol_flatfile",
+          "name": "map_9",
+          "fullname": "enrol_flatfile/map_9",
+          "visible_name": "Fleet Monitor",
+          "class": "enrol_flatfile_role_setting",
+          "current": "",
+          "default": "fleetmonitor"
+        },
+        {
+          "plugin": "enrol_ldap",
+          "name": "objectclass",
+          "fullname": "enrol_ldap/objectclass",
+          "visible_name": "Object class",
+          "class": "admin_setting_configtext_trim_lower",
+          "current": "(objectClass=*)",
+          "default": ""
+        },
+        {
+          "plugin": "enrol_ldap",
+          "name": "role_mapping",
+          "fullname": "enrol_ldap/role_mapping",
+          "visible_name": "Map roles from LDAP ",
+          "class": "admin_setting_ldap_rolemapping",
+          "current": "[[contexts=,id=1,memberattribute=,name=Manager],[contexts=,id=2,memberattribute=,name=Course creator],[contexts=,id=3,memberattribute=,name=Teacher],[contexts=,id=4,memberattribute=,name=Non-editing teacher],[contexts=,id=5,memberattribute=,name=Student],[contexts=,id=6,memberattribute=,name=Guest],[contexts=,id=7,memberattribute=,name=Authenticated user],[contexts=,id=8,memberattribute=,name=Authenticated user on site home],[contexts=,id=9,memberattribute=,name=Fleet Monitor]]",
+          "default": ""
+        },
+        {
+          "plugin": "folder",
+          "name": "maxsizetodownload",
+          "fullname": "folder/maxsizetodownload",
+          "visible_name": "Maximum folder download size (MB)",
+          "class": "admin_setting_configtext",
+          "current": "0",
+          "default": ""
+        },
+        {
+          "plugin": "local_certreminder",
+          "name": "emailbody",
+          "fullname": "local_certreminder/emailbody",
+          "visible_name": "Email body",
+          "class": "admin_setting_configtextarea",
+          "current": "Dear {fullname},\r\n\r\nYour certification for the course \"{coursename}\" will expire on {expirydate} ({daysuntilexpiry} days from now).\r\n\r\nPlease renew your certification by visiting: {renewalurl}\r\n\r\nThank you.",
+          "default": "Dear {fullname},\n\nYour certificate for the course \"{coursename}\" will expire on {expirydate} ({daysuntilexpiry} days from now).\n\nRenewing is easy — the course is a 2-hour online training you can complete on any device within 30 days of purchase.\n\nPlease renew your certification by visiting: {renewalurl}\n\nThank you."
+        },
+        {
+          "plugin": "local_certreminder",
+          "name": "emailsubject",
+          "fullname": "local_certreminder/emailsubject",
+          "visible_name": "Email subject",
+          "class": "admin_setting_configtext",
+          "current": "Your certification is expiring in {daysuntilexpiry} days",
+          "default": "Your Crowd Manager certification expires in {daysuntilexpiry} days"
+        },
+        {
+          "plugin": "logstore_database",
+          "name": "includeactions",
+          "fullname": "logstore_database/includeactions",
+          "visible_name": "Include actions of these types",
+          "class": "admin_setting_configmulticheckbox",
+          "current": "[c=1,d=1,r=1,u=1]",
+          "default": "[c=Create,d=Delete,r=Read,u=Update]"
+        },
+        {
+          "plugin": "logstore_database",
+          "name": "includelevels",
+          "fullname": "logstore_database/includelevels",
+          "visible_name": "Include actions with these educational levels",
+          "class": "admin_setting_configmulticheckbox",
+          "current": "[1,1,1]",
+          "default": "[Other,Participating,Teaching]"
+        },
+        {
+          "plugin": "logstore_xapi",
+          "name": "routes",
+          "fullname": "logstore_xapi/routes",
+          "visible_name": "Include actions with these routes",
+          "class": "admin_setting_configroutes",
+          "current": "[\\core\\event\\badge_awarded=1,\\core\\event\\badge_revoked=1,\\core\\event\\badge_updated=1,\\core\\event\\badge_viewed=1,\\core\\event\\calendar_event_created=1,\\core\\event\\calendar_event_deleted=1,\\core\\event\\calendar_event_updated=1,\\core\\event\\calendar_subscription_created=1,\\core\\event\\calendar_subscription_deleted=1,\\core\\event\\calendar_subscription_updated=1,\\core\\event\\course_category_created=1,\\core\\event\\course_completed=1,\\core\\event\\course_completion_updated=1,\\core\\event\\course_created=1,\\core\\event\\course_module_completion_updated=1,\\core\\event\\course_module_created=1,\\core\\event\\course_resources_list_viewed=1,\\core\\event\\course_section_created=1,\\core\\event\\course_updated=1,\\core\\event\\course_viewed=1,\\core\\event\\group_created=1,\\core\\event\\group_deleted=1,\\core\\event\\group_member_added=1,\\core\\event\\group_member_removed=1,\\core\\event\\group_message_sent=1,\\core\\event\\message_sent=1,\\core\\event\\message_viewed=1,\\core\\event\\note_created=1,\\core\\event\\note_updated=1,\\core\\event\\notes_viewed=1,\\core\\event\\question_created=1,\\core\\event\\questions_imported=1,\\core\\event\\search_results_viewed=1,\\core\\event\\user_created=1,\\core\\event\\user_enrolment_created=1,\\core\\event\\user_enrolment_deleted=1,\\core\\event\\user_enrolment_updated=1,\\core\\event\\user_loggedin=1,\\core\\event\\user_loggedinas=1,\\core\\event\\user_loggedout=1,\\core_h5p\\event\\h5p_viewed=1,\\mod_assign\\event\\assessable_submitted=1,\\mod_assign\\event\\course_module_viewed=1,\\mod_assign\\event\\feedback_viewed=1,\\mod_assign\\event\\submission_graded=1,\\mod_assign\\event\\submission_locked=1,\\mod_assign\\event\\submission_unlocked=1,\\mod_assign\\event\\submission_viewed=1,\\mod_bigbluebuttonbn\\event\\activity_management_viewed=1,\\mod_bigbluebuttonbn\\event\\live_session_event=1,\\mod_bigbluebuttonbn\\event\\meeting_created=1,\\mod_bigbluebuttonbn\\event\\meeting_ended=1,\\mod_bigbluebuttonbn\\event\\meeting_joined=1,\\mod_bigbluebuttonbn\\event\\meeting_left=1,\\mod_bigbluebuttonbn\\event\\recording_deleted=1,\\mod_bigbluebuttonbn\\event\\recording_edited=1,\\mod_bigbluebuttonbn\\event\\recording_imported=1,\\mod_bigbluebuttonbn\\event\\recording_protected=1,\\mod_bigbluebuttonbn\\event\\recording_published=1,\\mod_bigbluebuttonbn\\event\\recording_unprotected=1,\\mod_bigbluebuttonbn\\event\\recording_unpublished=1,\\mod_bigbluebuttonbn\\event\\recording_viewed=1,\\mod_book\\event\\chapter_created=1,\\mod_book\\event\\chapter_viewed=1,\\mod_book\\event\\course_module_viewed=1,\\mod_chat\\event\\course_module_viewed=1,\\mod_choice\\event\\answer_created=1,\\mod_choice\\event\\course_module_viewed=1,\\mod_data\\event\\course_module_viewed=1,\\mod_feedback\\event\\course_module_viewed=1,\\mod_feedback\\event\\response_submitted=1,\\mod_folder\\event\\course_module_viewed=1,\\mod_forum\\event\\course_module_viewed=1,\\mod_forum\\event\\discussion_created=1,\\mod_forum\\event\\discussion_subscription_created=1,\\mod_forum\\event\\discussion_subscription_deleted=1,\\mod_forum\\event\\discussion_viewed=1,\\mod_forum\\event\\post_created=1,\\mod_forum\\event\\post_deleted=1,\\mod_forum\\event\\post_updated=1,\\mod_forum\\event\\subscription_created=1,\\mod_forum\\event\\subscription_deleted=1,\\mod_forum\\event\\user_report_viewed=1,\\mod_glossary\\event\\comment_created=1,\\mod_glossary\\event\\comment_deleted=1,\\mod_glossary\\event\\course_module_viewed=1,\\mod_glossary\\event\\entry_viewed=1,\\mod_imscp\\event\\course_module_viewed=1,\\mod_lesson\\event\\content_page_viewed=1,\\mod_lesson\\event\\course_module_viewed=1,\\mod_lesson\\event\\essay_assessed=1,\\mod_lesson\\event\\lesson_ended=1,\\mod_lesson\\event\\lesson_restarted=1,\\mod_lesson\\event\\lesson_resumed=1,\\mod_lesson\\event\\lesson_started=1,\\mod_lesson\\event\\question_answered=1,\\mod_lesson\\event\\question_viewed=1,\\mod_lti\\event\\course_module_viewed=1,\\mod_page\\event\\course_module_viewed=1,\\mod_quiz\\event\\attempt_abandoned=1,\\mod_quiz\\event\\attempt_becameoverdue=1,\\mod_quiz\\event\\attempt_reviewed=1,\\mod_quiz\\event\\attempt_started=1,\\mod_quiz\\event\\attempt_submitted=1,\\mod_quiz\\event\\attempt_viewed=1,\\mod_quiz\\event\\course_module_viewed=1,\\mod_quiz\\event\\question_manually_graded=1,\\mod_resource\\event\\course_module_viewed=1,\\mod_scorm\\event\\course_module_viewed=1,\\mod_scorm\\event\\sco_launched=1,\\mod_scorm\\event\\scoreraw_submitted=1,\\mod_scorm\\event\\status_submitted=1,\\mod_survey\\event\\course_module_viewed=1,\\mod_survey\\event\\report_viewed=1,\\mod_survey\\event\\response_submitted=1,\\mod_url\\event\\course_module_viewed=1,\\mod_wiki\\event\\comment_created=1,\\mod_wiki\\event\\comment_deleted=1,\\mod_wiki\\event\\comments_viewed=1,\\mod_wiki\\event\\course_module_viewed=1,\\mod_wiki\\event\\page_viewed=1,\\mod_workshop\\event\\course_module_viewed=1,\\tool_usertours\\event\\tour_ended=1]",
+          "default": "[\\core\\event\\badge_awarded=\\core\\event\\badge_awarded,\\core\\event\\badge_revoked=\\core\\event\\badge_revoked,\\core\\event\\badge_updated=\\core\\event\\badge_updated,\\core\\event\\badge_viewed=\\core\\event\\badge_viewed,\\core\\event\\calendar_event_created=\\core\\event\\calendar_event_created,\\core\\event\\calendar_event_deleted=\\core\\event\\calendar_event_deleted,\\core\\event\\calendar_event_updated=\\core\\event\\calendar_event_updated,\\core\\event\\calendar_subscription_created=\\core\\event\\calendar_subscription_created,\\core\\event\\calendar_subscription_deleted=\\core\\event\\calendar_subscription_deleted,\\core\\event\\calendar_subscription_updated=\\core\\event\\calendar_subscription_updated,\\core\\event\\course_category_created=\\core\\event\\course_category_created,\\core\\event\\course_completed=\\core\\event\\course_completed,\\core\\event\\course_completion_updated=\\core\\event\\course_completion_updated,\\core\\event\\course_created=\\core\\event\\course_created,\\core\\event\\course_module_completion_updated=\\core\\event\\course_module_completion_updated,\\core\\event\\course_module_created=\\core\\event\\course_module_created,\\core\\event\\course_resources_list_viewed=\\core\\event\\course_resources_list_viewed,\\core\\event\\course_section_created=\\core\\event\\course_section_created,\\core\\event\\course_updated=\\core\\event\\course_updated,\\core\\event\\course_viewed=\\core\\event\\course_viewed,\\core\\event\\group_created=\\core\\event\\group_created,\\core\\event\\group_deleted=\\core\\event\\group_deleted,\\core\\event\\group_member_added=\\core\\event\\group_member_added,\\core\\event\\group_member_removed=\\core\\event\\group_member_removed,\\core\\event\\group_message_sent=\\core\\event\\group_message_sent,\\core\\event\\message_sent=\\core\\event\\message_sent,\\core\\event\\message_viewed=\\core\\event\\message_viewed,\\core\\event\\note_created=\\core\\event\\note_created,\\core\\event\\note_updated=\\core\\event\\note_updated,\\core\\event\\notes_viewed=\\core\\event\\notes_viewed,\\core\\event\\question_created=\\core\\event\\question_created,\\core\\event\\questions_imported=\\core\\event\\questions_imported,\\core\\event\\search_results_viewed=\\core\\event\\search_results_viewed,\\core\\event\\user_created=\\core\\event\\user_created,\\core\\event\\user_enrolment_created=\\core\\event\\user_enrolment_created,\\core\\event\\user_enrolment_deleted=\\core\\event\\user_enrolment_deleted,\\core\\event\\user_enrolment_updated=\\core\\event\\user_enrolment_updated,\\core\\event\\user_loggedin=\\core\\event\\user_loggedin,\\core\\event\\user_loggedinas=\\core\\event\\user_loggedinas,\\core\\event\\user_loggedout=\\core\\event\\user_loggedout,\\core_h5p\\event\\h5p_viewed=\\core_h5p\\event\\h5p_viewed,\\mod_assign\\event\\assessable_submitted=\\mod_assign\\event\\assessable_submitted,\\mod_assign\\event\\course_module_viewed=\\mod_assign\\event\\course_module_viewed,\\mod_assign\\event\\feedback_viewed=\\mod_assign\\event\\feedback_viewed,\\mod_assign\\event\\submission_graded=\\mod_assign\\event\\submission_graded,\\mod_assign\\event\\submission_locked=\\mod_assign\\event\\submission_locked,\\mod_assign\\event\\submission_unlocked=\\mod_assign\\event\\submission_unlocked,\\mod_assign\\event\\submission_viewed=\\mod_assign\\event\\submission_viewed,\\mod_bigbluebuttonbn\\event\\activity_management_viewed=\\mod_bigbluebuttonbn\\event\\activity_management_viewed,\\mod_bigbluebuttonbn\\event\\live_session_event=\\mod_bigbluebuttonbn\\event\\live_session_event,\\mod_bigbluebuttonbn\\event\\meeting_created=\\mod_bigbluebuttonbn\\event\\meeting_created,\\mod_bigbluebuttonbn\\event\\meeting_ended=\\mod_bigbluebuttonbn\\event\\meeting_ended,\\mod_bigbluebuttonbn\\event\\meeting_joined=\\mod_bigbluebuttonbn\\event\\meeting_joined,\\mod_bigbluebuttonbn\\event\\meeting_left=\\mod_bigbluebuttonbn\\event\\meeting_left,\\mod_bigbluebuttonbn\\event\\recording_deleted=\\mod_bigbluebuttonbn\\event\\recording_deleted,\\mod_bigbluebuttonbn\\event\\recording_edited=\\mod_bigbluebuttonbn\\event\\recording_edited,\\mod_bigbluebuttonbn\\event\\recording_imported=\\mod_bigbluebuttonbn\\event\\recording_imported,\\mod_bigbluebuttonbn\\event\\recording_protected=\\mod_bigbluebuttonbn\\event\\recording_protected,\\mod_bigbluebuttonbn\\event\\recording_published=\\mod_bigbluebuttonbn\\event\\recording_published,\\mod_bigbluebuttonbn\\event\\recording_unprotected=\\mod_bigbluebuttonbn\\event\\recording_unprotected,\\mod_bigbluebuttonbn\\event\\recording_unpublished=\\mod_bigbluebuttonbn\\event\\recording_unpublished,\\mod_bigbluebuttonbn\\event\\recording_viewed=\\mod_bigbluebuttonbn\\event\\recording_viewed,\\mod_book\\event\\chapter_created=\\mod_book\\event\\chapter_created,\\mod_book\\event\\chapter_viewed=\\mod_book\\event\\chapter_viewed,\\mod_book\\event\\course_module_viewed=\\mod_book\\event\\course_module_viewed,\\mod_chat\\event\\course_module_viewed=\\mod_chat\\event\\course_module_viewed,\\mod_choice\\event\\answer_created=\\mod_choice\\event\\answer_created,\\mod_choice\\event\\course_module_viewed=\\mod_choice\\event\\course_module_viewed,\\mod_data\\event\\course_module_viewed=\\mod_data\\event\\course_module_viewed,\\mod_feedback\\event\\course_module_viewed=\\mod_feedback\\event\\course_module_viewed,\\mod_feedback\\event\\response_submitted=\\mod_feedback\\event\\response_submitted,\\mod_folder\\event\\course_module_viewed=\\mod_folder\\event\\course_module_viewed,\\mod_forum\\event\\course_module_viewed=\\mod_forum\\event\\course_module_viewed,\\mod_forum\\event\\discussion_created=\\mod_forum\\event\\discussion_created,\\mod_forum\\event\\discussion_subscription_created=\\mod_forum\\event\\discussion_subscription_created,\\mod_forum\\event\\discussion_subscription_deleted=\\mod_forum\\event\\discussion_subscription_deleted,\\mod_forum\\event\\discussion_viewed=\\mod_forum\\event\\discussion_viewed,\\mod_forum\\event\\post_created=\\mod_forum\\event\\post_created,\\mod_forum\\event\\post_deleted=\\mod_forum\\event\\post_deleted,\\mod_forum\\event\\post_updated=\\mod_forum\\event\\post_updated,\\mod_forum\\event\\subscription_created=\\mod_forum\\event\\subscription_created,\\mod_forum\\event\\subscription_deleted=\\mod_forum\\event\\subscription_deleted,\\mod_forum\\event\\user_report_viewed=\\mod_forum\\event\\user_report_viewed,\\mod_glossary\\event\\comment_created=\\mod_glossary\\event\\comment_created,\\mod_glossary\\event\\comment_deleted=\\mod_glossary\\event\\comment_deleted,\\mod_glossary\\event\\course_module_viewed=\\mod_glossary\\event\\course_module_viewed,\\mod_glossary\\event\\entry_viewed=\\mod_glossary\\event\\entry_viewed,\\mod_imscp\\event\\course_module_viewed=\\mod_imscp\\event\\course_module_viewed,\\mod_lesson\\event\\content_page_viewed=\\mod_lesson\\event\\content_page_viewed,\\mod_lesson\\event\\course_module_viewed=\\mod_lesson\\event\\course_module_viewed,\\mod_lesson\\event\\essay_assessed=\\mod_lesson\\event\\essay_assessed,\\mod_lesson\\event\\lesson_ended=\\mod_lesson\\event\\lesson_ended,\\mod_lesson\\event\\lesson_restarted=\\mod_lesson\\event\\lesson_restarted,\\mod_lesson\\event\\lesson_resumed=\\mod_lesson\\event\\lesson_resumed,\\mod_lesson\\event\\lesson_started=\\mod_lesson\\event\\lesson_started,\\mod_lesson\\event\\question_answered=\\mod_lesson\\event\\question_answered,\\mod_lesson\\event\\question_viewed=\\mod_lesson\\event\\question_viewed,\\mod_lti\\event\\course_module_viewed=\\mod_lti\\event\\course_module_viewed,\\mod_page\\event\\course_module_viewed=\\mod_page\\event\\course_module_viewed,\\mod_quiz\\event\\attempt_abandoned=\\mod_quiz\\event\\attempt_abandoned,\\mod_quiz\\event\\attempt_becameoverdue=\\mod_quiz\\event\\attempt_becameoverdue,\\mod_quiz\\event\\attempt_reviewed=\\mod_quiz\\event\\attempt_reviewed,\\mod_quiz\\event\\attempt_started=\\mod_quiz\\event\\attempt_started,\\mod_quiz\\event\\attempt_submitted=\\mod_quiz\\event\\attempt_submitted,\\mod_quiz\\event\\attempt_viewed=\\mod_quiz\\event\\attempt_viewed,\\mod_quiz\\event\\course_module_viewed=\\mod_quiz\\event\\course_module_viewed,\\mod_quiz\\event\\question_manually_graded=\\mod_quiz\\event\\question_manually_graded,\\mod_resource\\event\\course_module_viewed=\\mod_resource\\event\\course_module_viewed,\\mod_scorm\\event\\course_module_viewed=\\mod_scorm\\event\\course_module_viewed,\\mod_scorm\\event\\sco_launched=\\mod_scorm\\event\\sco_launched,\\mod_scorm\\event\\scoreraw_submitted=\\mod_scorm\\event\\scoreraw_submitted,\\mod_scorm\\event\\status_submitted=\\mod_scorm\\event\\status_submitted,\\mod_survey\\event\\course_module_viewed=\\mod_survey\\event\\course_module_viewed,\\mod_survey\\event\\report_viewed=\\mod_survey\\event\\report_viewed,\\mod_survey\\event\\response_submitted=\\mod_survey\\event\\response_submitted,\\mod_url\\event\\course_module_viewed=\\mod_url\\event\\course_module_viewed,\\mod_wiki\\event\\comment_created=\\mod_wiki\\event\\comment_created,\\mod_wiki\\event\\comment_deleted=\\mod_wiki\\event\\comment_deleted,\\mod_wiki\\event\\comments_viewed=\\mod_wiki\\event\\comments_viewed,\\mod_wiki\\event\\course_module_viewed=\\mod_wiki\\event\\course_module_viewed,\\mod_wiki\\event\\page_viewed=\\mod_wiki\\event\\page_viewed,\\mod_workshop\\event\\course_module_viewed=\\mod_workshop\\event\\course_module_viewed,\\tool_usertours\\event\\tour_ended=\\tool_usertours\\event\\tour_ended]"
+        },
+        {
+          "plugin": "",
+          "name": "manageaiplacements",
+          "fullname": "manageaiplacements",
+          "visible_name": "Manage AI providers",
+          "class": "admin_setting_action_manager",
+          "current": "1",
+          "default": ""
+        },
+        {
+          "plugin": "",
+          "name": "manageaiplacements",
+          "fullname": "manageaiplacements",
+          "visible_name": "Manage AI providers",
+          "class": "admin_setting_action_manager",
+          "current": "1",
+          "default": ""
+        },
+        {
+          "plugin": "",
+          "name": "manageaiproviders",
+          "fullname": "manageaiproviders",
+          "visible_name": "Manage AI providers",
+          "class": "admin_setting_action_manager",
+          "current": "1",
+          "default": ""
+        },
+        {
+          "plugin": "",
+          "name": "manageaiproviders",
+          "fullname": "manageaiproviders",
+          "visible_name": "Manage AI providers",
+          "class": "admin_setting_action_manager",
+          "current": "1",
+          "default": ""
+        },
+        {
+          "plugin": "",
+          "name": "mfaui",
+          "fullname": "mfaui",
+          "visible_name": "Manage multi-factor authentication",
+          "class": "admin_setting_managemfa",
+          "current": "1",
+          "default": ""
+        },
+        {
+          "plugin": "mlbackend_python",
+          "name": "port",
+          "fullname": "mlbackend_python/port",
+          "visible_name": "Port",
+          "class": "admin_setting_configtext",
+          "current": "0",
+          "default": ""
+        },
+        {
+          "plugin": "mod_profilefield",
+          "name": "customprofilefields",
+          "fullname": "mod_profilefield/customprofilefields",
+          "visible_name": "Custom user profile fields",
+          "class": "admin_setting_configmultiselect",
+          "current": "[sn16,sn712]",
+          "default": "[]"
+        },
+        {
+          "plugin": "quizaccess_seb",
+          "name": "showseblinks",
+          "fullname": "quizaccess_seb/showseblinks",
+          "visible_name": "Show Safe Exam Browser config links",
+          "class": "admin_setting_configmulticheckbox",
+          "current": "[http=1,seb=1]",
+          "default": "[http=Show http:// link,seb=Show seb:// link]"
+        },
+        {
+          "plugin": "tincanlaunch",
+          "name": "tincanlaunchlrsendpoint",
+          "fullname": "tincanlaunch/tincanlaunchlrsendpoint",
+          "visible_name": "Endpoint",
+          "class": "admin_setting_configtext_mod_tincanlaunch",
+          "current": "/",
+          "default": ""
+        },
+        {
+          "plugin": "tiny_premium",
+          "name": "premiumplugins",
+          "fullname": "tiny_premium/premiumplugins",
+          "visible_name": "Premium plugins",
+          "class": "admin_setting_tiny_premium_plugins",
+          "current": "1",
+          "default": ""
         }
       ]
     }
