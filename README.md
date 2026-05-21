@@ -49,6 +49,7 @@ Available functions:
 | `local_fleetmonitor_get_health` | Cron, tasks, sessions, disk, backups, mail |
 | `local_fleetmonitor_get_auth` | Enabled auth methods + user counts per method |
 | `local_fleetmonitor_get_config_changes` | Recent `mdl_config_log` entries |
+| `local_fleetmonitor_get_config_drift` | Settings whose current value differs from default (secrets excluded) |
 
 Each function returns:
 

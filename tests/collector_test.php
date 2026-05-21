@@ -47,6 +47,23 @@ final class collector_test extends \advanced_testcase {
         $this->assertArrayHasKey('health', $snapshot);
         $this->assertArrayHasKey('auth', $snapshot);
         $this->assertArrayHasKey('config_changes', $snapshot);
+        $this->assertArrayHasKey('config_drift', $snapshot);
+    }
+
+    public function test_config_drift_redacts_secrets(): void {
+        $this->resetAfterTest();
+
+        $drift = collectors\config_drift::collect();
+
+        $this->assertArrayHasKey('count', $drift);
+        $this->assertArrayHasKey('entries', $drift);
+        $this->assertArrayHasKey('skipped', $drift);
+        foreach ($drift['entries'] as $entry) {
+            $name = strtolower($entry['name']);
+            $this->assertStringNotContainsString('password', $name);
+            $this->assertStringNotContainsString('secret', $name);
+            $this->assertStringNotContainsString('token', $name);
+        }
     }
 
     public function test_site_identity_uses_siteidentifier(): void {

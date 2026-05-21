@@ -67,6 +67,12 @@ $functions = [
         'type' => 'read',
         'capabilities' => 'local/fleetmonitor:view',
     ],
+    'local_fleetmonitor_get_config_drift' => [
+        'classname' => 'local_fleetmonitor\\external\\get_config_drift',
+        'description' => 'Settings whose current value differs from default (secrets excluded).',
+        'type' => 'read',
+        'capabilities' => 'local/fleetmonitor:view',
+    ],
 ];
 
 $services = [
@@ -79,6 +85,7 @@ $services = [
             'local_fleetmonitor_get_health',
             'local_fleetmonitor_get_auth',
             'local_fleetmonitor_get_config_changes',
+            'local_fleetmonitor_get_config_drift',
         ],
         'restrictedusers' => 1,
         'enabled' => 1,

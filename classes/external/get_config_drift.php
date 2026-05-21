@@ -15,18 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * External function: get_config_drift.
  *
  * @package    local_fleetmonitor
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_fleetmonitor\external;
 
-$plugin->version   = 2026052104;
-$plugin->release   = '0.5.0';
-$plugin->requires  = 2024100700;
-$plugin->component = 'local_fleetmonitor';
-$plugin->maturity  = MATURITY_ALPHA;
-$plugin->supported = [405, 501];
+use local_fleetmonitor\collector;
+
+/**
+ * Returns just the config_drift slice.
+ */
+class get_config_drift extends base {
+    /**
+     * Return the config_drift slice.
+     *
+     * @return array
+     */
+    public static function execute(): array {
+        self::authorise();
+        return self::envelope(collector::get_slice('config_drift'));
+    }
+}
