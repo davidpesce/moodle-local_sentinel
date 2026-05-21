@@ -55,6 +55,12 @@ $functions = [
         'type' => 'read',
         'capabilities' => 'local/fleetmonitor:view',
     ],
+    'local_fleetmonitor_get_auth' => [
+        'classname' => 'local_fleetmonitor\\external\\get_auth',
+        'description' => 'Enabled auth methods and user counts per method.',
+        'type' => 'read',
+        'capabilities' => 'local/fleetmonitor:view',
+    ],
     'local_fleetmonitor_get_config_changes' => [
         'classname' => 'local_fleetmonitor\\external\\get_config_changes',
         'description' => 'Recent entries from mdl_config_log.',
@@ -71,6 +77,7 @@ $services = [
             'local_fleetmonitor_get_environment',
             'local_fleetmonitor_get_plugins',
             'local_fleetmonitor_get_health',
+            'local_fleetmonitor_get_auth',
             'local_fleetmonitor_get_config_changes',
         ],
         'restrictedusers' => 1,

@@ -46,6 +46,7 @@ class collector {
             'environment' => collectors\environment::collect(),
             'plugins' => collectors\plugins::collect(),
             'health' => collectors\health::collect(),
+            'auth' => collectors\auth::collect(),
             'config_changes' => collectors\config_changes::collect(),
         ]);
     }
@@ -53,7 +54,7 @@ class collector {
     /**
      * Build a single-slice envelope, used by the granular external functions.
      *
-     * @param string $slice One of: status, environment, plugins, health, config_changes.
+     * @param string $slice One of: status, environment, plugins, health, auth, config_changes.
      * @return array Envelope containing only the requested slice plus site identity.
      */
     public static function get_slice(string $slice): array {

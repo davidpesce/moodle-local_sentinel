@@ -1,0 +1,4939 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-05-21T13:33:30+00:00",
+  "payload": {
+    "schema_version": 1,
+    "generated_at": "2026-05-21T13:33:30+00:00",
+    "site": {
+      "wwwroot": "http://localhost:8080",
+      "siteidentifier": "whGmK2ne5EoLxoksgOZaaTFg2REa8YYylocalhost",
+      "sitename": "Dev Site",
+      "shortname": "dev"
+    },
+    "status": {
+      "version": 2024100710,
+      "branch": 405,
+      "release": "4.5.10+ (Build: 20260306)",
+      "maintenance_enabled": false,
+      "maintenance_message": ""
+    },
+    "environment": {
+      "php": {
+        "version": "8.2.30",
+        "sapi": "apache2handler",
+        "memory_limit": "536870912",
+        "max_execution_time": 360,
+        "upload_max_filesize": "200M",
+        "post_max_size": "206M",
+        "timezone": "Europe/London"
+      },
+      "os": {
+        "sysname": "Linux",
+        "release": "6.12.76-linuxkit",
+        "version": "#1 SMP Fri May  1 14:35:41 UTC 2026",
+        "machine": "aarch64",
+        "hostname": "d243b3661c8e"
+      },
+      "webserver": {
+        "software": "Apache/2.4.65 (Debian)",
+        "sapi_is_fpm": false,
+        "sapi_is_apache": true,
+        "sapi_is_cli": false
+      },
+      "database": {
+        "type": "pgsql",
+        "version": "15.17",
+        "description": "15.17",
+        "host": "db",
+        "name": "moodle",
+        "prefix": "mdl_"
+      },
+      "opcache": {
+        "enabled": true,
+        "used_memory": 78281712,
+        "free_memory": 55936016,
+        "wasted_memory": 0,
+        "num_cached_scripts": 3167,
+        "hits": 16537,
+        "misses": 3276,
+        "hit_rate": 83.46540150406298
+      },
+      "extensions": [
+        "apache2handler",
+        "apcu",
+        "Core",
+        "ctype",
+        "curl",
+        "date",
+        "dom",
+        "exif",
+        "fileinfo",
+        "filter",
+        "gd",
+        "hash",
+        "iconv",
+        "igbinary",
+        "intl",
+        "json",
+        "ldap",
+        "libxml",
+        "mbstring",
+        "memcached",
+        "mysqli",
+        "mysqlnd",
+        "openssl",
+        "pcov",
+        "pcre",
+        "PDO",
+        "pdo_sqlite",
+        "pgsql",
+        "Phar",
+        "posix",
+        "random",
+        "redis",
+        "Reflection",
+        "session",
+        "SimpleXML",
+        "soap",
+        "sodium",
+        "solr",
+        "SPL",
+        "sqlite3",
+        "standard",
+        "timezonedb",
+        "tokenizer",
+        "uuid",
+        "xml",
+        "xmlreader",
+        "xmlrpc",
+        "xmlwriter",
+        "xsl",
+        "Zend OPcache",
+        "zip",
+        "zlib"
+      ],
+      "ssl": {
+        "checked": false,
+        "reason": "wwwroot is not https"
+      }
+    },
+    "plugins": {
+      "standard": [
+        {
+          "type": "mod",
+          "component": "mod_assign",
+          "name": "Assignment",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_bigbluebuttonbn",
+          "name": "BigBlueButton",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "mod",
+          "component": "mod_book",
+          "name": "Book",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_chat",
+          "name": "Chat",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "mod",
+          "component": "mod_choice",
+          "name": "Choice",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_data",
+          "name": "Database",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_feedback",
+          "name": "Feedback",
+          "version": 2024100701,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_folder",
+          "name": "Folder",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_forum",
+          "name": "Forum",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_glossary",
+          "name": "Glossary",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_h5pactivity",
+          "name": "H5P",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_imscp",
+          "name": "IMS content package",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_label",
+          "name": "Text and media area",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_lesson",
+          "name": "Lesson",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_lti",
+          "name": "External tool",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_page",
+          "name": "Page",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_quiz",
+          "name": "Quiz",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_resource",
+          "name": "File",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_scorm",
+          "name": "SCORM package",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_subsection",
+          "name": "Subsection",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "mod",
+          "component": "mod_survey",
+          "name": "Survey",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "mod",
+          "component": "mod_url",
+          "name": "URL",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_wiki",
+          "name": "Wiki",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_workshop",
+          "name": "Workshop",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "assignsubmission",
+          "component": "assignsubmission_comments",
+          "name": "Submission comments",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "assignsubmission",
+          "component": "assignsubmission_file",
+          "name": "File submissions",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "assignsubmission",
+          "component": "assignsubmission_onlinetext",
+          "name": "Online text submissions",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "assignfeedback",
+          "component": "assignfeedback_comments",
+          "name": "Feedback comments",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "assignfeedback",
+          "component": "assignfeedback_editpdf",
+          "name": "Annotate PDF",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "assignfeedback",
+          "component": "assignfeedback_file",
+          "name": "File feedback",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "assignfeedback",
+          "component": "assignfeedback_offline",
+          "name": "Offline grading worksheet",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "booktool",
+          "component": "booktool_exportimscp",
+          "name": "Book IMS CP export",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "booktool",
+          "component": "booktool_importhtml",
+          "name": "Book chapter import",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "booktool",
+          "component": "booktool_print",
+          "name": "Book printing",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datafield",
+          "component": "datafield_checkbox",
+          "name": "Checkboxes",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datafield",
+          "component": "datafield_date",
+          "name": "Date",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datafield",
+          "component": "datafield_file",
+          "name": "File",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datafield",
+          "component": "datafield_latlong",
+          "name": "Coordinates",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datafield",
+          "component": "datafield_menu",
+          "name": "Dropdown list",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datafield",
+          "component": "datafield_multimenu",
+          "name": "Multi-select list",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datafield",
+          "component": "datafield_number",
+          "name": "Number",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datafield",
+          "component": "datafield_picture",
+          "name": "Image",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datafield",
+          "component": "datafield_radiobutton",
+          "name": "Radio buttons",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datafield",
+          "component": "datafield_text",
+          "name": "Short text",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datafield",
+          "component": "datafield_textarea",
+          "name": "Text area",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datafield",
+          "component": "datafield_url",
+          "name": "URL",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datapreset",
+          "component": "datapreset_imagegallery",
+          "name": "Image gallery",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datapreset",
+          "component": "datapreset_journal",
+          "name": "Journal",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datapreset",
+          "component": "datapreset_proposals",
+          "name": "Proposals",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "datapreset",
+          "component": "datapreset_resources",
+          "name": "Resources",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "forumreport",
+          "component": "forumreport_summary",
+          "name": "Forum summary report",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "ltiservice",
+          "component": "ltiservice_basicoutcomes",
+          "name": "Basic Outcomes Service",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "ltiservice",
+          "component": "ltiservice_gradebookservices",
+          "name": "LTI Assignment and Grade Services",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "ltiservice",
+          "component": "ltiservice_memberships",
+          "name": "Names and Role Provisioning LTI Service",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "ltiservice",
+          "component": "ltiservice_profile",
+          "name": "Tool Consumer Profile LTI Service",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "ltiservice",
+          "component": "ltiservice_toolproxy",
+          "name": "Tool Proxy Service",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "ltiservice",
+          "component": "ltiservice_toolsettings",
+          "name": "Tool Settings Service",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quiz",
+          "component": "quiz_grading",
+          "name": "Manual grading",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quiz",
+          "component": "quiz_overview",
+          "name": "Grades",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quiz",
+          "component": "quiz_responses",
+          "name": "Responses",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quiz",
+          "component": "quiz_statistics",
+          "name": "Statistics",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quizaccess",
+          "component": "quizaccess_delaybetweenattempts",
+          "name": "Delay between attempts quiz access rule",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quizaccess",
+          "component": "quizaccess_ipaddress",
+          "name": "IP address quiz access rule",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quizaccess",
+          "component": "quizaccess_numattempts",
+          "name": "Number of attempts quiz access rule",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quizaccess",
+          "component": "quizaccess_offlineattempts",
+          "name": "Offline attempts access rule",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quizaccess",
+          "component": "quizaccess_openclosedate",
+          "name": "Open and close date access rule",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quizaccess",
+          "component": "quizaccess_password",
+          "name": "Password quiz access rule",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quizaccess",
+          "component": "quizaccess_seb",
+          "name": "Safe Exam Browser access rules",
+          "version": 2024100701,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quizaccess",
+          "component": "quizaccess_securewindow",
+          "name": "JavaScript security quiz access rule",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "quizaccess",
+          "component": "quizaccess_timelimit",
+          "name": "Time limit quiz access rule",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "scormreport",
+          "component": "scormreport_basic",
+          "name": "Basic report",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "scormreport",
+          "component": "scormreport_graphs",
+          "name": "Graph report",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "scormreport",
+          "component": "scormreport_interactions",
+          "name": "Interactions report",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "scormreport",
+          "component": "scormreport_objectives",
+          "name": "Objectives report",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "workshopform",
+          "component": "workshopform_accumulative",
+          "name": "Accumulative grading",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "workshopform",
+          "component": "workshopform_comments",
+          "name": "Comments",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "workshopform",
+          "component": "workshopform_numerrors",
+          "name": "Number of errors",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "workshopform",
+          "component": "workshopform_rubric",
+          "name": "Rubric",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "workshopallocation",
+          "component": "workshopallocation_manual",
+          "name": "Manual allocation",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "workshopallocation",
+          "component": "workshopallocation_random",
+          "name": "Random allocation",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "workshopallocation",
+          "component": "workshopallocation_scheduled",
+          "name": "Scheduled allocation",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "workshopeval",
+          "component": "workshopeval_best",
+          "name": "Comparison with the best assessment",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "block",
+          "component": "block_accessreview",
+          "name": "Accessibility review",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_activity_modules",
+          "name": "Activities",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_activity_results",
+          "name": "Activity results",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_admin_bookmarks",
+          "name": "Admin bookmarks",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_badges",
+          "name": "Latest badges",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_blog_menu",
+          "name": "Blog menu",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_blog_recent",
+          "name": "Recent blog entries",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_blog_tags",
+          "name": "Blog tags",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_calendar_month",
+          "name": "Calendar",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_calendar_upcoming",
+          "name": "Upcoming events",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_comments",
+          "name": "Comments",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_completionstatus",
+          "name": "Course completion status",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_course_list",
+          "name": "Courses",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_course_summary",
+          "name": "Course/site summary",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "block",
+          "component": "block_feedback",
+          "name": "Feedback",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "block",
+          "component": "block_globalsearch",
+          "name": "Global search",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_glossary_random",
+          "name": "Random glossary entry",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_html",
+          "name": "Text",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_login",
+          "name": "Login",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_lp",
+          "name": "Learning plans",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_mentees",
+          "name": "Mentees",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_mnet_hosts",
+          "name": "Network servers",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_myoverview",
+          "name": "Course overview",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_myprofile",
+          "name": "Logged in user",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_navigation",
+          "name": "Navigation",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_news_items",
+          "name": "Latest announcements",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_online_users",
+          "name": "Online users",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_private_files",
+          "name": "Private files",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_recent_activity",
+          "name": "Recent activity",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_recentlyaccessedcourses",
+          "name": "Recently accessed courses",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_recentlyaccesseditems",
+          "name": "Recently accessed items",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_rss_client",
+          "name": "RSS feeds",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "block",
+          "component": "block_search_forums",
+          "name": "Search forums",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_section_links",
+          "name": "Section links",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_selfcompletion",
+          "name": "Self completion",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "block",
+          "component": "block_settings",
+          "name": "Administration",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_site_main_menu",
+          "name": "Main menu",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_social_activities",
+          "name": "Social activities",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_starredcourses",
+          "name": "Starred courses",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_tag_flickr",
+          "name": "Flickr",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_tag_youtube",
+          "name": "YouTube",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "block",
+          "component": "block_tags",
+          "name": "Tags",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_timeline",
+          "name": "Timeline",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_calculated",
+          "name": "Calculated",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_calculatedmulti",
+          "name": "Calculated multichoice",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_calculatedsimple",
+          "name": "Calculated simple",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_ddimageortext",
+          "name": "Drag and drop onto image",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_ddmarker",
+          "name": "Drag and drop markers",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_ddwtos",
+          "name": "Drag and drop into text",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_description",
+          "name": "Description",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_essay",
+          "name": "Essay",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_gapselect",
+          "name": "Select missing words",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_match",
+          "name": "Matching",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_missingtype",
+          "name": "Missing question type placeholder",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_multianswer",
+          "name": "Embedded answers (Cloze)",
+          "version": 2024100701,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_multichoice",
+          "name": "Multiple choice",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_numerical",
+          "name": "Numerical",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_ordering",
+          "name": "Ordering",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_random",
+          "name": "Random",
+          "version": 2024100701,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_randomsamatch",
+          "name": "Random short-answer matching",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_shortanswer",
+          "name": "Short answer",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qtype",
+          "component": "qtype_truefalse",
+          "name": "True/False",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_bulkmove",
+          "name": "Bulk move questions",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_columnsortorder",
+          "name": "Column sort order",
+          "version": 2024100701,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_comment",
+          "name": "Question comments",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_customfields",
+          "name": "Question custom fields",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_deletequestion",
+          "name": "Delete question",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_editquestion",
+          "name": "Edit questions",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_exportquestions",
+          "name": "Export questions",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_exporttoxml",
+          "name": "Export to XML",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_history",
+          "name": "Question history",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_importquestions",
+          "name": "Import questions",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_managecategories",
+          "name": "Manage categories",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_previewquestion",
+          "name": "Preview question",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_statistics",
+          "name": "Question statistics",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_tagquestion",
+          "name": "Tag question",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_usage",
+          "name": "Question usage",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_viewcreator",
+          "name": "View creator",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_viewquestionname",
+          "name": "View question name",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_viewquestiontext",
+          "name": "View question text",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbank",
+          "component": "qbank_viewquestiontype",
+          "name": "View question type",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbehaviour",
+          "component": "qbehaviour_adaptive",
+          "name": "Adaptive mode",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbehaviour",
+          "component": "qbehaviour_adaptivenopenalty",
+          "name": "Adaptive mode (no penalties)",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbehaviour",
+          "component": "qbehaviour_deferredcbm",
+          "name": "Deferred feedback with CBM",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbehaviour",
+          "component": "qbehaviour_deferredfeedback",
+          "name": "Deferred feedback",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbehaviour",
+          "component": "qbehaviour_immediatecbm",
+          "name": "Immediate feedback with CBM",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbehaviour",
+          "component": "qbehaviour_immediatefeedback",
+          "name": "Immediate feedback",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbehaviour",
+          "component": "qbehaviour_informationitem",
+          "name": "Behaviour for information items",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbehaviour",
+          "component": "qbehaviour_interactive",
+          "name": "Interactive with multiple tries",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbehaviour",
+          "component": "qbehaviour_interactivecountback",
+          "name": "Interactive with multiple tries (credit for earlier tries)",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qbehaviour",
+          "component": "qbehaviour_manualgraded",
+          "name": "Manually graded",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "qbehaviour",
+          "component": "qbehaviour_missing",
+          "name": "Missing behaviour",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "qformat",
+          "component": "qformat_aiken",
+          "name": "Aiken format",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "qformat",
+          "component": "qformat_blackboard_six",
+          "name": "Blackboard",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "qformat",
+          "component": "qformat_gift",
+          "name": "GIFT format",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "qformat",
+          "component": "qformat_missingword",
+          "name": "Missing word format",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "qformat",
+          "component": "qformat_multianswer",
+          "name": "Embedded answers (Cloze)",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "qformat",
+          "component": "qformat_xhtml",
+          "name": "XHTML format",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "qformat",
+          "component": "qformat_xml",
+          "name": "Moodle XML format",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "filter",
+          "component": "filter_activitynames",
+          "name": "Activity names auto-linking",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "filter",
+          "component": "filter_algebra",
+          "name": "Algebra notation",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "filter",
+          "component": "filter_codehighlighter",
+          "name": "Code highlighter",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "filter",
+          "component": "filter_data",
+          "name": "Database auto-linking",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "filter",
+          "component": "filter_displayh5p",
+          "name": "Display H5P",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "filter",
+          "component": "filter_emailprotect",
+          "name": "Email protection",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "filter",
+          "component": "filter_emoticon",
+          "name": "Display emoticons as images",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "filter",
+          "component": "filter_glossary",
+          "name": "Glossary auto-linking",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "filter",
+          "component": "filter_mathjaxloader",
+          "name": "MathJax",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "filter",
+          "component": "filter_mediaplugin",
+          "name": "Multimedia plugins",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "filter",
+          "component": "filter_multilang",
+          "name": "Multi-language content",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "filter",
+          "component": "filter_tex",
+          "name": "TeX notation",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "filter",
+          "component": "filter_urltolink",
+          "name": "Convert URLs into links and images",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "editor",
+          "component": "editor_atto",
+          "name": "Atto HTML editor",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "editor",
+          "component": "editor_textarea",
+          "name": "Plain text area",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "editor",
+          "component": "editor_tiny",
+          "name": "TinyMCE editor",
+          "version": 2024100701,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "atto",
+          "component": "atto_accessibilitychecker",
+          "name": "Accessibility checker",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_accessibilityhelper",
+          "name": "Screenreader helper",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_align",
+          "name": "Text align",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_backcolor",
+          "name": "Background colour",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_bold",
+          "name": "Bold",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_charmap",
+          "name": "Insert character",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_clear",
+          "name": "Clear formatting",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_collapse",
+          "name": "Show/hide advanced buttons",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_emojipicker",
+          "name": "Emoji picker",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_emoticon",
+          "name": "Emoticon",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_equation",
+          "name": "Equation editor",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_fontcolor",
+          "name": "Font colour",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_h5p",
+          "name": "Insert H5P",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_html",
+          "name": "HTML",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_image",
+          "name": "Insert or edit image",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_indent",
+          "name": "Indent",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_italic",
+          "name": "Italic",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_link",
+          "name": "Link",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_managefiles",
+          "name": "Manage files",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_media",
+          "name": "Insert or edit an audio/video file",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_noautolink",
+          "name": "Prevent auto-link",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_orderedlist",
+          "name": "Ordered list",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_recordrtc",
+          "name": "RecordRTC",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_rtl",
+          "name": "RTL/LTR",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_strike",
+          "name": "Strike through",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_subscript",
+          "name": "Subscript",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_superscript",
+          "name": "Superscript",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_table",
+          "name": "Table",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_title",
+          "name": "Paragraph styles",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_underline",
+          "name": "Underline",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_undo",
+          "name": "Undo/Redo",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "atto",
+          "component": "atto_unorderedlist",
+          "name": "Unordered list",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "tiny",
+          "component": "tiny_accessibilitychecker",
+          "name": "Accessibility checker",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tiny",
+          "component": "tiny_aiplacement",
+          "name": "AI placement",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tiny",
+          "component": "tiny_autosave",
+          "name": "Autosave",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tiny",
+          "component": "tiny_equation",
+          "name": "Equation editor",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tiny",
+          "component": "tiny_h5p",
+          "name": "Insert H5P",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tiny",
+          "component": "tiny_html",
+          "name": "HTML",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tiny",
+          "component": "tiny_link",
+          "name": "Link",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tiny",
+          "component": "tiny_media",
+          "name": "Insert media",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tiny",
+          "component": "tiny_noautolink",
+          "name": "No auto-link",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "tiny",
+          "component": "tiny_premium",
+          "name": "TinyMCE Premium",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tiny",
+          "component": "tiny_recordrtc",
+          "name": "RecordRTC",
+          "version": 2024100701,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_category",
+          "name": "Category enrolments",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_cohort",
+          "name": "Cohort sync",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_database",
+          "name": "External database",
+          "version": 2024100702,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_fee",
+          "name": "Enrolment on payment",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_flatfile",
+          "name": "Flat file (CSV)",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_guest",
+          "name": "Guest access",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_imsenterprise",
+          "name": "IMS Enterprise file",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_ldap",
+          "name": "LDAP enrolments",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_lti",
+          "name": "Publish as LTI tool",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_manual",
+          "name": "Manual enrolments",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_meta",
+          "name": "Course meta link",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_mnet",
+          "name": "MNet remote enrolments",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_paypal",
+          "name": "PayPal",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "enrol",
+          "component": "enrol_self",
+          "name": "Self enrolment",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "auth",
+          "component": "auth_cas",
+          "name": "CAS server (SSO)",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "auth",
+          "component": "auth_db",
+          "name": "External database",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "auth",
+          "component": "auth_email",
+          "name": "Email-based self-registration",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "auth",
+          "component": "auth_ldap",
+          "name": "LDAP server",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "auth",
+          "component": "auth_lti",
+          "name": "LTI",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "auth",
+          "component": "auth_manual",
+          "name": "Manual accounts",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "auth",
+          "component": "auth_mnet",
+          "name": "MNet authentication",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "auth",
+          "component": "auth_nologin",
+          "name": "No login",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "auth",
+          "component": "auth_none",
+          "name": "No authentication",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "auth",
+          "component": "auth_oauth2",
+          "name": "OAuth 2",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "auth",
+          "component": "auth_shibboleth",
+          "name": "Shibboleth",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "auth",
+          "component": "auth_webservice",
+          "name": "Web services authentication",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "tool",
+          "component": "tool_admin_presets",
+          "name": "Site admin presets",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_analytics",
+          "name": "Analytic models",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_availabilityconditions",
+          "name": "Availability condition management",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_behat",
+          "name": "Acceptance testing",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_brickfield",
+          "name": "Accessibility toolkit",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_capability",
+          "name": "Capability overview",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_cohortroles",
+          "name": "Cohort roles management",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_componentlibrary",
+          "name": "UI Component library",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_customlang",
+          "name": "Language customisation",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_dataprivacy",
+          "name": "Data privacy",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_dbtransfer",
+          "name": "Database transfer",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_filetypes",
+          "name": "File types",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_generator",
+          "name": "Development data generator",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_httpsreplace",
+          "name": "HTTPS conversion tool",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_installaddon",
+          "name": "Plugin installer",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_langimport",
+          "name": "Language packs",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_licensemanager",
+          "name": "Licence manager",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_log",
+          "name": "Log store manager",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_lp",
+          "name": "Learning plans",
+          "version": 2024100701,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_lpimportcsv",
+          "name": "Import competency framework",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_lpmigrate",
+          "name": "Competencies migration tool",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_messageinbound",
+          "name": "Inbound message configuration",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_mfa",
+          "name": "Multi-factor authentication",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_mobile",
+          "name": "Moodle app tools",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_monitor",
+          "name": "Event monitor",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_moodlenet",
+          "name": "MoodleNet",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_multilangupgrade",
+          "name": "Multilang upgrade",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_oauth2",
+          "name": "OAuth 2 services",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_phpunit",
+          "name": "PHPUnit tests",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_policy",
+          "name": "Policies",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_profiling",
+          "name": "Profiling runs",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_recyclebin",
+          "name": "Recycle bin",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_replace",
+          "name": "DB search and replace",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_spamcleaner",
+          "name": "Spam cleaner",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_task",
+          "name": "Scheduled task configuration",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_templatelibrary",
+          "name": "Template library",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_unsuproles",
+          "name": "Unsupported role assignments",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_uploadcourse",
+          "name": "Course upload",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_uploaduser",
+          "name": "User upload",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_usertours",
+          "name": "User tours",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "tool",
+          "component": "tool_xmldb",
+          "name": "XMLDB editor",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "logstore",
+          "component": "logstore_database",
+          "name": "External database log",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "logstore",
+          "component": "logstore_standard",
+          "name": "Standard log",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "factor",
+          "component": "factor_admin",
+          "name": "Non-administrator",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "factor",
+          "component": "factor_auth",
+          "name": "Authentication type",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "factor",
+          "component": "factor_capability",
+          "name": "User capability",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "factor",
+          "component": "factor_cohort",
+          "name": "Cohort",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "factor",
+          "component": "factor_email",
+          "name": "Email",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "factor",
+          "component": "factor_grace",
+          "name": "Grace period",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "factor",
+          "component": "factor_iprange",
+          "name": "IP range",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "factor",
+          "component": "factor_nosetup",
+          "name": "No other factors",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "factor",
+          "component": "factor_role",
+          "name": "Role",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "factor",
+          "component": "factor_sms",
+          "name": "SMS mobile phone",
+          "version": 2024100702,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "factor",
+          "component": "factor_token",
+          "name": "Trust this device",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "factor",
+          "component": "factor_totp",
+          "name": "Authenticator app",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "factor",
+          "component": "factor_webauthn",
+          "name": "Security key",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "aiplacement",
+          "component": "aiplacement_courseassist",
+          "name": "Course assistance placement",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "aiplacement",
+          "component": "aiplacement_editor",
+          "name": "Text editor placement",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "aiprovider",
+          "component": "aiprovider_azureai",
+          "name": "Azure AI API provider",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "aiprovider",
+          "component": "aiprovider_openai",
+          "name": "OpenAI API provider",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "antivirus",
+          "component": "antivirus_clamav",
+          "name": "ClamAV antivirus",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "availability",
+          "component": "availability_completion",
+          "name": "Restriction by activity completion",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "availability",
+          "component": "availability_date",
+          "name": "Restriction by date",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "availability",
+          "component": "availability_grade",
+          "name": "Restriction by grades",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "availability",
+          "component": "availability_group",
+          "name": "Restriction by group",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "availability",
+          "component": "availability_grouping",
+          "name": "Restriction by grouping",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "availability",
+          "component": "availability_profile",
+          "name": "Restriction by profile",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "calendartype",
+          "component": "calendartype_gregorian",
+          "name": "Gregorian calendar type",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "communication",
+          "component": "communication_customlink",
+          "name": "Custom link",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "communication",
+          "component": "communication_matrix",
+          "name": "Matrix",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "customfield",
+          "component": "customfield_checkbox",
+          "name": "Checkbox",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "customfield",
+          "component": "customfield_date",
+          "name": "Date and time",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "customfield",
+          "component": "customfield_number",
+          "name": "Number",
+          "version": 2024100703,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "customfield",
+          "component": "customfield_select",
+          "name": "Dropdown menu",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "customfield",
+          "component": "customfield_text",
+          "name": "Short text",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "customfield",
+          "component": "customfield_textarea",
+          "name": "Text area",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "message",
+          "component": "message_airnotifier",
+          "name": "Mobile",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "message",
+          "component": "message_email",
+          "name": "Email",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "message",
+          "component": "message_popup",
+          "name": "Web",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "media",
+          "component": "media_html5audio",
+          "name": "HTML5 audio",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "media",
+          "component": "media_html5video",
+          "name": "HTML5 video",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "media",
+          "component": "media_videojs",
+          "name": "VideoJS player",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "media",
+          "component": "media_vimeo",
+          "name": "Vimeo",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "media",
+          "component": "media_youtube",
+          "name": "YouTube",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "format",
+          "component": "format_topics",
+          "name": "Custom sections",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "format",
+          "component": "format_weeks",
+          "name": "Weekly sections",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "format",
+          "component": "format_singleactivity",
+          "name": "Single activity",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "format",
+          "component": "format_social",
+          "name": "Social",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "dataformat",
+          "component": "dataformat_csv",
+          "name": "Comma separated values (.csv)",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "dataformat",
+          "component": "dataformat_excel",
+          "name": "Microsoft Excel (.xlsx)",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "dataformat",
+          "component": "dataformat_html",
+          "name": "HTML table",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "dataformat",
+          "component": "dataformat_json",
+          "name": "Javascript Object Notation (.json)",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "dataformat",
+          "component": "dataformat_ods",
+          "name": "OpenDocument (.ods)",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "dataformat",
+          "component": "dataformat_pdf",
+          "name": "Portable Document Format (.pdf)",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "profilefield",
+          "component": "profilefield_checkbox",
+          "name": "Checkbox",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "profilefield",
+          "component": "profilefield_datetime",
+          "name": "Date/Time",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "profilefield",
+          "component": "profilefield_menu",
+          "name": "Drop-down menu",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "profilefield",
+          "component": "profilefield_social",
+          "name": "Social",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "profilefield",
+          "component": "profilefield_text",
+          "name": "Text input",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "profilefield",
+          "component": "profilefield_textarea",
+          "name": "Text area",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_backups",
+          "name": "Backups report",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_competency",
+          "name": "Competency breakdown",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_completion",
+          "name": "Course completion",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_configlog",
+          "name": "Config changes",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_courseoverview",
+          "name": "Course overview",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_eventlist",
+          "name": "Events list",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_infectedfiles",
+          "name": "Infected files",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_insights",
+          "name": "Insights",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_log",
+          "name": "Logs",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_loglive",
+          "name": "Live logs",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_outline",
+          "name": "Activity report",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_participation",
+          "name": "Course participation",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_performance",
+          "name": "Performance overview",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_progress",
+          "name": "Activity completion",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_questioninstances",
+          "name": "Question instances",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_security",
+          "name": "Security checks",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_stats",
+          "name": "Statistics",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_status",
+          "name": "System status",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_themeusage",
+          "name": "Theme usage",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "report",
+          "component": "report_usersessions",
+          "name": "User sessions report",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradeexport",
+          "component": "gradeexport_ods",
+          "name": "OpenDocument spreadsheet",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradeexport",
+          "component": "gradeexport_txt",
+          "name": "Plain text file",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradeexport",
+          "component": "gradeexport_xls",
+          "name": "Excel spreadsheet",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradeexport",
+          "component": "gradeexport_xml",
+          "name": "XML file",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradeimport",
+          "component": "gradeimport_csv",
+          "name": "CSV file",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradeimport",
+          "component": "gradeimport_direct",
+          "name": "Paste from spreadsheet",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradeimport",
+          "component": "gradeimport_xml",
+          "name": "XML file",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradereport",
+          "component": "gradereport_grader",
+          "name": "Grader report",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradereport",
+          "component": "gradereport_history",
+          "name": "Grade history",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradereport",
+          "component": "gradereport_outcomes",
+          "name": "Outcomes report",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradereport",
+          "component": "gradereport_overview",
+          "name": "Overview report",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradereport",
+          "component": "gradereport_singleview",
+          "name": "Single view",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradereport",
+          "component": "gradereport_summary",
+          "name": "Grade summary",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradereport",
+          "component": "gradereport_user",
+          "name": "User report",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradingform",
+          "component": "gradingform_guide",
+          "name": "Marking guide",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "gradingform",
+          "component": "gradingform_rubric",
+          "name": "Rubric",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "mlbackend",
+          "component": "mlbackend_php",
+          "name": "PHP machine learning backend",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "mlbackend",
+          "component": "mlbackend_python",
+          "name": "Python machine learning backend",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "mnetservice",
+          "component": "mnetservice_enrol",
+          "name": "Remote enrolment service",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "webservice",
+          "component": "webservice_rest",
+          "name": "REST protocol",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "webservice",
+          "component": "webservice_soap",
+          "name": "SOAP protocol",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_areafiles",
+          "name": "Embedded files",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "repository",
+          "component": "repository_contentbank",
+          "name": "Content bank",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "repository",
+          "component": "repository_coursefiles",
+          "name": "Legacy course files",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_dropbox",
+          "name": "Dropbox",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_equella",
+          "name": "EQUELLA repository",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_filesystem",
+          "name": "File system",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_flickr",
+          "name": "Flickr",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_flickr_public",
+          "name": "Flickr public",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_googledocs",
+          "name": "Google Drive",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_local",
+          "name": "Server files",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "repository",
+          "component": "repository_merlot",
+          "name": "Merlot.org",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_nextcloud",
+          "name": "Nextcloud",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_onedrive",
+          "name": "Microsoft OneDrive",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_recent",
+          "name": "Recent files",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "repository",
+          "component": "repository_s3",
+          "name": "Amazon S3",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_upload",
+          "name": "Upload a file",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "repository",
+          "component": "repository_url",
+          "name": "URL downloader",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "repository",
+          "component": "repository_user",
+          "name": "Private files",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "repository",
+          "component": "repository_webdav",
+          "name": "WebDAV repository",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "repository",
+          "component": "repository_wikimedia",
+          "name": "Wikimedia",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "repository",
+          "component": "repository_youtube",
+          "name": "YouTube videos",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "portfolio",
+          "component": "portfolio_download",
+          "name": "File download",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "portfolio",
+          "component": "portfolio_flickr",
+          "name": "Flickr.com",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "portfolio",
+          "component": "portfolio_googledocs",
+          "name": "Google Drive",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "portfolio",
+          "component": "portfolio_mahara",
+          "name": "Mahara ePortfolio",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "search",
+          "component": "search_simpledb",
+          "name": "Simple search",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "search",
+          "component": "search_solr",
+          "name": "Solr",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "cachestore",
+          "component": "cachestore_apcu",
+          "name": "APC user cache (APCu)",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "cachestore",
+          "component": "cachestore_file",
+          "name": "File cache",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "cachestore",
+          "component": "cachestore_redis",
+          "name": "Redis",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "cachestore",
+          "component": "cachestore_session",
+          "name": "Session cache",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "cachestore",
+          "component": "cachestore_static",
+          "name": "Static request cache",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "cachelock",
+          "component": "cachelock_file",
+          "name": "File locking",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "fileconverter",
+          "component": "fileconverter_googledrive",
+          "name": "Google Drive",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "fileconverter",
+          "component": "fileconverter_unoconv",
+          "name": "Unoconv",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": false
+        },
+        {
+          "type": "contenttype",
+          "component": "contenttype_h5p",
+          "name": "H5P",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "theme",
+          "component": "theme_boost",
+          "name": "Boost",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "theme",
+          "component": "theme_classic",
+          "name": "Classic",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": null
+        },
+        {
+          "type": "h5plib",
+          "component": "h5plib_v127",
+          "name": "H5P framework v1.27",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "paygw",
+          "component": "paygw_paypal",
+          "name": "PayPal",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        },
+        {
+          "type": "smsgateway",
+          "component": "smsgateway_aws",
+          "name": "AWS",
+          "version": 2024100700,
+          "release": null,
+          "source": "std",
+          "enabled": true
+        }
+      ],
+      "third_party": [
+        {
+          "type": "mod",
+          "component": "mod_profilefield",
+          "name": "Profile Field",
+          "version": 2025071100,
+          "release": "1.0.9",
+          "source": "ext",
+          "enabled": true
+        },
+        {
+          "type": "mod",
+          "component": "mod_tincanlaunch",
+          "name": "xAPI Launch Link",
+          "version": 2026022502,
+          "release": "v2.0.0-alpha",
+          "source": "ext",
+          "enabled": true
+        },
+        {
+          "type": "block",
+          "component": "block_recompletion_due",
+          "name": "Recompletion Due Items",
+          "version": 2026030402,
+          "release": null,
+          "source": "ext",
+          "enabled": true
+        },
+        {
+          "type": "auth",
+          "component": "auth_emailasusername",
+          "name": "Email-based self-registration with the username as the email address",
+          "version": 2025102200,
+          "release": "2.0.0",
+          "source": "ext",
+          "enabled": false
+        },
+        {
+          "type": "tool",
+          "component": "tool_dynamic_cohorts",
+          "name": "Dynamic cohorts",
+          "version": 2025080701,
+          "release": 2025080701,
+          "source": "ext",
+          "enabled": true
+        },
+        {
+          "type": "logstore",
+          "component": "logstore_xapi",
+          "name": "Logstore xAPI",
+          "version": 2026022300,
+          "release": "5.0.1",
+          "source": "ext",
+          "enabled": false
+        },
+        {
+          "type": "profilefield",
+          "component": "profilefield_accesscode",
+          "name": "Access Code",
+          "version": 2026040501,
+          "release": null,
+          "source": "ext",
+          "enabled": null
+        },
+        {
+          "type": "profilefield",
+          "component": "profilefield_iproccn",
+          "name": "IPRO ESRD CCN",
+          "version": 2024100201,
+          "release": null,
+          "source": "ext",
+          "enabled": null
+        },
+        {
+          "type": "profilefield",
+          "component": "profilefield_nyscounty",
+          "name": "New York State County",
+          "version": 2025102101,
+          "release": null,
+          "source": "ext",
+          "enabled": null
+        },
+        {
+          "type": "profilefield",
+          "component": "profilefield_signnatonesix",
+          "name": "signnatonesix",
+          "version": null,
+          "release": null,
+          "source": "ext",
+          "enabled": false
+        },
+        {
+          "type": "profilefield",
+          "component": "profilefield_signnatseventwelve",
+          "name": "signnatseventwelve",
+          "version": null,
+          "release": null,
+          "source": "ext",
+          "enabled": false
+        },
+        {
+          "type": "profilefield",
+          "component": "profilefield_signnatthirteen",
+          "name": "signnatthirteen",
+          "version": null,
+          "release": null,
+          "source": "ext",
+          "enabled": false
+        },
+        {
+          "type": "local",
+          "component": "local_certreminder",
+          "name": "Certificate expiry reminders",
+          "version": 2026040701,
+          "release": "1.0.0",
+          "source": "ext",
+          "enabled": null
+        },
+        {
+          "type": "local",
+          "component": "local_dspcodechecker",
+          "name": "DawnSignDigital Access Code Checker",
+          "version": 2026040501,
+          "release": null,
+          "source": "ext",
+          "enabled": null
+        },
+        {
+          "type": "local",
+          "component": "local_fleetmonitor",
+          "name": "Fleet Monitor",
+          "version": 2026052100,
+          "release": "0.1.0",
+          "source": "ext",
+          "enabled": null
+        },
+        {
+          "type": "local",
+          "component": "local_profilefield_autofill",
+          "name": "Profile Field Auto-fill",
+          "version": 2025110402,
+          "release": "1.2.0",
+          "source": "ext",
+          "enabled": null
+        },
+        {
+          "type": "local",
+          "component": "local_recompletion",
+          "name": "Course recompletion",
+          "version": 2025041400,
+          "release": 2025041400,
+          "source": "ext",
+          "enabled": null
+        },
+        {
+          "type": "local",
+          "component": "local_sci",
+          "name": "SCI API",
+          "version": 2026021200,
+          "release": "1.0.1",
+          "source": "ext",
+          "enabled": null
+        }
+      ],
+      "updates_available": [],
+      "theme": {
+        "name": "boost",
+        "version": 2024100700,
+        "release": null,
+        "source": "std"
+      }
+    },
+    "health": {
+      "cron": {
+        "last_run": 0,
+        "seconds_since_last_run": null,
+        "now": 1779370410
+      },
+      "tasks": {
+        "scheduled_failed_count": 0,
+        "scheduled_failed": [],
+        "adhoc_queue_depth": 4,
+        "adhoc_oldest_nextruntime": 1772131374
+      },
+      "sessions": {
+        "active_last_5_min": 4,
+        "active_last_hour": 4,
+        "total_rows": 7
+      },
+      "disk": {
+        "dataroot": {
+          "path": "/var/www/moodledata",
+          "free_bytes": 54882541568,
+          "total_bytes": 62671097856
+        },
+        "dirroot": {
+          "path": "/var/www/html",
+          "free_bytes": 387481108480,
+          "total_bytes": 994662584320
+        }
+      },
+      "mail": {
+        "smtphosts": "",
+        "smtpsecure": "",
+        "noreplyaddress": "",
+        "supportemail": "admin@example.com"
+      },
+      "admins": {
+        "count": 1,
+        "admins": [
+          {
+            "id": 2,
+            "username": "admin",
+            "last_access": 1779370350,
+            "last_login": 1775587436,
+            "suspended": false
+          }
+        ]
+      },
+      "flags": {
+        "debug": 0,
+        "debugdisplay": false,
+        "themedesignermode": false,
+        "cachejs_disabled": false,
+        "perfdebug": 7
+      }
+    },
+    "config_changes": {
+      "limit": 50,
+      "count": 50,
+      "entries": [
+        {
+          "id": 2125,
+          "time": 1779369443,
+          "userid": 0,
+          "username": null,
+          "fullname": "",
+          "plugin": "local_fleetmonitor",
+          "name": "pushenabled",
+          "oldvalue": "1",
+          "newvalue": "0"
+        },
+        {
+          "id": 2124,
+          "time": 1779369442,
+          "userid": 0,
+          "username": null,
+          "fullname": "",
+          "plugin": "local_fleetmonitor",
+          "name": "pushsecret",
+          "oldvalue": "dev-secret-shh",
+          "newvalue": ""
+        },
+        {
+          "id": 2123,
+          "time": 1779369442,
+          "userid": 0,
+          "username": null,
+          "fullname": "",
+          "plugin": "local_fleetmonitor",
+          "name": "pushendpoint",
+          "oldvalue": "https://httpbin.org/post",
+          "newvalue": ""
+        },
+        {
+          "id": 2122,
+          "time": 1779369433,
+          "userid": 0,
+          "username": null,
+          "fullname": "",
+          "plugin": "local_fleetmonitor",
+          "name": "pushenabled",
+          "oldvalue": "0",
+          "newvalue": "1"
+        },
+        {
+          "id": 2121,
+          "time": 1779369433,
+          "userid": 0,
+          "username": null,
+          "fullname": "",
+          "plugin": "local_fleetmonitor",
+          "name": "pushsecret",
+          "oldvalue": "",
+          "newvalue": "dev-secret-shh"
+        },
+        {
+          "id": 2120,
+          "time": 1779369432,
+          "userid": 0,
+          "username": null,
+          "fullname": "",
+          "plugin": "local_fleetmonitor",
+          "name": "pushendpoint",
+          "oldvalue": "",
+          "newvalue": "https://httpbin.org/post"
+        },
+        {
+          "id": 2119,
+          "time": 1779369273,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_fleetmonitor",
+          "name": "pushsecret",
+          "oldvalue": null,
+          "newvalue": ""
+        },
+        {
+          "id": 2118,
+          "time": 1779369273,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_fleetmonitor",
+          "name": "pushendpoint",
+          "oldvalue": null,
+          "newvalue": ""
+        },
+        {
+          "id": 2117,
+          "time": 1779369273,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_fleetmonitor",
+          "name": "pushenabled",
+          "oldvalue": null,
+          "newvalue": "0"
+        },
+        {
+          "id": 2116,
+          "time": 1775591114,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_certreminder",
+          "name": "batchsize",
+          "oldvalue": null,
+          "newvalue": "500"
+        },
+        {
+          "id": 2115,
+          "time": 1775587487,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_certreminder",
+          "name": "emailbody",
+          "oldvalue": null,
+          "newvalue": "Dear {fullname},\r\n\r\nYour certification for the course \"{coursename}\" will expire on {expirydate} ({daysuntilexpiry} days from now).\r\n\r\nPlease renew your certification by visiting: {renewalurl}\r\n\r\nThank you."
+        },
+        {
+          "id": 2114,
+          "time": 1775587487,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_certreminder",
+          "name": "emailsubject",
+          "oldvalue": null,
+          "newvalue": "Your certification is expiring in {daysuntilexpiry} days"
+        },
+        {
+          "id": 2113,
+          "time": 1775587487,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_certreminder",
+          "name": "renewalurl",
+          "oldvalue": null,
+          "newvalue": "https://crowdmanagers.com/purchase"
+        },
+        {
+          "id": 2112,
+          "time": 1775587487,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_certreminder",
+          "name": "reminderintervals",
+          "oldvalue": null,
+          "newvalue": "30"
+        },
+        {
+          "id": 2111,
+          "time": 1775587487,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_certreminder",
+          "name": "cutoffdate",
+          "oldvalue": null,
+          "newvalue": ""
+        },
+        {
+          "id": 2110,
+          "time": 1775587487,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_certreminder",
+          "name": "expiryperiod",
+          "oldvalue": null,
+          "newvalue": "730"
+        },
+        {
+          "id": 2109,
+          "time": 1773334250,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "mod_profilefield",
+          "name": "customprofilefields",
+          "oldvalue": "",
+          "newvalue": "sn16,sn712"
+        },
+        {
+          "id": 2108,
+          "time": 1773329933,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_dspcodechecker",
+          "name": "apisecret",
+          "oldvalue": "",
+          "newvalue": "********"
+        },
+        {
+          "id": 2107,
+          "time": 1773329933,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_dspcodechecker",
+          "name": "apikey",
+          "oldvalue": "",
+          "newvalue": "ck_b36edb7c3917933790ee8d4a1c6390e5fd82dc31"
+        },
+        {
+          "id": 2106,
+          "time": 1773329933,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_dspcodechecker",
+          "name": "apiurl",
+          "oldvalue": "https://dawnsignpress.mystagingwebsite.com/api/v1/validate-sc-token",
+          "newvalue": "https://dawnsignstaging.mystagingwebsite.com/wp-json/dsp/v2"
+        },
+        {
+          "id": 2105,
+          "time": 1773329830,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_dspcodechecker",
+          "name": "batchsize",
+          "oldvalue": null,
+          "newvalue": "50"
+        },
+        {
+          "id": 2104,
+          "time": 1772223063,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_dspcodechecker",
+          "name": "apisecret",
+          "oldvalue": null,
+          "newvalue": ""
+        },
+        {
+          "id": 2103,
+          "time": 1772223063,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "local_dspcodechecker",
+          "name": "apikey",
+          "oldvalue": null,
+          "newvalue": ""
+        },
+        {
+          "id": 2102,
+          "time": 1772198125,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_shibboleth",
+          "name": "field_lock_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": "unlocked"
+        },
+        {
+          "id": 2101,
+          "time": 1772198125,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_shibboleth",
+          "name": "field_updatelocal_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": "oncreate"
+        },
+        {
+          "id": 2100,
+          "time": 1772198125,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_shibboleth",
+          "name": "field_map_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": ""
+        },
+        {
+          "id": 2099,
+          "time": 1772198125,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_shibboleth",
+          "name": "field_lock_profile_field_sn16",
+          "oldvalue": null,
+          "newvalue": "unlocked"
+        },
+        {
+          "id": 2098,
+          "time": 1772198125,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_shibboleth",
+          "name": "field_updatelocal_profile_field_sn16",
+          "oldvalue": null,
+          "newvalue": "oncreate"
+        },
+        {
+          "id": 2097,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_shibboleth",
+          "name": "field_map_profile_field_sn16",
+          "oldvalue": null,
+          "newvalue": ""
+        },
+        {
+          "id": 2096,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_ldap",
+          "name": "field_lock_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": "unlocked"
+        },
+        {
+          "id": 2095,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_ldap",
+          "name": "field_updateremote_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": "0"
+        },
+        {
+          "id": 2094,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_ldap",
+          "name": "field_updatelocal_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": "oncreate"
+        },
+        {
+          "id": 2093,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_ldap",
+          "name": "field_map_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": ""
+        },
+        {
+          "id": 2092,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_ldap",
+          "name": "field_lock_profile_field_sn16",
+          "oldvalue": null,
+          "newvalue": "unlocked"
+        },
+        {
+          "id": 2091,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_ldap",
+          "name": "field_updateremote_profile_field_sn16",
+          "oldvalue": null,
+          "newvalue": "0"
+        },
+        {
+          "id": 2090,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_ldap",
+          "name": "field_updatelocal_profile_field_sn16",
+          "oldvalue": null,
+          "newvalue": "oncreate"
+        },
+        {
+          "id": 2089,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_ldap",
+          "name": "field_map_profile_field_sn16",
+          "oldvalue": null,
+          "newvalue": ""
+        },
+        {
+          "id": 2088,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_db",
+          "name": "field_lock_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": "unlocked"
+        },
+        {
+          "id": 2087,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_db",
+          "name": "field_updateremote_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": "0"
+        },
+        {
+          "id": 2086,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_db",
+          "name": "field_updatelocal_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": "oncreate"
+        },
+        {
+          "id": 2085,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_db",
+          "name": "field_map_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": ""
+        },
+        {
+          "id": 2084,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_db",
+          "name": "field_lock_profile_field_sn16",
+          "oldvalue": null,
+          "newvalue": "unlocked"
+        },
+        {
+          "id": 2083,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_db",
+          "name": "field_updateremote_profile_field_sn16",
+          "oldvalue": null,
+          "newvalue": "0"
+        },
+        {
+          "id": 2082,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_db",
+          "name": "field_updatelocal_profile_field_sn16",
+          "oldvalue": null,
+          "newvalue": "oncreate"
+        },
+        {
+          "id": 2081,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_db",
+          "name": "field_map_profile_field_sn16",
+          "oldvalue": null,
+          "newvalue": ""
+        },
+        {
+          "id": 2080,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_cas",
+          "name": "field_lock_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": "unlocked"
+        },
+        {
+          "id": 2079,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_cas",
+          "name": "field_updateremote_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": "0"
+        },
+        {
+          "id": 2078,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_cas",
+          "name": "field_updatelocal_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": "oncreate"
+        },
+        {
+          "id": 2077,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_cas",
+          "name": "field_map_profile_field_sn712",
+          "oldvalue": null,
+          "newvalue": ""
+        },
+        {
+          "id": 2076,
+          "time": 1772198124,
+          "userid": 2,
+          "username": "admin",
+          "fullname": "Admin User",
+          "plugin": "auth_cas",
+          "name": "field_lock_profile_field_sn16",
+          "oldvalue": null,
+          "newvalue": "unlocked"
+        }
+      ]
+    }
+  }
+}

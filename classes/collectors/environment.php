@@ -108,7 +108,83 @@ class environment {
             'host' => $CFG->dbhost,
             'name' => $CFG->dbname,
             'prefix' => $CFG->prefix,
+            'size_bytes' => self::db_size_bytes(),
+            'largest_tables' => self::db_largest_tables(10),
         ];
+    }
+
+    /**
+     * Total database size in bytes, dispatching on dbtype. Null if unsupported.
+     *
+     * @return int|null
+     */
+    protected static function db_size_bytes(): ?int {
+        global $CFG, $DB;
+
+        try {
+            if ($CFG->dbtype === 'pgsql') {
+                $val = $DB->get_field_sql('SELECT pg_database_size(current_database())');
+            } else if (in_array($CFG->dbtype, ['mysqli', 'mariadb', 'auroramysql'], true)) {
+                $val = $DB->get_field_sql(
+                    'SELECT SUM(data_length + index_length) FROM information_schema.tables '
+                    . 'WHERE table_schema = DATABASE()'
+                );
+            } else {
+                return null;
+            }
+        } catch (\Throwable $e) {
+            return null;
+        }
+        return $val !== false && $val !== null ? (int) $val : null;
+    }
+
+    /**
+     * Top N largest Moodle tables by total size (data + indexes).
+     *
+     * Filtered to tables matching the configured prefix so legacy / unrelated
+     * tables in the same schema don't pollute the list.
+     *
+     * @param int $limit
+     * @return array
+     */
+    protected static function db_largest_tables(int $limit): array {
+        global $CFG, $DB;
+
+        $prefix = $CFG->prefix;
+        $like = str_replace(['\\', '_', '%'], ['\\\\', '\\_', '\\%'], $prefix) . '%';
+
+        try {
+            if ($CFG->dbtype === 'pgsql') {
+                $sql = 'SELECT c.relname AS name, pg_total_relation_size(c.oid) AS size_bytes
+                          FROM pg_class c
+                          JOIN pg_namespace n ON n.oid = c.relnamespace
+                         WHERE c.relkind = \'r\'
+                           AND n.nspname = current_schema()
+                           AND c.relname LIKE :like ESCAPE \'\\\'
+                      ORDER BY pg_total_relation_size(c.oid) DESC';
+                $rows = $DB->get_records_sql($sql, ['like' => $like], 0, $limit);
+            } else if (in_array($CFG->dbtype, ['mysqli', 'mariadb', 'auroramysql'], true)) {
+                $sql = 'SELECT table_name AS name, (data_length + index_length) AS size_bytes
+                          FROM information_schema.tables
+                         WHERE table_schema = DATABASE()
+                           AND table_name LIKE :like ESCAPE \'\\\'
+                      ORDER BY (data_length + index_length) DESC';
+                $rows = $DB->get_records_sql($sql, ['like' => $like], 0, $limit);
+            } else {
+                return [];
+            }
+        } catch (\Throwable $e) {
+            return [];
+        }
+
+        $out = [];
+        foreach ($rows as $row) {
+            $out[] = [
+                'name' => $row->name,
+                'size_bytes' => (int) $row->size_bytes,
+            ];
+        }
+        return $out;
     }
 
     /**

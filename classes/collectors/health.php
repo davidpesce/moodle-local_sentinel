@@ -41,7 +41,58 @@ class health {
             'disk' => self::collect_disk(),
             'mail' => self::collect_mail(),
             'admins' => self::collect_admins(),
+            'backup' => self::collect_backup(),
             'flags' => self::collect_footgun_flags(),
+        ];
+    }
+
+    /**
+     * Automated backup state and per-status counts from mdl_backup_courses.
+     *
+     * Reads the table directly rather than going through backup_cron_automated_helper
+     * because the helper's public API surface has shifted across Moodle versions and
+     * is not stable.
+     *
+     * Status codes (from backup_cron_automated_helper):
+     *   0 = ERROR, 1 = OK, 2 = UNFINISHED, 3 = SKIPPED,
+     *   4 = WARNING, 5 = NOTYETRUN, 6 = QUEUED
+     *
+     * @return array
+     */
+    protected static function collect_backup(): array {
+        global $DB;
+
+        $automatedstate = (int) get_config('backup', 'backup_auto_active');
+
+        $statuslabels = [
+            0 => 'error',
+            1 => 'ok',
+            2 => 'unfinished',
+            3 => 'skipped',
+            4 => 'warning',
+            5 => 'notyetrun',
+            6 => 'queued',
+        ];
+
+        $rows = $DB->get_records_sql(
+            'SELECT laststatus, COUNT(*) AS c FROM {backup_courses} GROUP BY laststatus'
+        );
+        $statuscounts = array_fill_keys(array_values($statuslabels), 0);
+        foreach ($rows as $row) {
+            $label = $statuslabels[(int) $row->laststatus] ?? 'unknown';
+            $statuscounts[$label] = (int) $row->c;
+        }
+
+        $lastsuccess = (int) $DB->get_field_sql(
+            'SELECT MAX(laststarttime) FROM {backup_courses} WHERE laststatus = ?',
+            [1]
+        );
+
+        return [
+            'automated_state' => $automatedstate,
+            'status_counts' => $statuscounts,
+            'last_success' => $lastsuccess > 0 ? $lastsuccess : null,
+            'total_courses_tracked' => array_sum($statuscounts),
         ];
     }
 

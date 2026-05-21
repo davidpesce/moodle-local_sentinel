@@ -45,6 +45,7 @@ final class collector_test extends \advanced_testcase {
         $this->assertArrayHasKey('environment', $snapshot);
         $this->assertArrayHasKey('plugins', $snapshot);
         $this->assertArrayHasKey('health', $snapshot);
+        $this->assertArrayHasKey('auth', $snapshot);
         $this->assertArrayHasKey('config_changes', $snapshot);
     }
 
@@ -68,6 +69,9 @@ final class collector_test extends \advanced_testcase {
         $this->assertArrayHasKey('branch', $status);
         $this->assertArrayHasKey('release', $status);
         $this->assertArrayHasKey('maintenance_enabled', $status);
+        $this->assertArrayHasKey('branch_eol_date', $status);
+        $this->assertArrayHasKey('branch_eol_days_remaining', $status);
+        $this->assertArrayHasKey('build_age_days', $status);
         $this->assertIsBool($status['maintenance_enabled']);
     }
 
@@ -85,6 +89,9 @@ final class collector_test extends \advanced_testcase {
         $this->assertSame(PHP_VERSION, $env['php']['version']);
         $this->assertSame(PHP_SAPI, $env['php']['sapi']);
         $this->assertIsArray($env['extensions']);
+        $this->assertArrayHasKey('size_bytes', $env['database']);
+        $this->assertArrayHasKey('largest_tables', $env['database']);
+        $this->assertIsArray($env['database']['largest_tables']);
     }
 
     public function test_plugins_keys(): void {
@@ -110,7 +117,27 @@ final class collector_test extends \advanced_testcase {
         $this->assertArrayHasKey('disk', $health);
         $this->assertArrayHasKey('mail', $health);
         $this->assertArrayHasKey('admins', $health);
+        $this->assertArrayHasKey('backup', $health);
         $this->assertArrayHasKey('flags', $health);
+        $this->assertArrayHasKey('status_counts', $health['backup']);
+        $this->assertArrayHasKey('last_success', $health['backup']);
+        $this->assertArrayHasKey('automated_state', $health['backup']);
+    }
+
+    public function test_auth_keys(): void {
+        $this->resetAfterTest();
+
+        $auth = collectors\auth::collect();
+
+        $this->assertArrayHasKey('enabled', $auth);
+        $this->assertArrayHasKey('methods', $auth);
+        $this->assertIsArray($auth['enabled']);
+        $this->assertIsArray($auth['methods']);
+        foreach ($auth['methods'] as $entry) {
+            $this->assertArrayHasKey('plugin', $entry);
+            $this->assertArrayHasKey('total_users', $entry);
+            $this->assertArrayHasKey('active_users', $entry);
+        }
     }
 
     public function test_config_changes_respects_limit(): void {

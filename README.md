@@ -46,7 +46,8 @@ Available functions:
 | `local_fleetmonitor_get_snapshot` | Full snapshot (all sections below) |
 | `local_fleetmonitor_get_environment` | PHP, OS, DB, web server, extensions |
 | `local_fleetmonitor_get_plugins` | Installed plugins + available updates |
-| `local_fleetmonitor_get_health` | Cron, tasks, sessions, disk, backups |
+| `local_fleetmonitor_get_health` | Cron, tasks, sessions, disk, backups, mail |
+| `local_fleetmonitor_get_auth` | Enabled auth methods + user counts per method |
 | `local_fleetmonitor_get_config_changes` | Recent `mdl_config_log` entries |
 
 Each function returns:

@@ -32,6 +32,22 @@ namespace local_fleetmonitor\collectors;
  */
 class status {
     /**
+     * Branch number => security-support end date (ISO 8601).
+     *
+     * Source: https://moodledev.io/general/releases — security end dates for each
+     * supported branch. Bump this map when a new Moodle major release ships.
+     */
+    private const BRANCH_EOL = [
+        401 => '2025-12-08',
+        402 => '2023-12-11',
+        403 => '2025-04-14',
+        404 => '2025-10-13',
+        405 => '2027-12-13',
+        500 => '2026-10-12',
+        501 => '2027-04-12',
+    ];
+
+    /**
      * Collect.
      *
      * @return array
@@ -45,6 +61,58 @@ class status {
             'release' => $CFG->release,
             'maintenance_enabled' => !empty($CFG->maintenance_enabled),
             'maintenance_message' => isset($CFG->maintenance_message) ? (string) $CFG->maintenance_message : '',
+            'branch_eol_date' => self::branch_eol_date((int) $CFG->branch),
+            'branch_eol_days_remaining' => self::branch_eol_days_remaining((int) $CFG->branch),
+            'build_age_days' => self::build_age_days((int) $CFG->version),
         ];
+    }
+
+    /**
+     * EOL date string for a branch, or null if unknown.
+     *
+     * @param int $branch
+     * @return string|null
+     */
+    protected static function branch_eol_date(int $branch): ?string {
+        return self::BRANCH_EOL[$branch] ?? null;
+    }
+
+    /**
+     * Days remaining until security support ends. Negative if already past EOL.
+     *
+     * @param int $branch
+     * @return int|null
+     */
+    protected static function branch_eol_days_remaining(int $branch): ?int {
+        $date = self::branch_eol_date($branch);
+        if ($date === null) {
+            return null;
+        }
+        $eol = strtotime($date . ' 23:59:59 UTC');
+        if ($eol === false) {
+            return null;
+        }
+        return (int) floor(($eol - time()) / 86400);
+    }
+
+    /**
+     * Days since the build encoded in $CFG->version (YYYYMMDDXX).
+     *
+     * @param int $version
+     * @return int|null
+     */
+    protected static function build_age_days(int $version): ?int {
+        $str = (string) $version;
+        if (strlen($str) < 8) {
+            return null;
+        }
+        $year = (int) substr($str, 0, 4);
+        $month = (int) substr($str, 4, 2);
+        $day = (int) substr($str, 6, 2);
+        $build = gmmktime(0, 0, 0, $month, $day, $year);
+        if ($build === false) {
+            return null;
+        }
+        return (int) floor((time() - $build) / 86400);
     }
 }
