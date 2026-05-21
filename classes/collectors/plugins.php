@@ -100,16 +100,18 @@ class plugins {
             return [];
         }
         $out = [];
-        foreach ($updates as $component => $componentupdates) {
-            foreach ($componentupdates as $update) {
-                $out[] = [
-                    'component' => $component,
-                    'version' => $update->version ?? null,
-                    'release' => $update->release ?? null,
-                    'maturity' => $update->maturity ?? null,
-                    'download' => $update->download ?? null,
-                ];
-            }
+        foreach ($updates as $component => $remoteinfo) {
+            // available_updates() returns one \core\update\remote_info per component;
+            // the actual version metadata lives in $remoteinfo->version (a stdClass).
+            $v = $remoteinfo->version ?? null;
+            $out[] = [
+                'component' => $component,
+                'version' => $v->version ?? null,
+                'release' => $v->release ?? null,
+                'maturity' => $v->maturity ?? null,
+                'download' => $v->downloadurl ?? null,
+                'source_url' => $remoteinfo->source ?? null,
+            ];
         }
         return $out;
     }
