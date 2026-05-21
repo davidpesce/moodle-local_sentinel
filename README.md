@@ -51,15 +51,42 @@ Available functions:
 | `local_fleetmonitor_get_config_changes` | Recent `mdl_config_log` entries |
 | `local_fleetmonitor_get_config_drift` | Settings whose current value differs from default (secrets excluded) |
 
-Each function returns:
+Each function returns a versioned envelope. The structure is validated
+server-side via Moodle's `clean_returnvalue()`; auto-generated docs are
+available at `admin/webservice/documentation.php` for the deployed token.
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "generated_at": "2026-05-21T14:23:11+00:00",
-  "payload": "<json-encoded snapshot data>"
+  "plugin": {
+    "component": "local_fleetmonitor",
+    "version": 2026052108,
+    "release": "0.9.0"
+  },
+  "site": { "wwwroot": "...", "siteidentifier": "...", "sitename": "...", "shortname": "..." },
+  "<slice_name>": { ... }
 }
 ```
+
+`get_snapshot` returns every slice keyed at the top level; the granular
+functions (`get_status`, `get_environment`, …) return only their own slice
+plus `site`. Snapshot slices and their high-level contents:
+
+| Slice | Contents |
+|---|---|
+| `status` | Moodle version, branch, release, maintenance flag, branch EOL date, build age |
+| `environment` | PHP / OS / web server / DB / OPcache / SSL / loaded extensions |
+| `plugins` | Standard + third-party plugin lists with install status, available updates with `update_available` cross-reference |
+| `health` | Cron, scheduled + adhoc tasks, sessions, disk, mail, admins (with last-changed), backup, upgrade log, foot-gun flags |
+| `auth` | Enabled auth methods, per-method user counts, failed-login signals (locked accounts, top targets) |
+| `config_changes` | Tail of `mdl_config_log` (default last 50, configurable) |
+| `config_drift` | Settings whose current value differs from declared default (secrets excluded by class + name pattern) |
+
+See `CHANGELOG.md` for `schema_version` history. Versioning rule:
+`schema_version` bumps only on breaking shape changes; additive fields do
+not require a bump. Central dashboards should branch parsing on
+`schema_version`, not on the plugin's `release` string.
 
 ### Push
 

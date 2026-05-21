@@ -88,7 +88,26 @@ class collector {
         return array_merge([
             'schema_version' => self::SCHEMA_VERSION,
             'generated_at' => gmdate('c'),
+            'plugin' => self::get_plugin_identity(),
         ], $data);
+    }
+
+    /**
+     * Self-identification for the local_fleetmonitor plugin itself.
+     *
+     * Lets a central dashboard detect instances running outdated plugin
+     * versions and parse older snapshots correctly when SCHEMA_VERSION
+     * has bumped.
+     *
+     * @return array
+     */
+    public static function get_plugin_identity(): array {
+        $info = \core_plugin_manager::instance()->get_plugin_info('local_fleetmonitor');
+        return [
+            'component' => 'local_fleetmonitor',
+            'version' => $info ? (int) $info->versiondisk : null,
+            'release' => $info && isset($info->release) ? (string) $info->release : null,
+        ];
     }
 
     /**

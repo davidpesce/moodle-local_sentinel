@@ -67,6 +67,11 @@ abstract class base extends external_api {
         $structure = [
             'schema_version' => new external_value(PARAM_INT, 'Snapshot schema version.'),
             'generated_at' => new external_value(PARAM_TEXT, 'ISO 8601 UTC timestamp.'),
+            'plugin' => new external_single_structure([
+                'component' => new external_value(PARAM_RAW, 'Plugin frankenstyle.'),
+                'version' => self::nullable_int('local_fleetmonitor version int.'),
+                'release' => self::nullable_text('local_fleetmonitor release string.'),
+            ], 'local_fleetmonitor self-identification.'),
             'site' => self::site_structure(),
         ];
         $builders = [
