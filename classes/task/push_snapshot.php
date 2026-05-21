@@ -27,8 +27,6 @@ namespace local_fleetmonitor\task;
 use core\task\scheduled_task;
 use local_fleetmonitor\collector;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Push the current snapshot to the configured central collector.
  *
@@ -37,8 +35,9 @@ defined('MOODLE_INTERNAL') || die();
  * and instances that cannot be polled inbound.
  */
 class push_snapshot extends scheduled_task {
-
     /**
+     * Get name.
+     *
      * @return string
      */
     public function get_name(): string {

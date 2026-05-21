@@ -26,14 +26,13 @@ namespace local_fleetmonitor\collectors;
 
 use core_plugin_manager;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Inventories installed plugins, separating standard core plugins from extensions.
  */
 class plugins {
-
     /**
+     * Collect.
+     *
      * @return array
      */
     public static function collect(): array {
@@ -95,6 +94,8 @@ class plugins {
     }
 
     /**
+     * Collect theme.
+     *
      * @return array
      */
     protected static function collect_theme(): array {

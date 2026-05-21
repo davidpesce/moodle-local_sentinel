@@ -24,8 +24,6 @@
 
 namespace local_fleetmonitor;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Builds the snapshot payload by delegating to per-slice collectors.
  *
@@ -33,7 +31,6 @@ defined('MOODLE_INTERNAL') || die();
  * call into this class so the JSON shape is identical regardless of transport.
  */
 class collector {
-
     /** @var int Bump on breaking changes to the payload shape. Additive changes do not require a bump. */
     public const SCHEMA_VERSION = 1;
 

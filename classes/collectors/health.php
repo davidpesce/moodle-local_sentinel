@@ -24,14 +24,13 @@
 
 namespace local_fleetmonitor\collectors;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Operational health signals — the things most likely to wake an operator at night.
  */
 class health {
-
     /**
+     * Collect.
+     *
      * @return array
      */
     public static function collect(): array {
@@ -47,6 +46,8 @@ class health {
     }
 
     /**
+     * Collect cron.
+     *
      * @return array
      */
     protected static function collect_cron(): array {
@@ -60,6 +61,8 @@ class health {
     }
 
     /**
+     * Collect tasks.
+     *
      * @return array
      */
     protected static function collect_tasks(): array {
@@ -96,6 +99,8 @@ class health {
     }
 
     /**
+     * Collect sessions.
+     *
      * @return array
      */
     protected static function collect_sessions(): array {
@@ -118,6 +123,8 @@ class health {
     }
 
     /**
+     * Collect disk.
+     *
      * @return array
      */
     protected static function collect_disk(): array {
@@ -138,6 +145,8 @@ class health {
     }
 
     /**
+     * Safe disk free.
+     *
      * @param string $path
      * @return int|null
      */
@@ -147,6 +156,8 @@ class health {
     }
 
     /**
+     * Safe disk total.
+     *
      * @param string $path
      * @return int|null
      */
@@ -156,6 +167,8 @@ class health {
     }
 
     /**
+     * Collect mail.
+     *
      * @return array
      */
     protected static function collect_mail(): array {
@@ -170,6 +183,8 @@ class health {
     }
 
     /**
+     * Collect admins.
+     *
      * @return array
      */
     protected static function collect_admins(): array {

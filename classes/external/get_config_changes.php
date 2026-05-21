@@ -29,14 +29,13 @@ use core_external\external_value;
 use local_fleetmonitor\collector;
 use local_fleetmonitor\collectors\config_changes;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Returns just the config_changes slice. Accepts an optional row limit.
  */
 class get_config_changes extends base {
-
     /**
+     * Execute parameters.
+     *
      * @return external_function_parameters
      */
     public static function execute_parameters(): external_function_parameters {
@@ -51,6 +50,8 @@ class get_config_changes extends base {
     }
 
     /**
+     * Execute.
+     *
      * @param int $limit
      * @return array
      */

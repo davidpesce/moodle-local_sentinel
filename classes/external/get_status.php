@@ -26,14 +26,13 @@ namespace local_fleetmonitor\external;
 
 use local_fleetmonitor\collector;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Cheap liveness probe — only the status slice.
  */
 class get_status extends base {
-
     /**
+     * Return the status slice.
+     *
      * @return array
      */
     public static function execute(): array {

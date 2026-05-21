@@ -24,17 +24,16 @@
 
 namespace local_fleetmonitor\collectors;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Tails mdl_config_log, matching the data exposed by Reports → Config Changes.
  */
 class config_changes {
-
     /** @var int Default number of rows to return. */
     public const DEFAULT_LIMIT = 50;
 
     /**
+     * Collect.
+     *
      * @param int|null $limit Override the default row count.
      * @return array
      */

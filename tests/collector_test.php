@@ -24,8 +24,6 @@
 
 namespace local_fleetmonitor;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Verifies each collector returns the expected top-level keys.
  *
@@ -35,7 +33,6 @@ defined('MOODLE_INTERNAL') || die();
  * @covers \local_fleetmonitor\collector
  */
 final class collector_test extends \advanced_testcase {
-
     public function test_snapshot_envelope(): void {
         $this->resetAfterTest();
 

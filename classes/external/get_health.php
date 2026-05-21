@@ -26,14 +26,13 @@ namespace local_fleetmonitor\external;
 
 use local_fleetmonitor\collector;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Returns just the health slice.
  */
 class get_health extends base {
-
     /**
+     * Execute.
+     *
      * @return array
      */
     public static function execute(): array {

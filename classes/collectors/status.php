@@ -24,8 +24,6 @@
 
 namespace local_fleetmonitor\collectors;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Returns the minimum data needed to answer "is this site up and which Moodle is it?".
  *
@@ -33,8 +31,9 @@ defined('MOODLE_INTERNAL') || die();
  * polled at high frequency by a fleet dashboard.
  */
 class status {
-
     /**
+     * Collect.
+     *
      * @return array
      */
     public static function collect(): array {

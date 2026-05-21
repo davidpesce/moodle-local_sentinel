@@ -30,8 +30,6 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Provides the standard envelope return shape and a permission check helper.
  *
@@ -39,7 +37,6 @@ defined('MOODLE_INTERNAL') || die();
  * then returns the result of envelope().
  */
 abstract class base extends external_api {
-
     /**
      * Default: no parameters. Subclasses that need params override this.
      *

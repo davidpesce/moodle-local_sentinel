@@ -26,14 +26,13 @@ namespace local_fleetmonitor\external;
 
 use local_fleetmonitor\collector;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Returns the full monitoring snapshot.
  */
 class get_snapshot extends base {
-
     /**
+     * Return the full monitoring snapshot.
+     *
      * @return array
      */
     public static function execute(): array {

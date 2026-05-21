@@ -24,14 +24,13 @@
 
 namespace local_fleetmonitor\collectors;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Environment details for the underlying host and stack.
  */
 class environment {
-
     /**
+     * Collect.
+     *
      * @return array
      */
     public static function collect(): array {
@@ -47,6 +46,8 @@ class environment {
     }
 
     /**
+     * Collect php.
+     *
      * @return array
      */
     protected static function collect_php(): array {
@@ -62,6 +63,8 @@ class environment {
     }
 
     /**
+     * Collect os.
+     *
      * @return array
      */
     protected static function collect_os(): array {
@@ -75,6 +78,8 @@ class environment {
     }
 
     /**
+     * Collect webserver.
+     *
      * @return array
      */
     protected static function collect_webserver(): array {
@@ -88,6 +93,8 @@ class environment {
     }
 
     /**
+     * Collect database.
+     *
      * @return array
      */
     protected static function collect_database(): array {
@@ -105,6 +112,8 @@ class environment {
     }
 
     /**
+     * Collect opcache.
+     *
      * @return array
      */
     protected static function collect_opcache(): array {
@@ -130,6 +139,8 @@ class environment {
     }
 
     /**
+     * Collect extensions.
+     *
      * @return array
      */
     protected static function collect_extensions(): array {
