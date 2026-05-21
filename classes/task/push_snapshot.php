@@ -65,14 +65,6 @@ class push_snapshot extends scheduled_task {
             return;
         }
 
-        // Refresh the update cache if Moodle deems it stale (respects the
-        // built-in 24h freshness window — does NOT hammer moodle.org every run).
-        try {
-            \core\update\checker::instance()->cron();
-        } catch (\Throwable $e) {
-            mtrace('local_fleetmonitor: update checker cron failed: ' . $e->getMessage());
-        }
-
         $snapshot = collector::get_snapshot();
         $body = json_encode($snapshot);
 

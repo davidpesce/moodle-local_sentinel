@@ -43,3 +43,4 @@ $string['settingsheading_push_desc'] = 'Configure the plugin to POST snapshots t
     . 'Use this for new-client evaluation or for instances behind firewalls that cannot be polled inbound. '
     . 'Pull access through Moodle web services works independently of these settings.';
 $string['task_push_snapshot'] = 'Push fleet monitor snapshot to central collector';
+$string['task_refresh_updates'] = 'Refresh available-updates cache (no admin email)';

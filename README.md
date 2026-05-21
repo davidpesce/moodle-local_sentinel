@@ -77,15 +77,23 @@ The central collector must verify the secret header before accepting the body.
 The `plugins.updates_available` and `plugins.update_check` fields reflect
 Moodle's cached results from its last fetch of `moodle.org/updates`. The
 plugin does **not** trigger a fresh fetch on every snapshot call — that would
-be slow and would hammer moodle.org at fleet scale. Refresh happens via:
+be slow and hammer moodle.org at fleet scale.
 
-1. Moodle's own scheduled update-check task (runs daily by default, controlled
-   by Site administration → Server → Update notifications).
-2. The `push_snapshot` task, which calls `checker::cron()` before building the
-   snapshot — Moodle respects its own 24h freshness window so this is safe to
-   run frequently.
-3. On demand: `php local/fleetmonitor/cli/refresh_updates.php` — equivalent to
-   clicking "Check for available updates" at Site administration → Notifications.
+Instead, the plugin ships its own scheduled task **`refresh_updates`**
+(enabled by default, daily at a randomized time). It calls
+`\core\update\checker::fetch()` directly — same network call as Moodle's
+built-in auto-check, but **without** the admin email notifications.
+
+This means you can leave Moodle's own "Check for updates and notify me"
+task disabled to silence the email spam, and this plugin will still keep
+the update cache fresh.
+
+The task respects the top-level kill switch `$CFG->disableupdatenotifications`
+for sites that have explicitly chosen not to phone home to moodle.org at all.
+
+For on-demand refresh:
+`php local/fleetmonitor/cli/refresh_updates.php` — equivalent to clicking
+"Check for available updates" at Site administration → Notifications.
 
 Use `plugins.update_check.age_seconds` to judge how stale the data is.
 
