@@ -13,6 +13,26 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [1.1.0] — schema_version 3 — 2026-05-21
+
+Additive. Exposes Moodle core update availability — previously the
+snapshot only showed per-plugin updates and not whether Moodle itself
+had a newer release.
+
+- **Added** `status.core_update`:
+  - `update_available: bool` — true if a newer Moodle release exists
+    on the current branch (e.g. 4.5.10 → 4.5.11).
+  - `latest_on_branch: {branch, version, release, maturity, download}`
+    or `null` — same-branch latest, what an operator would actually
+    apply as a routine patch.
+  - `newer_branches: [...]` — one entry per newer branch (e.g. 5.0,
+    5.1, 5.2) with its latest stable release. For planning major
+    upgrades, not routine patching.
+
+  Data comes from `\core\update\checker::get_update_info('core')`.
+  Refresh is handled by the existing `refresh_updates` scheduled
+  task; the collector reads cache only.
+
 ## [1.0.0] — schema_version 3 — 2026-05-21
 
 Closes the original spec. Adds the long-deferred reports collector.

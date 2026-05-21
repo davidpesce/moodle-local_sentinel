@@ -1,6 +1,11 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-05-21T14:55:40+00:00",
+  "generated_at": "2026-05-21T15:31:03+00:00",
+  "plugin": {
+    "component": "local_fleetmonitor",
+    "version": 2026052110,
+    "release": "1.0.0"
+  },
   "site": {
     "wwwroot": "http://localhost:8080",
     "siteidentifier": "whGmK2ne5EoLxoksgOZaaTFg2REa8YYylocalhost",
@@ -30,7 +35,7 @@
     "os": {
       "sysname": "Linux",
       "release": "6.12.76-linuxkit",
-      "version": "#1 SMP Fri May  1 14:35:41 UTC 2026",
+      "version": "#1 SMP Fri May 1 14:35:41 UTC 2026",
       "machine": "aarch64",
       "hostname": "d243b3661c8e"
     },
@@ -47,7 +52,7 @@
       "host": "db",
       "name": "moodle",
       "prefix": "mdl_",
-      "size_bytes": 88137063,
+      "size_bytes": 88735079,
       "largest_tables": [
         {
           "name": "mdl_role_capabilities",
@@ -93,13 +98,13 @@
     },
     "opcache": {
       "enabled": true,
-      "used_memory": 82104792,
-      "free_memory": 50191744,
-      "wasted_memory": 1921192,
-      "num_cached_scripts": 3864,
-      "hits": 60345,
-      "misses": 4060,
-      "hit_rate": 93.69614160391274
+      "used_memory": 90815816,
+      "free_memory": 39960264,
+      "wasted_memory": 3441648,
+      "num_cached_scripts": 4247,
+      "hits": 70234,
+      "misses": 4478,
+      "hit_rate": 94.00631759289003
     },
     "extensions": [
       "apache2handler",
@@ -6636,9 +6641,9 @@
         "type": "local",
         "component": "local_fleetmonitor",
         "name": "Fleet Monitor",
-        "version_disk": 2026052107,
-        "version_db": 2026052107,
-        "release": "0.7.1",
+        "version_disk": 2026052110,
+        "version_db": 2026052110,
+        "release": "1.0.0",
         "source": "ext",
         "status": "uptodate",
         "missing_from_disk": false,
@@ -6702,7 +6707,7 @@
     "update_check": {
       "enabled": true,
       "last_fetched": 1779372279,
-      "age_seconds": 3061
+      "age_seconds": 5182
     },
     "theme": {
       "name": "boost",
@@ -6715,7 +6720,7 @@
     "cron": {
       "last_run": 0,
       "seconds_since_last_run": null,
-      "now": 1779375340
+      "now": 1779377461
     },
     "tasks": {
       "scheduled_failed_count": 0,
@@ -6725,18 +6730,18 @@
     },
     "sessions": {
       "active_last_5_min": 0,
-      "active_last_hour": 1,
+      "active_last_hour": 0,
       "total_rows": 7
     },
     "disk": {
       "dataroot": {
         "path": "/var/www/moodledata",
-        "free_bytes": 54888361984,
+        "free_bytes": 54887694336,
         "total_bytes": 62671097856
       },
       "dirroot": {
         "path": "/var/www/html",
-        "free_bytes": 387392106496,
+        "free_bytes": 387355004928,
         "total_bytes": 994662584320
       }
     },
@@ -6752,11 +6757,17 @@
         {
           "id": 2,
           "username": "admin",
-          "last_access": 1779373588,
+          "last_access": 1779377174,
           "last_login": 1775587436,
           "suspended": false
         }
-      ]
+      ],
+      "last_changed": {
+        "time": null,
+        "userid": null,
+        "oldvalue": null,
+        "newvalue": null
+      }
     },
     "backup": {
       "automated_state": 0,
@@ -6771,6 +6782,286 @@
       },
       "last_success": null,
       "total_courses_tracked": 0
+    },
+    "upgrade_log": {
+      "total_errors": 0,
+      "recent": [
+        {
+          "id": 1450,
+          "time": 1779376704,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052110",
+          "targetversion": "2026052110",
+          "info": "Plugin upgraded",
+          "userid": 0
+        },
+        {
+          "id": 1449,
+          "time": 1779376704,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052110",
+          "targetversion": "2026052110",
+          "info": "Upgrade savepoint reached",
+          "userid": 0
+        },
+        {
+          "id": 1448,
+          "time": 1779376704,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052109",
+          "targetversion": "2026052110",
+          "info": "Starting plugin upgrade",
+          "userid": 0
+        },
+        {
+          "id": 1447,
+          "time": 1779376290,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052109",
+          "targetversion": "2026052109",
+          "info": "Plugin upgraded",
+          "userid": 0
+        },
+        {
+          "id": 1446,
+          "time": 1779376290,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052109",
+          "targetversion": "2026052109",
+          "info": "Upgrade savepoint reached",
+          "userid": 0
+        },
+        {
+          "id": 1445,
+          "time": 1779376290,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052108",
+          "targetversion": "2026052109",
+          "info": "Starting plugin upgrade",
+          "userid": 0
+        },
+        {
+          "id": 1444,
+          "time": 1779375846,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052108",
+          "targetversion": "2026052108",
+          "info": "Plugin upgraded",
+          "userid": 0
+        },
+        {
+          "id": 1443,
+          "time": 1779375846,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052108",
+          "targetversion": "2026052108",
+          "info": "Upgrade savepoint reached",
+          "userid": 0
+        },
+        {
+          "id": 1442,
+          "time": 1779375846,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052107",
+          "targetversion": "2026052108",
+          "info": "Starting plugin upgrade",
+          "userid": 0
+        },
+        {
+          "id": 1441,
+          "time": 1779375262,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052107",
+          "targetversion": "2026052107",
+          "info": "Plugin upgraded",
+          "userid": 0
+        },
+        {
+          "id": 1440,
+          "time": 1779375262,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052107",
+          "targetversion": "2026052107",
+          "info": "Upgrade savepoint reached",
+          "userid": 0
+        },
+        {
+          "id": 1439,
+          "time": 1779375262,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052106",
+          "targetversion": "2026052107",
+          "info": "Starting plugin upgrade",
+          "userid": 0
+        },
+        {
+          "id": 1438,
+          "time": 1779374817,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052106",
+          "targetversion": "2026052106",
+          "info": "Plugin upgraded",
+          "userid": 0
+        },
+        {
+          "id": 1437,
+          "time": 1779374817,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052106",
+          "targetversion": "2026052106",
+          "info": "Upgrade savepoint reached",
+          "userid": 0
+        },
+        {
+          "id": 1436,
+          "time": 1779374817,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052104",
+          "targetversion": "2026052106",
+          "info": "Starting plugin upgrade",
+          "userid": 0
+        },
+        {
+          "id": 1435,
+          "time": 1779372615,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052104",
+          "targetversion": "2026052104",
+          "info": "Plugin upgraded",
+          "userid": 0
+        },
+        {
+          "id": 1434,
+          "time": 1779372615,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052104",
+          "targetversion": "2026052104",
+          "info": "Upgrade savepoint reached",
+          "userid": 0
+        },
+        {
+          "id": 1433,
+          "time": 1779372615,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052103",
+          "targetversion": "2026052104",
+          "info": "Starting plugin upgrade",
+          "userid": 0
+        },
+        {
+          "id": 1432,
+          "time": 1779372274,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052103",
+          "targetversion": "2026052103",
+          "info": "Plugin upgraded",
+          "userid": 0
+        },
+        {
+          "id": 1431,
+          "time": 1779372274,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052103",
+          "targetversion": "2026052103",
+          "info": "Upgrade savepoint reached",
+          "userid": 0
+        },
+        {
+          "id": 1430,
+          "time": 1779372274,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052101",
+          "targetversion": "2026052103",
+          "info": "Starting plugin upgrade",
+          "userid": 0
+        },
+        {
+          "id": 1429,
+          "time": 1779371495,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052101",
+          "targetversion": "2026052101",
+          "info": "Plugin upgraded",
+          "userid": 0
+        },
+        {
+          "id": 1428,
+          "time": 1779371495,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052101",
+          "targetversion": "2026052101",
+          "info": "Upgrade savepoint reached",
+          "userid": 0
+        },
+        {
+          "id": 1427,
+          "time": 1779371495,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052100",
+          "targetversion": "2026052101",
+          "info": "Starting plugin upgrade",
+          "userid": 0
+        },
+        {
+          "id": 1426,
+          "time": 1779369270,
+          "type": 0,
+          "type_label": "normal",
+          "plugin": "local_fleetmonitor",
+          "version": "2026052100",
+          "targetversion": "2026052100",
+          "info": "Plugin installed",
+          "userid": 0
+        }
+      ]
     },
     "flags": {
       "debug": 0,
@@ -6791,7 +7082,288 @@
         "active_users": 0
       }
     ],
-    "distinct_methods_in_use": 2
+    "distinct_methods_in_use": 2,
+    "failed_logins": {
+      "total_failed_count": 0,
+      "accounts_with_failures": 0,
+      "locked_accounts": 0,
+      "top_accounts": []
+    }
+  },
+  "reports": {
+    "performance": {
+      "total": 6,
+      "counts_by_status": {
+        "na": 0,
+        "ok": 6,
+        "info": 0,
+        "unknown": 0,
+        "warning": 0,
+        "error": 0,
+        "critical": 0
+      },
+      "checks": [
+        {
+          "ref": "core_designermode",
+          "component": "core",
+          "name": "Theme designer mode",
+          "status": "ok",
+          "summary": "If enabled, images and style sheets will not be cached, resulting in significant performance degradation."
+        },
+        {
+          "ref": "core_cachejs",
+          "component": "core",
+          "name": "Cache Javascript",
+          "status": "ok",
+          "summary": "If disabled, page might load slow."
+        },
+        {
+          "ref": "core_debugging",
+          "component": "core",
+          "name": "Debug messages",
+          "status": "ok",
+          "summary": "If set to DEVELOPER, performance may be affected slightly."
+        },
+        {
+          "ref": "core_backups",
+          "component": "core",
+          "name": "Automated backup",
+          "status": "ok",
+          "summary": "Performance may be affected during the backup process. If enabled, backups should be scheduled for off-peak times."
+        },
+        {
+          "ref": "core_stats",
+          "component": "core",
+          "name": "Statistics",
+          "status": "ok",
+          "summary": "Performance may be affected by statistics processing. If enabled, statistics settings should be set with caution."
+        },
+        {
+          "ref": "core_dbschema",
+          "component": "core",
+          "name": "Database schema check",
+          "status": "ok",
+          "summary": "Database schema is correct."
+        }
+      ]
+    },
+    "security": {
+      "total": 19,
+      "counts_by_status": {
+        "na": 0,
+        "ok": 11,
+        "info": 1,
+        "unknown": 0,
+        "warning": 6,
+        "error": 1,
+        "critical": 0
+      },
+      "checks": [
+        {
+          "ref": "core_displayerrors",
+          "component": "core",
+          "name": "Displaying of PHP errors",
+          "status": "warning",
+          "summary": "The PHP setting to display errors is enabled. It is recommended that this is disabled."
+        },
+        {
+          "ref": "core_unsecuredataroot",
+          "component": "core",
+          "name": "Insecure dataroot",
+          "status": "ok",
+          "summary": "Dataroot directory must not be accessible via the web."
+        },
+        {
+          "ref": "core_publicpaths",
+          "component": "core",
+          "name": "Check all public / private paths",
+          "status": "error",
+          "summary": "Some internal paths are publicly accessible\t* /behat/ files should not be public"
+        },
+        {
+          "ref": "core_configrw",
+          "component": "core",
+          "name": "Writable config.php",
+          "status": "warning",
+          "summary": "PHP scripts may modify config.php."
+        },
+        {
+          "ref": "core_preventexecpath",
+          "component": "core",
+          "name": "Executable paths",
+          "status": "warning",
+          "summary": "Executable paths can be set in the Admin GUI."
+        },
+        {
+          "ref": "core_embed",
+          "component": "core",
+          "name": "Allow EMBED and OBJECT",
+          "status": "ok",
+          "summary": "Unlimited object embedding is not allowed."
+        },
+        {
+          "ref": "core_openprofiles",
+          "component": "core",
+          "name": "Open user profiles",
+          "status": "ok",
+          "summary": "Login is required before viewing user profiles."
+        },
+        {
+          "ref": "core_crawlers",
+          "component": "core",
+          "name": "Open to search engines",
+          "status": "ok",
+          "summary": "Search engine access is not enabled."
+        },
+        {
+          "ref": "core_passwordpolicy",
+          "component": "core",
+          "name": "Password policy",
+          "status": "ok",
+          "summary": "Password policy enabled."
+        },
+        {
+          "ref": "core_emailchangeconfirmation",
+          "component": "core",
+          "name": "Email change confirmation",
+          "status": "ok",
+          "summary": "Confirmation of change of email address in user profile."
+        },
+        {
+          "ref": "core_webcron",
+          "component": "core",
+          "name": "Web cron",
+          "status": "ok",
+          "summary": "Anonymous users can not access cron."
+        },
+        {
+          "ref": "core_cookiesecure",
+          "component": "core",
+          "name": "Secure cookies",
+          "status": "warning",
+          "summary": "You must turn on https in order to use secure cookies"
+        },
+        {
+          "ref": "core_riskadmin",
+          "component": "core",
+          "name": "Administrators",
+          "status": "info",
+          "summary": "Found 1 server administrator(s)."
+        },
+        {
+          "ref": "core_riskxss",
+          "component": "core",
+          "name": "XSS trusted users",
+          "status": "warning",
+          "summary": "RISK_XSS - found 1 users that have to be trusted."
+        },
+        {
+          "ref": "core_riskbackup",
+          "component": "core",
+          "name": "Backup of user data",
+          "status": "warning",
+          "summary": "Found 1 roles, 0 overrides and 0 users with the ability to backup user data."
+        },
+        {
+          "ref": "core_defaultuserrole",
+          "component": "core",
+          "name": "Default role for all users",
+          "status": "ok",
+          "summary": "Default role for all users definition is OK."
+        },
+        {
+          "ref": "core_guestrole",
+          "component": "core",
+          "name": "Guest role",
+          "status": "ok",
+          "summary": "Guest role definition is OK."
+        },
+        {
+          "ref": "core_frontpagerole",
+          "component": "core",
+          "name": "Site home role",
+          "status": "ok",
+          "summary": "Site home role definition is OK."
+        },
+        {
+          "ref": "auth_none_noauth",
+          "component": "auth_none",
+          "name": "No authentication",
+          "status": "ok",
+          "summary": "The no authentication plugin is disabled."
+        }
+      ]
+    },
+    "system_status": {
+      "total": 7,
+      "counts_by_status": {
+        "na": 1,
+        "ok": 4,
+        "info": 0,
+        "unknown": 0,
+        "warning": 0,
+        "error": 1,
+        "critical": 1
+      },
+      "checks": [
+        {
+          "ref": "core_environment",
+          "component": "core",
+          "name": "Environment",
+          "status": "ok",
+          "summary": "Your server environment meets all minimum requirements."
+        },
+        {
+          "ref": "core_upgradecheck",
+          "component": "core",
+          "name": "Upgrade",
+          "status": "ok",
+          "summary": "No upgrade needed for the installed version 4.5.10+ (Build: 20260306) (2024100710.04). Thanks for coming anyway!"
+        },
+        {
+          "ref": "core_antivirus",
+          "component": "core",
+          "name": "Antivirus",
+          "status": "na",
+          "summary": "No antivirus scanners are currently enabled"
+        },
+        {
+          "ref": "tool_task_cronrunning",
+          "component": "tool_task",
+          "name": "Cron running",
+          "status": "critical",
+          "summary": "The admin/cli/cron.php script has never been run and should run every 1 min."
+        },
+        {
+          "ref": "tool_task_maxfaildelay",
+          "component": "tool_task",
+          "name": "Tasks max fail delay",
+          "status": "ok",
+          "summary": "There are no tasks failing"
+        },
+        {
+          "ref": "tool_task_adhocqueue",
+          "component": "tool_task",
+          "name": "Ad hoc task queue",
+          "status": "error",
+          "summary": "Oldest unprocessed task is 83 days 20 hours, which is more than 4 hours"
+        },
+        {
+          "ref": "tool_task_longrunningtasks",
+          "component": "tool_task",
+          "name": "Long running tasks",
+          "status": "ok",
+          "summary": "Long running tasks: 0"
+        }
+      ]
+    },
+    "mfa": {
+      "installed": true,
+      "enabled": false,
+      "users_with_factor": 0,
+      "locked_users": 0,
+      "by_factor": []
+    }
   },
   "config_changes": {
     "limit": 50,

@@ -64,7 +64,98 @@ class status {
             'branch_eol_date' => self::branch_eol_date((int) $CFG->branch),
             'branch_eol_days_remaining' => self::branch_eol_days_remaining((int) $CFG->branch),
             'build_age_days' => self::build_age_days((int) $CFG->version),
+            'core_update' => self::collect_core_update(),
         ];
+    }
+
+    /**
+     * Available Moodle core updates from \core\update\checker.
+     *
+     * Distinguishes same-branch updates (e.g. 4.5.10 → 4.5.11, which is a
+     * routine patch) from newer-branch updates (4.5 → 5.0, a major upgrade
+     * the operator plans separately).
+     *
+     * Reads only the cache; freshness is the responsibility of the
+     * refresh_updates scheduled task.
+     *
+     * @return array
+     */
+    protected static function collect_core_update(): array {
+        global $CFG;
+
+        $cachedinfo = \core\update\checker::instance()->get_update_info('core');
+        if (empty($cachedinfo)) {
+            return [
+                'update_available' => false,
+                'latest_on_branch' => null,
+                'newer_branches' => [],
+            ];
+        }
+
+        $currentbranch = (int) $CFG->branch;
+        $currentversion = (float) $CFG->version;
+
+        $samebranch = [];
+        $newerbranches = [];
+        foreach ($cachedinfo as $info) {
+            $branch = self::branch_from_release((string) ($info->release ?? ''));
+            if ($branch === null) {
+                continue;
+            }
+            $entry = [
+                'branch' => $branch,
+                'version' => (float) $info->version,
+                'release' => (string) $info->release,
+                'maturity' => isset($info->maturity) ? (int) $info->maturity : null,
+                'download' => $info->download ?? null,
+            ];
+            if ($branch === $currentbranch) {
+                $samebranch[] = $entry;
+            } else if ($branch > $currentbranch) {
+                $newerbranches[] = $entry;
+            }
+        }
+
+        $latestonbranch = null;
+        if (!empty($samebranch)) {
+            usort($samebranch, fn($a, $b) => $b['version'] <=> $a['version']);
+            $candidate = $samebranch[0];
+            if ($candidate['version'] > $currentversion) {
+                $latestonbranch = $candidate;
+            }
+        }
+
+        // Per-branch deduplication for newer branches: keep highest stable per branch.
+        usort($newerbranches, fn($a, $b) => $b['version'] <=> $a['version']);
+        $seenbranches = [];
+        $deduped = [];
+        foreach ($newerbranches as $entry) {
+            if (isset($seenbranches[$entry['branch']])) {
+                continue;
+            }
+            $seenbranches[$entry['branch']] = true;
+            $deduped[] = $entry;
+        }
+        usort($deduped, fn($a, $b) => $a['branch'] <=> $b['branch']);
+
+        return [
+            'update_available' => $latestonbranch !== null,
+            'latest_on_branch' => $latestonbranch,
+            'newer_branches' => $deduped,
+        ];
+    }
+
+    /**
+     * Parse "4.5.11+" / "5.0.7+" / "5.3dev" → 405 / 500 / 503.
+     *
+     * @param string $release
+     * @return int|null
+     */
+    protected static function branch_from_release(string $release): ?int {
+        if (preg_match('/^(\d+)\.(\d+)/', $release, $m)) {
+            return ((int) $m[1]) * 100 + ((int) $m[2]);
+        }
+        return null;
     }
 
     /**

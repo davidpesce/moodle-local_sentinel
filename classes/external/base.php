@@ -153,6 +153,29 @@ abstract class base extends external_api {
             'branch_eol_date' => self::nullable_text('Branch security EOL date (ISO 8601).'),
             'branch_eol_days_remaining' => self::nullable_int('Days until branch security EOL.'),
             'build_age_days' => self::nullable_int('Days since this build date.'),
+            'core_update' => new external_single_structure([
+                'update_available' => new external_value(
+                    PARAM_BOOL,
+                    'True if a newer Moodle release exists on the current branch.'
+                ),
+                'latest_on_branch' => new external_single_structure([
+                    'branch' => new external_value(PARAM_INT, 'Branch number.'),
+                    'version' => new external_value(PARAM_FLOAT, 'Available version (float, preserves sub-build).'),
+                    'release' => new external_value(PARAM_RAW, 'Release string.'),
+                    'maturity' => self::nullable_int('Release maturity (MATURITY_* constant).'),
+                    'download' => self::nullable_text('Download URL.'),
+                ], 'Newest release on the current branch; null if up to date.', VALUE_REQUIRED, null, NULL_ALLOWED),
+                'newer_branches' => new external_multiple_structure(
+                    new external_single_structure([
+                        'branch' => new external_value(PARAM_INT, 'Branch number.'),
+                        'version' => new external_value(PARAM_FLOAT, 'Latest version on that branch.'),
+                        'release' => new external_value(PARAM_RAW, 'Release string.'),
+                        'maturity' => self::nullable_int('Release maturity.'),
+                        'download' => self::nullable_text('Download URL.'),
+                    ]),
+                    'Latest release per newer branch (one entry per branch).'
+                ),
+            ]),
         ]);
     }
 
