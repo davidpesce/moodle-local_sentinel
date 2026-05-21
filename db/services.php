@@ -61,6 +61,12 @@ $functions = [
         'type' => 'read',
         'capabilities' => 'local/fleetmonitor:view',
     ],
+    'local_fleetmonitor_get_reports' => [
+        'classname' => 'local_fleetmonitor\\external\\get_reports',
+        'description' => 'Performance / Security / System status checks + MFA report.',
+        'type' => 'read',
+        'capabilities' => 'local/fleetmonitor:view',
+    ],
     'local_fleetmonitor_get_config_changes' => [
         'classname' => 'local_fleetmonitor\\external\\get_config_changes',
         'description' => 'Recent entries from mdl_config_log.',
@@ -84,6 +90,7 @@ $services = [
             'local_fleetmonitor_get_plugins',
             'local_fleetmonitor_get_health',
             'local_fleetmonitor_get_auth',
+            'local_fleetmonitor_get_reports',
             'local_fleetmonitor_get_config_changes',
             'local_fleetmonitor_get_config_drift',
         ],

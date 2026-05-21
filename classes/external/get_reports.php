@@ -15,18 +15,38 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * External function: get_reports.
  *
  * @package    local_fleetmonitor
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_fleetmonitor\external;
 
-$plugin->version   = 2026052110;
-$plugin->release   = '1.0.0';
-$plugin->requires  = 2024100700;
-$plugin->component = 'local_fleetmonitor';
-$plugin->maturity  = MATURITY_ALPHA;
-$plugin->supported = [405, 501];
+use core_external\external_single_structure;
+use local_fleetmonitor\collector;
+
+/**
+ * Returns just the reports slice: Performance / Security / System status / MFA.
+ */
+class get_reports extends base {
+    /**
+     * Return the reports slice.
+     *
+     * @return array
+     */
+    public static function execute(): array {
+        self::authorise();
+        return collector::get_slice('reports');
+    }
+
+    /**
+     * Declare the return shape.
+     *
+     * @return external_single_structure
+     */
+    public static function execute_returns(): external_single_structure {
+        return self::envelope_with_slices(['reports']);
+    }
+}

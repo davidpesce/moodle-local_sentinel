@@ -80,6 +80,7 @@ abstract class base extends external_api {
             'plugins' => 'plugins_structure',
             'health' => 'health_structure',
             'auth' => 'auth_structure',
+            'reports' => 'reports_structure',
             'config_changes' => 'config_changes_structure',
             'config_drift' => 'config_drift_structure',
         ];
@@ -421,6 +422,58 @@ abstract class base extends external_api {
                         'locked' => new external_value(PARAM_BOOL, 'True if the account is currently locked.'),
                         'suspended' => new external_value(PARAM_BOOL, 'Suspended flag.'),
                     ])
+                ),
+            ]),
+        ]);
+    }
+
+    /**
+     * Reports slice: performance / security / system_status checks + MFA stats.
+     *
+     * @return external_single_structure
+     */
+    protected static function reports_structure(): external_single_structure {
+        $checkresult = new external_single_structure([
+            'ref' => new external_value(PARAM_RAW, 'Unique check reference (component:id).'),
+            'component' => new external_value(PARAM_RAW, 'Component the check belongs to.'),
+            'name' => new external_value(PARAM_RAW, 'Display name.'),
+            'status' => new external_value(PARAM_RAW, 'Result status: na/ok/info/unknown/warning/error/critical.'),
+            'summary' => new external_value(PARAM_RAW, 'Plaintext summary of the result.'),
+        ]);
+        $checksection = new external_single_structure([
+            'total' => new external_value(PARAM_INT, 'Total checks in this category.'),
+            'counts_by_status' => new external_single_structure([
+                'na' => new external_value(PARAM_INT, 'Not applicable.'),
+                'ok' => new external_value(PARAM_INT, 'OK.'),
+                'info' => new external_value(PARAM_INT, 'Informational.'),
+                'unknown' => new external_value(PARAM_INT, 'Unknown / not yet run.'),
+                'warning' => new external_value(PARAM_INT, 'Warning.'),
+                'error' => new external_value(PARAM_INT, 'Error.'),
+                'critical' => new external_value(PARAM_INT, 'Critical.'),
+            ]),
+            'checks' => new external_multiple_structure($checkresult),
+        ]);
+
+        return new external_single_structure([
+            'performance' => $checksection,
+            'security' => $checksection,
+            'system_status' => $checksection,
+            'mfa' => new external_single_structure([
+                'installed' => new external_value(PARAM_BOOL, 'Whether tool_mfa is installed.'),
+                'enabled' => new external_value(PARAM_BOOL, 'tool_mfa global enable flag.', VALUE_OPTIONAL),
+                'users_with_factor' => new external_value(
+                    PARAM_INT,
+                    'Distinct users with at least one active MFA factor.',
+                    VALUE_OPTIONAL
+                ),
+                'locked_users' => new external_value(PARAM_INT, 'Users currently locked out by MFA.', VALUE_OPTIONAL),
+                'by_factor' => new external_multiple_structure(
+                    new external_single_structure([
+                        'factor' => new external_value(PARAM_RAW, 'Factor plugin name.'),
+                        'active_users' => new external_value(PARAM_INT, 'Distinct users with this factor enrolled.'),
+                    ]),
+                    'Per-factor active user counts.',
+                    VALUE_OPTIONAL
                 ),
             ]),
         ]);

@@ -13,6 +13,22 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [1.0.0] — schema_version 3 — 2026-05-21
+
+Closes the original spec. Adds the long-deferred reports collector.
+
+- **Added** `reports` slice (new `get_reports` external function):
+  - `performance` — runs `\core\check\manager::get_performance_checks()`,
+    captures status / summary for each (cachejs, OPcache, designermode, etc.).
+  - `security` — same via `get_security_checks()` (crawlers, password policy,
+    web cron, embed, etc.).
+  - `system_status` — same via `get_status_checks()` (the data behind the
+    System status admin page).
+  - `mfa` — direct read of `mdl_tool_mfa`: per-factor active user counts,
+    total users with any factor enrolled, current locked user count.
+  Each check section includes `counts_by_status` (na/ok/info/unknown/warning/
+  error/critical) plus the full check list with plaintext summaries.
+
 ## [0.9.0] — schema_version 3 — 2026-05-21
 
 Additive on the wire. Plugin self-identification embedded in every snapshot.

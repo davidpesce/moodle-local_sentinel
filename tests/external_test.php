@@ -40,6 +40,7 @@ use core_external\external_api;
  * @covers \local_fleetmonitor\external\get_plugins
  * @covers \local_fleetmonitor\external\get_health
  * @covers \local_fleetmonitor\external\get_auth
+ * @covers \local_fleetmonitor\external\get_reports
  * @covers \local_fleetmonitor\external\get_config_changes
  * @covers \local_fleetmonitor\external\get_config_drift
  */
@@ -57,6 +58,7 @@ final class external_test extends \advanced_testcase {
             'get_plugins' => [external\get_plugins::class],
             'get_health' => [external\get_health::class],
             'get_auth' => [external\get_auth::class],
+            'get_reports' => [external\get_reports::class],
             'get_config_changes' => [external\get_config_changes::class],
             'get_config_drift' => [external\get_config_drift::class],
         ];
@@ -88,7 +90,11 @@ final class external_test extends \advanced_testcase {
         $result = external\get_snapshot::execute();
         $cleaned = external_api::clean_returnvalue(external\get_snapshot::execute_returns(), $result);
 
-        foreach (['status', 'environment', 'plugins', 'health', 'auth', 'config_changes', 'config_drift'] as $slice) {
+        $expected = [
+            'status', 'environment', 'plugins', 'health',
+            'auth', 'reports', 'config_changes', 'config_drift',
+        ];
+        foreach ($expected as $slice) {
             $this->assertArrayHasKey($slice, $cleaned, "Snapshot missing slice: $slice");
         }
     }

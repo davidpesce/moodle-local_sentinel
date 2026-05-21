@@ -48,6 +48,7 @@ Available functions:
 | `local_fleetmonitor_get_plugins` | Installed plugins + available updates |
 | `local_fleetmonitor_get_health` | Cron, tasks, sessions, disk, backups, mail |
 | `local_fleetmonitor_get_auth` | Enabled auth methods + user counts per method |
+| `local_fleetmonitor_get_reports` | Performance / Security / System status checks + MFA stats |
 | `local_fleetmonitor_get_config_changes` | Recent `mdl_config_log` entries |
 | `local_fleetmonitor_get_config_drift` | Settings whose current value differs from default (secrets excluded) |
 
@@ -80,6 +81,7 @@ plus `site`. Snapshot slices and their high-level contents:
 | `plugins` | Standard + third-party plugin lists with install status, available updates with `update_available` cross-reference |
 | `health` | Cron, scheduled + adhoc tasks, sessions, disk, mail, admins (with last-changed), backup, upgrade log, foot-gun flags |
 | `auth` | Enabled auth methods, per-method user counts, failed-login signals (locked accounts, top targets) |
+| `reports` | Performance / Security / System status checks (via `\core\check\manager`) + MFA factor enrolment stats |
 | `config_changes` | Tail of `mdl_config_log` (default last 50, configurable) |
 | `config_drift` | Settings whose current value differs from declared default (secrets excluded by class + name pattern) |
 

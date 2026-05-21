@@ -46,8 +46,28 @@ final class collector_test extends \advanced_testcase {
         $this->assertArrayHasKey('plugins', $snapshot);
         $this->assertArrayHasKey('health', $snapshot);
         $this->assertArrayHasKey('auth', $snapshot);
+        $this->assertArrayHasKey('reports', $snapshot);
         $this->assertArrayHasKey('config_changes', $snapshot);
         $this->assertArrayHasKey('config_drift', $snapshot);
+    }
+
+    public function test_reports_keys(): void {
+        $this->resetAfterTest();
+
+        $reports = collectors\reports::collect();
+
+        $this->assertArrayHasKey('performance', $reports);
+        $this->assertArrayHasKey('security', $reports);
+        $this->assertArrayHasKey('system_status', $reports);
+        $this->assertArrayHasKey('mfa', $reports);
+        foreach (['performance', 'security', 'system_status'] as $section) {
+            $this->assertArrayHasKey('total', $reports[$section]);
+            $this->assertArrayHasKey('counts_by_status', $reports[$section]);
+            $this->assertArrayHasKey('checks', $reports[$section]);
+            foreach (['ok', 'warning', 'error', 'critical'] as $status) {
+                $this->assertArrayHasKey($status, $reports[$section]['counts_by_status']);
+            }
+        }
     }
 
     public function test_config_drift_redacts_secrets(): void {

@@ -53,6 +53,7 @@ class get_snapshot extends base {
             'plugins',
             'health',
             'auth',
+            'reports',
             'config_changes',
             'config_drift',
         ]);
