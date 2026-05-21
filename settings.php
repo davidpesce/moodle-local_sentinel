@@ -25,6 +25,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
+    // Setup wizard — replaces having to run cli/setup.php for sites whose admins lack shell access.
+    $ADMIN->add('localplugins', new admin_externalpage(
+        'local_sentinel_setup',
+        get_string('setup_heading', 'local_sentinel'),
+        new moodle_url('/local/sentinel/setup.php')
+    ));
+
     $settings = new admin_settingpage('local_sentinel', get_string('pluginname', 'local_sentinel'));
     $ADMIN->add('localplugins', $settings);
 
