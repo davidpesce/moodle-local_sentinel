@@ -25,6 +25,7 @@
 namespace local_fleetmonitor\external;
 
 use core_external\external_function_parameters;
+use core_external\external_single_structure;
 use core_external\external_value;
 use local_fleetmonitor\collector;
 use local_fleetmonitor\collectors\config_changes;
@@ -34,7 +35,7 @@ use local_fleetmonitor\collectors\config_changes;
  */
 class get_config_changes extends base {
     /**
-     * Execute parameters.
+     * Accept an optional row limit (1-500, default 50).
      *
      * @return external_function_parameters
      */
@@ -50,7 +51,7 @@ class get_config_changes extends base {
     }
 
     /**
-     * Execute.
+     * Return the config_changes slice.
      *
      * @param int $limit
      * @return array
@@ -63,6 +64,15 @@ class get_config_changes extends base {
 
         $snapshot = collector::get_slice('config_changes');
         $snapshot['config_changes'] = config_changes::collect($limit);
-        return self::envelope($snapshot);
+        return $snapshot;
+    }
+
+    /**
+     * Declare the return shape.
+     *
+     * @return external_single_structure
+     */
+    public static function execute_returns(): external_single_structure {
+        return self::envelope_with_slices(['config_changes']);
     }
 }

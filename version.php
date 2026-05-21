@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026052105;
-$plugin->release   = '0.6.0';
+$plugin->version   = 2026052106;
+$plugin->release   = '0.7.0';
 $plugin->requires  = 2024100700;
 $plugin->component = 'local_fleetmonitor';
 $plugin->maturity  = MATURITY_ALPHA;

@@ -32,7 +32,7 @@ namespace local_fleetmonitor;
  */
 class collector {
     /** @var int Bump on breaking changes to the payload shape. Additive changes do not require a bump. */
-    public const SCHEMA_VERSION = 2;
+    public const SCHEMA_VERSION = 3;
 
     /**
      * Build the full snapshot envelope.

@@ -24,6 +24,7 @@
 
 namespace local_fleetmonitor\external;
 
+use core_external\external_single_structure;
 use local_fleetmonitor\collector;
 
 /**
@@ -37,6 +38,23 @@ class get_snapshot extends base {
      */
     public static function execute(): array {
         self::authorise();
-        return self::envelope(collector::get_snapshot());
+        return collector::get_snapshot();
+    }
+
+    /**
+     * Declare the bundled-snapshot return shape.
+     *
+     * @return external_single_structure
+     */
+    public static function execute_returns(): external_single_structure {
+        return self::envelope_with_slices([
+            'status',
+            'environment',
+            'plugins',
+            'health',
+            'auth',
+            'config_changes',
+            'config_drift',
+        ]);
     }
 }

@@ -24,6 +24,7 @@
 
 namespace local_fleetmonitor\external;
 
+use core_external\external_single_structure;
 use local_fleetmonitor\collector;
 
 /**
@@ -31,12 +32,21 @@ use local_fleetmonitor\collector;
  */
 class get_health extends base {
     /**
-     * Execute.
+     * Return the health slice.
      *
      * @return array
      */
     public static function execute(): array {
         self::authorise();
-        return self::envelope(collector::get_slice('health'));
+        return collector::get_slice('health');
+    }
+
+    /**
+     * Declare the return shape.
+     *
+     * @return external_single_structure
+     */
+    public static function execute_returns(): external_single_structure {
+        return self::envelope_with_slices(['health']);
     }
 }

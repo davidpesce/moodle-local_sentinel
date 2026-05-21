@@ -24,6 +24,7 @@
 
 namespace local_fleetmonitor\external;
 
+use core_external\external_single_structure;
 use local_fleetmonitor\collector;
 
 /**
@@ -37,6 +38,15 @@ class get_auth extends base {
      */
     public static function execute(): array {
         self::authorise();
-        return self::envelope(collector::get_slice('auth'));
+        return collector::get_slice('auth');
+    }
+
+    /**
+     * Declare the return shape.
+     *
+     * @return external_single_structure
+     */
+    public static function execute_returns(): external_single_structure {
+        return self::envelope_with_slices(['auth']);
     }
 }

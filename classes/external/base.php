@@ -27,14 +27,16 @@ namespace local_fleetmonitor\external;
 use context_system;
 use core_external\external_api;
 use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
 
 /**
- * Provides the standard envelope return shape and a permission check helper.
+ * Base class plus structure-definition helpers shared by every external function.
  *
- * Each concrete subclass implements execute() and calls authorise() first,
- * then returns the result of envelope().
+ * Each concrete external function calls envelope_with_slices() in
+ * execute_returns() to declare its return type. The same registry maps slice
+ * names to structure builders so the wire contract lives in one place.
  */
 abstract class base extends external_api {
     /**
@@ -47,23 +49,6 @@ abstract class base extends external_api {
     }
 
     /**
-     * All snapshot endpoints return the same envelope shape.
-     *
-     * The actual data lives in the JSON-encoded `payload` field so the snapshot
-     * shape can evolve without breaking the web service contract. Bump
-     * collector::SCHEMA_VERSION when making breaking shape changes.
-     *
-     * @return external_single_structure
-     */
-    public static function execute_returns(): external_single_structure {
-        return new external_single_structure([
-            'schema_version' => new external_value(PARAM_INT, 'Snapshot schema version.'),
-            'generated_at' => new external_value(PARAM_TEXT, 'ISO 8601 UTC timestamp.'),
-            'payload' => new external_value(PARAM_RAW, 'JSON-encoded snapshot data.'),
-        ]);
-    }
-
-    /**
      * Validates the system context and requires the fleet monitor capability.
      */
     protected static function authorise(): void {
@@ -73,16 +58,368 @@ abstract class base extends external_api {
     }
 
     /**
-     * Wrap snapshot data into the WS return envelope.
+     * Build the envelope structure declaration for a set of slice names.
      *
-     * @param array $snapshot
-     * @return array
+     * @param string[] $slicekeys
+     * @return external_single_structure
      */
-    protected static function envelope(array $snapshot): array {
-        return [
-            'schema_version' => (int) $snapshot['schema_version'],
-            'generated_at' => (string) $snapshot['generated_at'],
-            'payload' => json_encode($snapshot),
+    protected static function envelope_with_slices(array $slicekeys): external_single_structure {
+        $structure = [
+            'schema_version' => new external_value(PARAM_INT, 'Snapshot schema version.'),
+            'generated_at' => new external_value(PARAM_TEXT, 'ISO 8601 UTC timestamp.'),
+            'site' => self::site_structure(),
         ];
+        $builders = [
+            'status' => 'status_structure',
+            'environment' => 'environment_structure',
+            'plugins' => 'plugins_structure',
+            'health' => 'health_structure',
+            'auth' => 'auth_structure',
+            'config_changes' => 'config_changes_structure',
+            'config_drift' => 'config_drift_structure',
+        ];
+        foreach ($slicekeys as $key) {
+            $method = $builders[$key];
+            $structure[$key] = self::$method();
+        }
+        return new external_single_structure($structure);
+    }
+
+    /**
+     * Nullable text value (PARAM_RAW + NULL_ALLOWED).
+     *
+     * @param string $desc
+     * @return external_value
+     */
+    protected static function nullable_text(string $desc): external_value {
+        return new external_value(PARAM_RAW, $desc, VALUE_REQUIRED, null, NULL_ALLOWED);
+    }
+
+    /**
+     * Nullable integer value (PARAM_INT + NULL_ALLOWED).
+     *
+     * @param string $desc
+     * @return external_value
+     */
+    protected static function nullable_int(string $desc): external_value {
+        return new external_value(PARAM_INT, $desc, VALUE_REQUIRED, null, NULL_ALLOWED);
+    }
+
+    /**
+     * Optional + nullable integer value (for fields that may be missing AND null).
+     *
+     * @param string $desc
+     * @return external_value
+     */
+    protected static function nullable_int_optional(string $desc): external_value {
+        return new external_value(PARAM_INT, $desc, VALUE_OPTIONAL, null, NULL_ALLOWED);
+    }
+
+    // ----------------------------------------------------------------------
+    // Slice structure builders. Keep these aligned with the matching
+    // collector class outputs in \local_fleetmonitor\collectors\*.
+    // ----------------------------------------------------------------------
+
+    /**
+     * Stable site identifiers.
+     *
+     * @return external_single_structure
+     */
+    protected static function site_structure(): external_single_structure {
+        return new external_single_structure([
+            'wwwroot' => new external_value(PARAM_URL, 'Configured wwwroot.'),
+            'siteidentifier' => new external_value(PARAM_TEXT, 'Stable site identifier.'),
+            'sitename' => new external_value(PARAM_RAW, 'Site full name.'),
+            'shortname' => new external_value(PARAM_RAW, 'Site short name.'),
+        ], 'Site identity (stable across domain migrations).');
+    }
+
+    /**
+     * Status slice: version, branch, maintenance, EOL data.
+     *
+     * @return external_single_structure
+     */
+    protected static function status_structure(): external_single_structure {
+        return new external_single_structure([
+            'version' => new external_value(PARAM_INT, 'Moodle version integer.'),
+            'branch' => new external_value(PARAM_INT, 'Moodle branch (e.g. 405).'),
+            'release' => new external_value(PARAM_RAW, 'Release string.'),
+            'maintenance_enabled' => new external_value(PARAM_BOOL, 'Maintenance mode flag.'),
+            'maintenance_message' => new external_value(PARAM_RAW, 'Maintenance banner text.'),
+            'branch_eol_date' => self::nullable_text('Branch security EOL date (ISO 8601).'),
+            'branch_eol_days_remaining' => self::nullable_int('Days until branch security EOL.'),
+            'build_age_days' => self::nullable_int('Days since this build date.'),
+        ]);
+    }
+
+    /**
+     * Environment slice: PHP, OS, web server, database, OPcache, extensions, SSL.
+     *
+     * @return external_single_structure
+     */
+    protected static function environment_structure(): external_single_structure {
+        return new external_single_structure([
+            'php' => new external_single_structure([
+                'version' => new external_value(PARAM_RAW, 'PHP version.'),
+                'sapi' => new external_value(PARAM_RAW, 'PHP SAPI.'),
+                'memory_limit' => new external_value(PARAM_RAW, 'memory_limit ini value.'),
+                'max_execution_time' => new external_value(PARAM_INT, 'max_execution_time ini value.'),
+                'upload_max_filesize' => new external_value(PARAM_RAW, 'upload_max_filesize ini value.'),
+                'post_max_size' => new external_value(PARAM_RAW, 'post_max_size ini value.'),
+                'timezone' => new external_value(PARAM_RAW, 'Default timezone.'),
+            ]),
+            'os' => new external_single_structure([
+                'sysname' => new external_value(PARAM_RAW, 'OS sysname.'),
+                'release' => new external_value(PARAM_RAW, 'OS release.'),
+                'version' => new external_value(PARAM_RAW, 'OS version.'),
+                'machine' => new external_value(PARAM_RAW, 'CPU architecture.'),
+                'hostname' => new external_value(PARAM_RAW, 'Hostname.'),
+            ]),
+            'webserver' => new external_single_structure([
+                'software' => new external_value(PARAM_RAW, 'SERVER_SOFTWARE value (empty under CLI).'),
+                'sapi_is_fpm' => new external_value(PARAM_BOOL, 'Running under PHP-FPM.'),
+                'sapi_is_apache' => new external_value(PARAM_BOOL, 'Running under Apache module SAPI.'),
+                'sapi_is_cli' => new external_value(PARAM_BOOL, 'Running under CLI SAPI.'),
+            ]),
+            'database' => new external_single_structure([
+                'type' => new external_value(PARAM_RAW, 'DB driver type.'),
+                'version' => new external_value(PARAM_RAW, 'DB server version.'),
+                'description' => new external_value(PARAM_RAW, 'DB server description.'),
+                'host' => new external_value(PARAM_RAW, 'DB host.'),
+                'name' => new external_value(PARAM_RAW, 'DB name.'),
+                'prefix' => new external_value(PARAM_RAW, 'Table prefix.'),
+                'size_bytes' => self::nullable_int('Total DB size in bytes (null if unsupported).'),
+                'largest_tables' => new external_multiple_structure(
+                    new external_single_structure([
+                        'name' => new external_value(PARAM_RAW, 'Table name.'),
+                        'size_bytes' => new external_value(PARAM_INT, 'Table size in bytes.'),
+                    ])
+                ),
+            ]),
+            'opcache' => new external_single_structure([
+                'enabled' => new external_value(PARAM_BOOL, 'OPcache enabled.'),
+                'reason' => new external_value(PARAM_RAW, 'Reason when disabled.', VALUE_OPTIONAL),
+                'used_memory' => new external_value(PARAM_INT, 'Used memory bytes.', VALUE_OPTIONAL),
+                'free_memory' => new external_value(PARAM_INT, 'Free memory bytes.', VALUE_OPTIONAL),
+                'wasted_memory' => new external_value(PARAM_INT, 'Wasted memory bytes.', VALUE_OPTIONAL),
+                'num_cached_scripts' => new external_value(PARAM_INT, 'Cached script count.', VALUE_OPTIONAL),
+                'hits' => new external_value(PARAM_INT, 'OPcache hits.', VALUE_OPTIONAL),
+                'misses' => new external_value(PARAM_INT, 'OPcache misses.', VALUE_OPTIONAL),
+                'hit_rate' => new external_value(PARAM_FLOAT, 'Hit rate percentage.', VALUE_OPTIONAL),
+            ]),
+            'extensions' => new external_multiple_structure(
+                new external_value(PARAM_RAW, 'Loaded PHP extension name.')
+            ),
+            'ssl' => new external_single_structure([
+                'checked' => new external_value(PARAM_BOOL, 'Whether the SSL probe ran successfully.'),
+                'reason' => new external_value(PARAM_RAW, 'Reason when not checked.', VALUE_OPTIONAL),
+                'host' => new external_value(PARAM_RAW, 'Probed hostname.', VALUE_OPTIONAL),
+                'issuer' => new external_value(PARAM_RAW, 'Cert issuer.', VALUE_OPTIONAL),
+                'subject_cn' => new external_value(PARAM_RAW, 'Cert subject CN.', VALUE_OPTIONAL),
+                'valid_from' => new external_value(PARAM_INT, 'Cert validFrom timestamp.', VALUE_OPTIONAL),
+                'valid_to' => new external_value(PARAM_INT, 'Cert validTo timestamp.', VALUE_OPTIONAL),
+                'days_remaining' => self::nullable_int_optional('Days until cert expiry.'),
+            ]),
+        ]);
+    }
+
+    /**
+     * Plugins slice: standard, third-party, updates, update_check, theme.
+     *
+     * @return external_single_structure
+     */
+    protected static function plugins_structure(): external_single_structure {
+        $pluginentry = new external_single_structure([
+            'type' => new external_value(PARAM_RAW, 'Plugin type (mod, local, tool, etc.).'),
+            'component' => new external_value(PARAM_RAW, 'Frankenstyle component name.'),
+            'name' => new external_value(PARAM_RAW, 'Display name.'),
+            'version_disk' => self::nullable_int('Version declared in version.php on disk.'),
+            'version_db' => self::nullable_int('Version recorded in mdl_config_plugins.'),
+            'release' => self::nullable_text('Human release string.'),
+            'source' => self::nullable_text('Plugin source (std / ext).'),
+            'status' => new external_value(PARAM_RAW, 'Install status (uptodate, missing, new, upgrade, downgrade).'),
+            'missing_from_disk' => new external_value(PARAM_BOOL, 'True when status is missing.'),
+            'enabled' => new external_value(PARAM_BOOL, 'Whether the plugin is enabled.', VALUE_REQUIRED, null, NULL_ALLOWED),
+        ]);
+
+        return new external_single_structure([
+            'standard' => new external_multiple_structure($pluginentry),
+            'third_party' => new external_multiple_structure($pluginentry),
+            'updates_available' => new external_multiple_structure(
+                new external_single_structure([
+                    'component' => new external_value(PARAM_RAW, 'Component name.'),
+                    'version' => self::nullable_int('Available version int.'),
+                    'release' => self::nullable_text('Available release string.'),
+                    'maturity' => self::nullable_int('Available maturity (MATURITY_* constant).'),
+                    'download' => self::nullable_text('Direct download URL.'),
+                    'source_url' => self::nullable_text('Upstream source URL.'),
+                ])
+            ),
+            'update_check' => new external_single_structure([
+                'enabled' => new external_value(PARAM_BOOL, 'Update checker globally enabled.'),
+                'last_fetched' => self::nullable_int('Unix timestamp of last fetch.'),
+                'age_seconds' => self::nullable_int('Seconds since last fetch.'),
+            ]),
+            'theme' => new external_single_structure([
+                'name' => new external_value(PARAM_RAW, 'Theme component name.'),
+                'version' => self::nullable_int('Theme version int.'),
+                'release' => self::nullable_text('Theme release.'),
+                'source' => self::nullable_text('Theme source.'),
+            ]),
+        ]);
+    }
+
+    /**
+     * Health slice: cron, tasks, sessions, disk, mail, admins, backup, flags.
+     *
+     * @return external_single_structure
+     */
+    protected static function health_structure(): external_single_structure {
+        $diskpart = new external_single_structure([
+            'path' => new external_value(PARAM_RAW, 'Filesystem path.'),
+            'free_bytes' => self::nullable_int('Free bytes on this filesystem.'),
+            'total_bytes' => self::nullable_int('Total bytes on this filesystem.'),
+        ]);
+
+        return new external_single_structure([
+            'cron' => new external_single_structure([
+                'last_run' => new external_value(PARAM_INT, 'Unix timestamp of last cron run (0 = never).'),
+                'seconds_since_last_run' => self::nullable_int('Seconds since last cron run.'),
+                'now' => new external_value(PARAM_INT, 'Current server time.'),
+            ]),
+            'tasks' => new external_single_structure([
+                'scheduled_failed_count' => new external_value(PARAM_INT, 'Count of failing scheduled tasks.'),
+                'scheduled_failed' => new external_multiple_structure(
+                    new external_single_structure([
+                        'classname' => new external_value(PARAM_RAW, 'Task class name.'),
+                        'last_run' => new external_value(PARAM_INT, 'Last run timestamp.'),
+                        'faildelay' => new external_value(PARAM_INT, 'Current retry delay.'),
+                        'disabled' => new external_value(PARAM_BOOL, 'Task disabled flag.'),
+                    ])
+                ),
+                'adhoc_queue_depth' => new external_value(PARAM_INT, 'Number of queued adhoc tasks.'),
+                'adhoc_oldest_nextruntime' => self::nullable_int('Oldest nextruntime in adhoc queue.'),
+            ]),
+            'sessions' => new external_single_structure([
+                'active_last_5_min' => new external_value(PARAM_INT, 'Sessions touched in last 5 min.'),
+                'active_last_hour' => new external_value(PARAM_INT, 'Sessions touched in last hour.'),
+                'total_rows' => new external_value(PARAM_INT, 'Total rows in mdl_sessions.'),
+            ]),
+            'disk' => new external_single_structure([
+                'dataroot' => $diskpart,
+                'dirroot' => $diskpart,
+            ]),
+            'mail' => new external_single_structure([
+                'smtphosts' => new external_value(PARAM_RAW, 'SMTP host list.'),
+                'smtpsecure' => new external_value(PARAM_RAW, 'SMTP security setting.'),
+                'noreplyaddress' => new external_value(PARAM_RAW, 'Noreply address.'),
+                'supportemail' => new external_value(PARAM_RAW, 'Support email.'),
+            ]),
+            'admins' => new external_single_structure([
+                'count' => new external_value(PARAM_INT, 'Number of site admins.'),
+                'admins' => new external_multiple_structure(
+                    new external_single_structure([
+                        'id' => new external_value(PARAM_INT, 'User ID.'),
+                        'username' => new external_value(PARAM_RAW, 'Username.'),
+                        'last_access' => new external_value(PARAM_INT, 'Last access timestamp.'),
+                        'last_login' => new external_value(PARAM_INT, 'Last login timestamp.'),
+                        'suspended' => new external_value(PARAM_BOOL, 'Suspended flag.'),
+                    ])
+                ),
+            ]),
+            'backup' => new external_single_structure([
+                'automated_state' => new external_value(PARAM_INT, 'backup_auto_active setting.'),
+                'status_counts' => new external_single_structure([
+                    'error' => new external_value(PARAM_INT, 'Courses with last status = error.'),
+                    'ok' => new external_value(PARAM_INT, 'Courses with last status = ok.'),
+                    'unfinished' => new external_value(PARAM_INT, 'Courses with last status = unfinished.'),
+                    'skipped' => new external_value(PARAM_INT, 'Courses with last status = skipped.'),
+                    'warning' => new external_value(PARAM_INT, 'Courses with last status = warning.'),
+                    'notyetrun' => new external_value(PARAM_INT, 'Courses with last status = notyetrun.'),
+                    'queued' => new external_value(PARAM_INT, 'Courses with last status = queued.'),
+                ]),
+                'last_success' => self::nullable_int('Last successful automated backup timestamp.'),
+                'total_courses_tracked' => new external_value(PARAM_INT, 'Total rows in mdl_backup_courses.'),
+            ]),
+            'flags' => new external_single_structure([
+                'debug' => self::nullable_int('$CFG->debug level.'),
+                'debugdisplay' => new external_value(PARAM_BOOL, '$CFG->debugdisplay flag.'),
+                'themedesignermode' => new external_value(PARAM_BOOL, 'Theme designer mode flag.'),
+                'cachejs_disabled' => new external_value(PARAM_BOOL, 'JS caching disabled.'),
+                'perfdebug' => self::nullable_int('$CFG->perfdebug level.'),
+            ]),
+        ]);
+    }
+
+    /**
+     * Auth slice: enabled methods + user counts per method.
+     *
+     * @return external_single_structure
+     */
+    protected static function auth_structure(): external_single_structure {
+        return new external_single_structure([
+            'enabled' => new external_multiple_structure(
+                new external_value(PARAM_RAW, 'Enabled auth plugin name.')
+            ),
+            'methods' => new external_multiple_structure(
+                new external_single_structure([
+                    'plugin' => new external_value(PARAM_RAW, 'Auth plugin name.'),
+                    'total_users' => new external_value(PARAM_INT, 'Total non-deleted users.'),
+                    'active_users' => new external_value(PARAM_INT, 'Non-deleted, non-suspended users.'),
+                ])
+            ),
+            'distinct_methods_in_use' => new external_value(PARAM_INT, 'Distinct auth values across all users.'),
+        ]);
+    }
+
+    /**
+     * Config changes slice: tail of mdl_config_log.
+     *
+     * @return external_single_structure
+     */
+    protected static function config_changes_structure(): external_single_structure {
+        return new external_single_structure([
+            'limit' => new external_value(PARAM_INT, 'Row limit applied.'),
+            'count' => new external_value(PARAM_INT, 'Rows returned.'),
+            'entries' => new external_multiple_structure(
+                new external_single_structure([
+                    'id' => new external_value(PARAM_INT, 'config_log row id.'),
+                    'time' => new external_value(PARAM_INT, 'Modification timestamp.'),
+                    'userid' => new external_value(PARAM_INT, 'User ID who made the change.'),
+                    'username' => self::nullable_text('Username (null for system user).'),
+                    'fullname' => new external_value(PARAM_RAW, 'User full name.'),
+                    'plugin' => self::nullable_text('Plugin component (null for core).'),
+                    'name' => new external_value(PARAM_RAW, 'Setting name.'),
+                    'oldvalue' => self::nullable_text('Previous value.'),
+                    'newvalue' => self::nullable_text('New value.'),
+                ])
+            ),
+        ]);
+    }
+
+    /**
+     * Config drift slice: settings differing from defaults.
+     *
+     * @return external_single_structure
+     */
+    protected static function config_drift_structure(): external_single_structure {
+        return new external_single_structure([
+            'count' => new external_value(PARAM_INT, 'Number of drift entries.'),
+            'skipped' => new external_single_structure([
+                'sensitive' => new external_value(PARAM_INT, 'Sensitive settings excluded.'),
+                'no_default' => new external_value(PARAM_INT, 'Settings without a declared default.'),
+            ]),
+            'entries' => new external_multiple_structure(
+                new external_single_structure([
+                    'plugin' => new external_value(PARAM_RAW, 'Plugin component (empty for core).'),
+                    'name' => new external_value(PARAM_RAW, 'Setting name.'),
+                    'fullname' => new external_value(PARAM_RAW, 'Combined plugin/name identifier.'),
+                    'visible_name' => new external_value(PARAM_RAW, 'Display label.'),
+                    'class' => new external_value(PARAM_RAW, 'admin_setting subclass.'),
+                    'current' => new external_value(PARAM_RAW, 'Current stored value.'),
+                    'default' => new external_value(PARAM_RAW, 'Declared default value.'),
+                ])
+            ),
+        ]);
     }
 }
