@@ -1,0 +1,7 @@
+vendor/
+node_modules/
+.idea/
+.vscode/
+*.swp
+.DS_Store
+response.json
