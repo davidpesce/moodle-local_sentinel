@@ -72,6 +72,23 @@ snapshots outbound on a schedule. Configure under Site administration → Plugin
 
 The central collector must verify the secret header before accepting the body.
 
+## Available-updates freshness
+
+The `plugins.updates_available` and `plugins.update_check` fields reflect
+Moodle's cached results from its last fetch of `moodle.org/updates`. The
+plugin does **not** trigger a fresh fetch on every snapshot call — that would
+be slow and would hammer moodle.org at fleet scale. Refresh happens via:
+
+1. Moodle's own scheduled update-check task (runs daily by default, controlled
+   by Site administration → Server → Update notifications).
+2. The `push_snapshot` task, which calls `checker::cron()` before building the
+   snapshot — Moodle respects its own 24h freshness window so this is safe to
+   run frequently.
+3. On demand: `php local/fleetmonitor/cli/refresh_updates.php` — equivalent to
+   clicking "Check for available updates" at Site administration → Notifications.
+
+Use `plugins.update_check.age_seconds` to judge how stale the data is.
+
 ## Schema
 
 The snapshot envelope is keyed by `siteidentifier` (stable across domain

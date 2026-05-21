@@ -63,7 +63,28 @@ class plugins {
             'standard' => $standard,
             'third_party' => $thirdparty,
             'updates_available' => self::collect_updates($pluginman),
+            'update_check' => self::collect_update_check(),
             'theme' => self::collect_theme(),
+        ];
+    }
+
+    /**
+     * Freshness metadata about Moodle's update checker.
+     *
+     * `updates_available` reflects the last cached fetch from moodle.org/updates;
+     * it does not trigger a new fetch. Use these fields to judge how stale that
+     * data is. Run cli/refresh_updates.php to force a refresh on demand.
+     *
+     * @return array
+     */
+    protected static function collect_update_check(): array {
+        $checker = \core\update\checker::instance();
+        $lastfetched = (int) $checker->get_last_timefetched();
+        $now = time();
+        return [
+            'enabled' => (bool) $checker->enabled(),
+            'last_fetched' => $lastfetched > 0 ? $lastfetched : null,
+            'age_seconds' => $lastfetched > 0 ? $now - $lastfetched : null,
         ];
     }
 
