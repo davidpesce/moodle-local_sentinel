@@ -25,15 +25,23 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    // Setup wizard — replaces having to run cli/setup.php for sites whose admins lack shell access.
-    $ADMIN->add('localplugins', new admin_externalpage(
-        'local_sentinel_setup',
-        get_string('setup_heading', 'local_sentinel'),
-        new moodle_url('/local/sentinel/setup.php')
+    // Parent category so the two sub-pages nest under one "Sentinel" heading
+    // (same pattern as Logstore xAPI / other plugin categories under Local plugins).
+    $ADMIN->add('localplugins', new admin_category(
+        'local_sentinel_category',
+        get_string('pluginname', 'local_sentinel')
     ));
 
-    $settings = new admin_settingpage('local_sentinel', get_string('pluginname', 'local_sentinel'));
-    $ADMIN->add('localplugins', $settings);
+    // Sub-page 1: push / runtime settings.
+    $settings = new admin_settingpage('local_sentinel', get_string('settings_label', 'local_sentinel'));
+    $ADMIN->add('local_sentinel_category', $settings);
+
+    // Sub-page 2: web-UI replacement for cli/setup.php.
+    $ADMIN->add('local_sentinel_category', new admin_externalpage(
+        'local_sentinel_setup',
+        get_string('setup_label', 'local_sentinel'),
+        new moodle_url('/local/sentinel/setup.php')
+    ));
 
     $settings->add(new admin_setting_heading(
         'local_sentinel/settingsheading_push',

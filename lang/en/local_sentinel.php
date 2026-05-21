@@ -40,6 +40,7 @@ $string['sentinel:view'] = 'View Sentinel snapshot data';
 $string['servicemissing'] = 'The Sentinel external service was not found. '
     . 'Visit Site administration → Notifications to finish plugin installation, then retry.';
 $string['servicename'] = 'Sentinel';
+$string['settings_label'] = 'Settings';
 $string['settingsheading_push'] = 'Outbound push configuration';
 $string['settingsheading_push_desc'] = 'Configure the plugin to POST snapshots to a central collector. '
     . 'Use this for new-client evaluation or for instances behind firewalls that cannot be polled inbound. '
@@ -59,6 +60,7 @@ $string['setup_heading'] = 'Sentinel: connect to dashboard';
 $string['setup_identity_heading'] = 'Service user identity';
 $string['setup_intro'] = 'This page bootstraps the web service access the Sentinel Dashboard needs to read snapshots '
     . 'from this Moodle. It is the GUI equivalent of running cli/setup.php — defaults match the CLI script.';
+$string['setup_label'] = 'Connect to dashboard';
 $string['setup_log_label'] = 'Setup steps';
 $string['setup_regen_heading'] = 'Token regeneration';
 $string['setup_regenerate'] = 'Generate a fresh token';
