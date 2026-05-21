@@ -237,8 +237,18 @@ abstract class base extends external_api {
             'version_db' => self::nullable_int('Version recorded in mdl_config_plugins.'),
             'release' => self::nullable_text('Human release string.'),
             'source' => self::nullable_text('Plugin source (std / ext).'),
-            'status' => new external_value(PARAM_RAW, 'Install status (uptodate, missing, new, upgrade, downgrade).'),
+            'status' => new external_value(
+                PARAM_RAW,
+                'Install consistency: uptodate / missing / new / upgrade / downgrade. '
+                . 'Refers to versiondisk vs versiondb, NOT freshness vs upstream.'
+            ),
             'missing_from_disk' => new external_value(PARAM_BOOL, 'True when status is missing.'),
+            'update_available' => new external_value(
+                PARAM_BOOL,
+                'True if moodle.org/updates has a newer version than version_disk. '
+                . 'Independent of the install-consistency status field.'
+            ),
+            'version_latest' => self::nullable_int('Latest version available upstream (null if no update).'),
             'enabled' => new external_value(PARAM_BOOL, 'Whether the plugin is enabled.', VALUE_REQUIRED, null, NULL_ALLOWED),
         ]);
 

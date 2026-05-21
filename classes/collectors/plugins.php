@@ -37,12 +37,21 @@ class plugins {
      */
     public static function collect(): array {
         $pluginman = core_plugin_manager::instance();
+        $updates = self::collect_updates($pluginman);
+
+        // Index updates by component for O(1) lookup when annotating each entry.
+        $updatesindex = [];
+        foreach ($updates as $update) {
+            $updatesindex[$update['component']] = $update;
+        }
+
         $standard = [];
         $thirdparty = [];
 
         foreach ($pluginman->get_plugins() as $type => $plugintypes) {
             foreach ($plugintypes as $plugin) {
                 $status = $plugin->get_status();
+                $upstream = $updatesindex[$plugin->component] ?? null;
                 $entry = [
                     'type' => $type,
                     'component' => $plugin->component,
@@ -53,6 +62,8 @@ class plugins {
                     'source' => $plugin->source ?? null,
                     'status' => $status,
                     'missing_from_disk' => $status === core_plugin_manager::PLUGIN_STATUS_MISSING,
+                    'update_available' => $upstream !== null,
+                    'version_latest' => $upstream['version'] ?? null,
                     'enabled' => $pluginman->get_plugin_info($plugin->component)->is_enabled(),
                 ];
                 if (($plugin->source ?? '') === core_plugin_manager::PLUGIN_SOURCE_STANDARD) {
@@ -66,7 +77,7 @@ class plugins {
         return [
             'standard' => $standard,
             'third_party' => $thirdparty,
-            'updates_available' => self::collect_updates($pluginman),
+            'updates_available' => $updates,
             'update_check' => self::collect_update_check(),
             'theme' => self::collect_theme(),
         ];
