@@ -17,15 +17,15 @@
 /**
  * Scheduled task that POSTs a snapshot to the central collector.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_fleetmonitor\task;
+namespace local_sentinel\task;
 
 use core\task\scheduled_task;
-use local_fleetmonitor\collector;
+use local_sentinel\collector;
 
 /**
  * Push the current snapshot to the configured central collector.
@@ -41,27 +41,27 @@ class push_snapshot extends scheduled_task {
      * @return string
      */
     public function get_name(): string {
-        return get_string('task_push_snapshot', 'local_fleetmonitor');
+        return get_string('task_push_snapshot', 'local_sentinel');
     }
 
     /**
      * Build the snapshot, POST it to the configured endpoint, log the outcome.
      */
     public function execute(): void {
-        $endpoint = trim((string) get_config('local_fleetmonitor', 'pushendpoint'));
-        $secret = (string) get_config('local_fleetmonitor', 'pushsecret');
-        $enabled = (bool) get_config('local_fleetmonitor', 'pushenabled');
+        $endpoint = trim((string) get_config('local_sentinel', 'pushendpoint'));
+        $secret = (string) get_config('local_sentinel', 'pushsecret');
+        $enabled = (bool) get_config('local_sentinel', 'pushenabled');
 
         if (!$enabled) {
-            mtrace('local_fleetmonitor: push disabled in settings, skipping.');
+            mtrace('local_sentinel: push disabled in settings, skipping.');
             return;
         }
         if ($endpoint === '') {
-            mtrace('local_fleetmonitor: pushendpoint not configured, skipping.');
+            mtrace('local_sentinel: pushendpoint not configured, skipping.');
             return;
         }
         if ($secret === '') {
-            mtrace('local_fleetmonitor: pushsecret not configured, refusing to push.');
+            mtrace('local_sentinel: pushsecret not configured, refusing to push.');
             return;
         }
 
@@ -71,21 +71,21 @@ class push_snapshot extends scheduled_task {
         $curl = new \curl(['ignoresecurity' => false]);
         $curl->setHeader([
             'Content-Type: application/json',
-            'X-Fleetmonitor-Secret: ' . $secret,
+            'X-Sentinel-Secret: ' . $secret,
             'X-Fleetmonitor-Site: ' . $snapshot['site']['siteidentifier'],
         ]);
         $response = $curl->post($endpoint, $body);
         $httpcode = (int) ($curl->get_info()['http_code'] ?? 0);
 
         if ($curl->get_errno() !== 0) {
-            mtrace('local_fleetmonitor: push failed: ' . $curl->error);
+            mtrace('local_sentinel: push failed: ' . $curl->error);
             return;
         }
         if ($httpcode < 200 || $httpcode >= 300) {
-            mtrace("local_fleetmonitor: push got HTTP $httpcode from $endpoint");
-            mtrace('local_fleetmonitor: response body: ' . substr((string) $response, 0, 500));
+            mtrace("local_sentinel: push got HTTP $httpcode from $endpoint");
+            mtrace('local_sentinel: response body: ' . substr((string) $response, 0, 500));
             return;
         }
-        mtrace("local_fleetmonitor: pushed snapshot to $endpoint (HTTP $httpcode, " . strlen($body) . ' bytes).');
+        mtrace("local_sentinel: pushed snapshot to $endpoint (HTTP $httpcode, " . strlen($body) . ' bytes).');
     }
 }

@@ -17,18 +17,18 @@
 /**
  * External function: get_config_changes.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_fleetmonitor\external;
+namespace local_sentinel\external;
 
 use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
-use local_fleetmonitor\collector;
-use local_fleetmonitor\collectors\config_changes;
+use local_sentinel\collector;
+use local_sentinel\collectors\config_changes;
 
 /**
  * Returns just the config_changes slice. Accepts an optional row limit.

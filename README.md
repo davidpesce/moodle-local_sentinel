@@ -1,4 +1,4 @@
-# local_fleetmonitor
+# local_sentinel
 
 Per-instance Moodle plugin that exposes operational health, environment details,
 plugin inventory, and recent config changes through Moodle web services (pull)
@@ -14,16 +14,16 @@ the data source; the central dashboard is a separate concern.
 
 ## Install
 
-Copy the plugin to `moodle/local/fleetmonitor/`, visit Site administration →
+Copy the plugin to `moodle/local/sentinel/`, visit Site administration →
 Notifications, and run the upgrade.
 
 After install, run the bundled setup helper from the Moodle root:
 
 ```bash
-php local/fleetmonitor/cli/setup.php --username=fleetmonitor
+php local/sentinel/cli/setup.php --username=sentinel
 ```
 
-It enables web services + REST, creates a `local_fleetmonitor` role with the
+It enables web services + REST, creates a `local_sentinel` role with the
 required capabilities, creates a dedicated webservice user, and prints a token
 ready for the central poller to use.
 
@@ -34,7 +34,7 @@ ready for the central poller to use.
 ```
 GET /webservice/rest/server.php
     ?wstoken=<token>
-    &wsfunction=local_fleetmonitor_get_snapshot
+    &wsfunction=local_sentinel_get_snapshot
     &moodlewsrestformat=json
 ```
 
@@ -42,15 +42,15 @@ Available functions:
 
 | Function | Purpose |
 |---|---|
-| `local_fleetmonitor_get_status` | Cheap liveness — version + maintenance flag |
-| `local_fleetmonitor_get_snapshot` | Full snapshot (all sections below) |
-| `local_fleetmonitor_get_environment` | PHP, OS, DB, web server, extensions |
-| `local_fleetmonitor_get_plugins` | Installed plugins + available updates |
-| `local_fleetmonitor_get_health` | Cron, tasks, sessions, disk, backups, mail |
-| `local_fleetmonitor_get_auth` | Enabled auth methods + user counts per method |
-| `local_fleetmonitor_get_reports` | Performance / Security / System status checks + MFA stats |
-| `local_fleetmonitor_get_config_changes` | Recent `mdl_config_log` entries |
-| `local_fleetmonitor_get_config_drift` | Settings whose current value differs from default (secrets excluded) |
+| `local_sentinel_get_status` | Cheap liveness — version + maintenance flag |
+| `local_sentinel_get_snapshot` | Full snapshot (all sections below) |
+| `local_sentinel_get_environment` | PHP, OS, DB, web server, extensions |
+| `local_sentinel_get_plugins` | Installed plugins + available updates |
+| `local_sentinel_get_health` | Cron, tasks, sessions, disk, backups, mail |
+| `local_sentinel_get_auth` | Enabled auth methods + user counts per method |
+| `local_sentinel_get_reports` | Performance / Security / System status checks + MFA stats |
+| `local_sentinel_get_config_changes` | Recent `mdl_config_log` entries |
+| `local_sentinel_get_config_drift` | Settings whose current value differs from default (secrets excluded) |
 
 Each function returns a versioned envelope. The structure is validated
 server-side via Moodle's `clean_returnvalue()`; auto-generated docs are
@@ -61,7 +61,7 @@ available at `admin/webservice/documentation.php` for the deployed token.
   "schema_version": 3,
   "generated_at": "2026-05-21T14:23:11+00:00",
   "plugin": {
-    "component": "local_fleetmonitor",
+    "component": "local_sentinel",
     "version": 2026052108,
     "release": "0.9.0"
   },
@@ -94,10 +94,10 @@ not require a bump. Central dashboards should branch parsing on
 
 For new-client evaluation or instances behind firewalls, the plugin can push
 snapshots outbound on a schedule. Configure under Site administration → Plugins
-→ Local plugins → Fleet Monitor:
+→ Local plugins → Sentinel:
 
 - **Push endpoint URL** — where to POST
-- **Push shared secret** — sent as `X-Fleetmonitor-Secret` header
+- **Push shared secret** — sent as `X-Sentinel-Secret` header
 - **Enable push** — flip the scheduled task on
 
 The central collector must verify the secret header before accepting the body.
@@ -122,7 +122,7 @@ The task respects the top-level kill switch `$CFG->disableupdatenotifications`
 for sites that have explicitly chosen not to phone home to moodle.org at all.
 
 For on-demand refresh:
-`php local/fleetmonitor/cli/refresh_updates.php` — equivalent to clicking
+`php local/sentinel/cli/refresh_updates.php` — equivalent to clicking
 "Check for available updates" at Site administration → Notifications.
 
 Use `plugins.update_check.age_seconds` to judge how stale the data is.
@@ -138,6 +138,6 @@ breaking fields; additive changes do not require a bump.
 This plugin lives in the `_MoodleDEV` workspace. Use the workspace `Makefile`:
 
 ```bash
-make phpcs PLUGIN=moodle-local_fleetmonitor
-make phpunit SUITE=local_fleetmonitor_testsuite
+make phpcs PLUGIN=moodle-local_sentinel
+make phpunit SUITE=local_sentinel_testsuite
 ```

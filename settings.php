@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Settings for local_fleetmonitor.
+ * Settings for local_sentinel.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,34 +25,34 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    $settings = new admin_settingpage('local_fleetmonitor', get_string('pluginname', 'local_fleetmonitor'));
+    $settings = new admin_settingpage('local_sentinel', get_string('pluginname', 'local_sentinel'));
     $ADMIN->add('localplugins', $settings);
 
     $settings->add(new admin_setting_heading(
-        'local_fleetmonitor/settingsheading_push',
-        get_string('settingsheading_push', 'local_fleetmonitor'),
-        get_string('settingsheading_push_desc', 'local_fleetmonitor')
+        'local_sentinel/settingsheading_push',
+        get_string('settingsheading_push', 'local_sentinel'),
+        get_string('settingsheading_push_desc', 'local_sentinel')
     ));
 
     $settings->add(new admin_setting_configcheckbox(
-        'local_fleetmonitor/pushenabled',
-        get_string('pushenabled', 'local_fleetmonitor'),
-        get_string('pushenabled_desc', 'local_fleetmonitor'),
+        'local_sentinel/pushenabled',
+        get_string('pushenabled', 'local_sentinel'),
+        get_string('pushenabled_desc', 'local_sentinel'),
         0
     ));
 
     $settings->add(new admin_setting_configtext(
-        'local_fleetmonitor/pushendpoint',
-        get_string('pushendpoint', 'local_fleetmonitor'),
-        get_string('pushendpoint_desc', 'local_fleetmonitor'),
+        'local_sentinel/pushendpoint',
+        get_string('pushendpoint', 'local_sentinel'),
+        get_string('pushendpoint_desc', 'local_sentinel'),
         '',
         PARAM_URL
     ));
 
     $settings->add(new admin_setting_configpasswordunmask(
-        'local_fleetmonitor/pushsecret',
-        get_string('pushsecret', 'local_fleetmonitor'),
-        get_string('pushsecret_desc', 'local_fleetmonitor'),
+        'local_sentinel/pushsecret',
+        get_string('pushsecret', 'local_sentinel'),
+        get_string('pushsecret_desc', 'local_sentinel'),
         ''
     ));
 }

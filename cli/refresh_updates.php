@@ -22,7 +22,7 @@
  * stores the result. Subsequent get_plugins / get_snapshot calls will reflect
  * the new data.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

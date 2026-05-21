@@ -17,12 +17,12 @@
 /**
  * Snapshot orchestrator.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_fleetmonitor;
+namespace local_sentinel;
 
 /**
  * Builds the snapshot payload by delegating to per-slice collectors.
@@ -94,7 +94,7 @@ class collector {
     }
 
     /**
-     * Self-identification for the local_fleetmonitor plugin itself.
+     * Self-identification for the local_sentinel plugin itself.
      *
      * Lets a central dashboard detect instances running outdated plugin
      * versions and parse older snapshots correctly when SCHEMA_VERSION
@@ -103,9 +103,9 @@ class collector {
      * @return array
      */
     public static function get_plugin_identity(): array {
-        $info = \core_plugin_manager::instance()->get_plugin_info('local_fleetmonitor');
+        $info = \core_plugin_manager::instance()->get_plugin_info('local_sentinel');
         return [
-            'component' => 'local_fleetmonitor',
+            'component' => 'local_sentinel',
             'version' => $info ? (int) $info->versiondisk : null,
             'release' => $info && isset($info->release) ? (string) $info->release : null,
         ];

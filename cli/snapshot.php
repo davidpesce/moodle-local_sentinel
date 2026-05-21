@@ -20,7 +20,7 @@
  * Useful for debugging the collector pipeline without going through the
  * web service layer. Always returns the full snapshot.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -48,7 +48,7 @@ if ($unrecognised) {
 
 if ($options['help']) {
     cli_writeln(
-        "Dump local_fleetmonitor snapshot as JSON.\n\n" .
+        "Dump local_sentinel snapshot as JSON.\n\n" .
         "Options:\n" .
         "  -h, --help     Show this help.\n" .
         "  -p, --pretty   Pretty-print JSON (default: compact).\n"
@@ -56,7 +56,7 @@ if ($options['help']) {
     exit(0);
 }
 
-$snapshot = \local_fleetmonitor\collector::get_snapshot();
+$snapshot = \local_sentinel\collector::get_snapshot();
 $flags = JSON_UNESCAPED_SLASHES;
 if (!empty($options['pretty'])) {
     $flags |= JSON_PRETTY_PRINT;

@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Shared base for fleet monitor external functions.
+ * Shared base for Sentinel external functions.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_fleetmonitor\external;
+namespace local_sentinel\external;
 
 use context_system;
 use core_external\external_api;
@@ -49,12 +49,12 @@ abstract class base extends external_api {
     }
 
     /**
-     * Validates the system context and requires the fleet monitor capability.
+     * Validates the system context and requires the Sentinel capability.
      */
     protected static function authorise(): void {
         $context = context_system::instance();
         self::validate_context($context);
-        require_capability('local/fleetmonitor:view', $context);
+        require_capability('local/sentinel:view', $context);
     }
 
     /**
@@ -69,9 +69,9 @@ abstract class base extends external_api {
             'generated_at' => new external_value(PARAM_TEXT, 'ISO 8601 UTC timestamp.'),
             'plugin' => new external_single_structure([
                 'component' => new external_value(PARAM_RAW, 'Plugin frankenstyle.'),
-                'version' => self::nullable_int('local_fleetmonitor version int.'),
-                'release' => self::nullable_text('local_fleetmonitor release string.'),
-            ], 'local_fleetmonitor self-identification.'),
+                'version' => self::nullable_int('local_sentinel version int.'),
+                'release' => self::nullable_text('local_sentinel release string.'),
+            ], 'local_sentinel self-identification.'),
             'site' => self::site_structure(),
         ];
         $builders = [
@@ -122,7 +122,7 @@ abstract class base extends external_api {
     }
 
     // Slice structure builders below. Each must stay aligned with the
-    // matching collector class output in \local_fleetmonitor\collectors\.
+    // matching collector class output in \local_sentinel\collectors\.
 
     /**
      * Stable site identifiers.

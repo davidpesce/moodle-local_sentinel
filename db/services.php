@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Web service function and service definitions for local_fleetmonitor.
+ * Web service function and service definitions for local_sentinel.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,78 +25,78 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
-    'local_fleetmonitor_get_status' => [
-        'classname' => 'local_fleetmonitor\\external\\get_status',
+    'local_sentinel_get_status' => [
+        'classname' => 'local_sentinel\\external\\get_status',
         'description' => 'Cheap liveness probe: version, branch, maintenance flag.',
         'type' => 'read',
-        'capabilities' => 'local/fleetmonitor:view',
+        'capabilities' => 'local/sentinel:view',
     ],
-    'local_fleetmonitor_get_snapshot' => [
-        'classname' => 'local_fleetmonitor\\external\\get_snapshot',
+    'local_sentinel_get_snapshot' => [
+        'classname' => 'local_sentinel\\external\\get_snapshot',
         'description' => 'Full monitoring snapshot for this Moodle instance.',
         'type' => 'read',
-        'capabilities' => 'local/fleetmonitor:view',
+        'capabilities' => 'local/sentinel:view',
     ],
-    'local_fleetmonitor_get_environment' => [
-        'classname' => 'local_fleetmonitor\\external\\get_environment',
+    'local_sentinel_get_environment' => [
+        'classname' => 'local_sentinel\\external\\get_environment',
         'description' => 'PHP, OS, DB, web server and extension details.',
         'type' => 'read',
-        'capabilities' => 'local/fleetmonitor:view',
+        'capabilities' => 'local/sentinel:view',
     ],
-    'local_fleetmonitor_get_plugins' => [
-        'classname' => 'local_fleetmonitor\\external\\get_plugins',
+    'local_sentinel_get_plugins' => [
+        'classname' => 'local_sentinel\\external\\get_plugins',
         'description' => 'Installed plugins, versions, available updates.',
         'type' => 'read',
-        'capabilities' => 'local/fleetmonitor:view',
+        'capabilities' => 'local/sentinel:view',
     ],
-    'local_fleetmonitor_get_health' => [
-        'classname' => 'local_fleetmonitor\\external\\get_health',
+    'local_sentinel_get_health' => [
+        'classname' => 'local_sentinel\\external\\get_health',
         'description' => 'Cron, scheduled tasks, sessions, disk, backups, mail.',
         'type' => 'read',
-        'capabilities' => 'local/fleetmonitor:view',
+        'capabilities' => 'local/sentinel:view',
     ],
-    'local_fleetmonitor_get_auth' => [
-        'classname' => 'local_fleetmonitor\\external\\get_auth',
+    'local_sentinel_get_auth' => [
+        'classname' => 'local_sentinel\\external\\get_auth',
         'description' => 'Enabled auth methods and user counts per method.',
         'type' => 'read',
-        'capabilities' => 'local/fleetmonitor:view',
+        'capabilities' => 'local/sentinel:view',
     ],
-    'local_fleetmonitor_get_reports' => [
-        'classname' => 'local_fleetmonitor\\external\\get_reports',
+    'local_sentinel_get_reports' => [
+        'classname' => 'local_sentinel\\external\\get_reports',
         'description' => 'Performance / Security / System status checks + MFA report.',
         'type' => 'read',
-        'capabilities' => 'local/fleetmonitor:view',
+        'capabilities' => 'local/sentinel:view',
     ],
-    'local_fleetmonitor_get_config_changes' => [
-        'classname' => 'local_fleetmonitor\\external\\get_config_changes',
+    'local_sentinel_get_config_changes' => [
+        'classname' => 'local_sentinel\\external\\get_config_changes',
         'description' => 'Recent entries from mdl_config_log.',
         'type' => 'read',
-        'capabilities' => 'local/fleetmonitor:view',
+        'capabilities' => 'local/sentinel:view',
     ],
-    'local_fleetmonitor_get_config_drift' => [
-        'classname' => 'local_fleetmonitor\\external\\get_config_drift',
+    'local_sentinel_get_config_drift' => [
+        'classname' => 'local_sentinel\\external\\get_config_drift',
         'description' => 'Settings whose current value differs from default (secrets excluded).',
         'type' => 'read',
-        'capabilities' => 'local/fleetmonitor:view',
+        'capabilities' => 'local/sentinel:view',
     ],
 ];
 
 $services = [
-    'Fleet Monitor' => [
+    'Sentinel' => [
         'functions' => [
-            'local_fleetmonitor_get_status',
-            'local_fleetmonitor_get_snapshot',
-            'local_fleetmonitor_get_environment',
-            'local_fleetmonitor_get_plugins',
-            'local_fleetmonitor_get_health',
-            'local_fleetmonitor_get_auth',
-            'local_fleetmonitor_get_reports',
-            'local_fleetmonitor_get_config_changes',
-            'local_fleetmonitor_get_config_drift',
+            'local_sentinel_get_status',
+            'local_sentinel_get_snapshot',
+            'local_sentinel_get_environment',
+            'local_sentinel_get_plugins',
+            'local_sentinel_get_health',
+            'local_sentinel_get_auth',
+            'local_sentinel_get_reports',
+            'local_sentinel_get_config_changes',
+            'local_sentinel_get_config_drift',
         ],
         'restrictedusers' => 1,
         'enabled' => 1,
-        'shortname' => 'local_fleetmonitor',
+        'shortname' => 'local_sentinel',
         'downloadfiles' => 0,
         'uploadfiles' => 0,
     ],

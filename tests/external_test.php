@@ -17,12 +17,12 @@
 /**
  * External function smoke tests.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_fleetmonitor;
+namespace local_sentinel;
 
 use core_external\external_api;
 
@@ -34,15 +34,15 @@ use core_external\external_api;
  * it in the test layer catches collector output that drifts from the
  * declared shape before it can ship.
  *
- * @covers \local_fleetmonitor\external\get_status
- * @covers \local_fleetmonitor\external\get_snapshot
- * @covers \local_fleetmonitor\external\get_environment
- * @covers \local_fleetmonitor\external\get_plugins
- * @covers \local_fleetmonitor\external\get_health
- * @covers \local_fleetmonitor\external\get_auth
- * @covers \local_fleetmonitor\external\get_reports
- * @covers \local_fleetmonitor\external\get_config_changes
- * @covers \local_fleetmonitor\external\get_config_drift
+ * @covers \local_sentinel\external\get_status
+ * @covers \local_sentinel\external\get_snapshot
+ * @covers \local_sentinel\external\get_environment
+ * @covers \local_sentinel\external\get_plugins
+ * @covers \local_sentinel\external\get_health
+ * @covers \local_sentinel\external\get_auth
+ * @covers \local_sentinel\external\get_reports
+ * @covers \local_sentinel\external\get_config_changes
+ * @covers \local_sentinel\external\get_config_drift
  */
 final class external_test extends \advanced_testcase {
     /**

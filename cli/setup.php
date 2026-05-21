@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * CLI: bootstrap Fleet Monitor web service access.
+ * CLI: bootstrap Sentinel web service access.
  *
- * Enables web services + REST, ensures the Fleet Monitor role and webservice
+ * Enables web services + REST, ensures the Sentinel role and webservice
  * user exist, assigns the user to the service, and prints a token.
  *
  * Idempotent — safe to re-run. Will reuse existing role/user/token if found.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -37,9 +37,9 @@ require_once($CFG->libdir . '/accesslib.php');
 [$options, $unrecognised] = cli_get_params(
     [
         'help' => false,
-        'username' => 'fleetmonitor',
-        'rolename' => 'Fleet Monitor',
-        'roleshortname' => 'fleetmonitor',
+        'username' => 'sentinel',
+        'rolename' => 'Sentinel',
+        'roleshortname' => 'sentinel',
     ],
     [
         'h' => 'help',
@@ -52,19 +52,19 @@ if ($unrecognised) {
 
 if ($options['help']) {
     cli_writeln(
-        "Bootstrap Fleet Monitor web service access.\n\n" .
+        "Bootstrap Sentinel web service access.\n\n" .
         "Options:\n" .
         "  -h, --help               Show this help.\n" .
-        "  --username=<name>        Webservice username (default: fleetmonitor).\n" .
-        "  --rolename=<name>        Role display name (default: 'Fleet Monitor').\n" .
-        "  --roleshortname=<name>   Role short name (default: fleetmonitor).\n"
+        "  --username=<name>        Webservice username (default: sentinel).\n" .
+        "  --rolename=<name>        Role display name (default: 'Sentinel').\n" .
+        "  --roleshortname=<name>   Role short name (default: sentinel).\n"
     );
     exit(0);
 }
 
 global $DB;
 
-cli_heading('Fleet Monitor setup');
+cli_heading('Sentinel setup');
 
 // 1. Enable web services.
 if (empty($CFG->enablewebservices)) {
@@ -85,11 +85,11 @@ if (!in_array('rest', $protocols, true)) {
     cli_writeln('  REST protocol already enabled.');
 }
 
-// 3. Find the Fleet Monitor service (auto-created from db/services.php on install).
-$service = $DB->get_record('external_services', ['shortname' => 'local_fleetmonitor']);
+// 3. Find the Sentinel service (auto-created from db/services.php on install).
+$service = $DB->get_record('external_services', ['shortname' => 'local_sentinel']);
 if (!$service) {
     cli_error(
-        "Fleet Monitor service not found. Run Site administration → Notifications first " .
+        "Sentinel service not found. Run Site administration → Notifications first " .
         "to finish plugin installation."
     );
 }
@@ -101,7 +101,7 @@ if (!$role) {
     $roleid = create_role(
         $options['rolename'],
         $options['roleshortname'],
-        'Fleet Monitor webservice access role.',
+        'Sentinel webservice access role.',
         ''
     );
     set_role_contextlevels($roleid, [CONTEXT_SYSTEM]);
@@ -112,7 +112,7 @@ if (!$role) {
 }
 
 $systemcontext = context_system::instance();
-$requiredcaps = ['webservice/rest:use', 'local/fleetmonitor:view'];
+$requiredcaps = ['webservice/rest:use', 'local/sentinel:view'];
 foreach ($requiredcaps as $cap) {
     assign_capability($cap, CAP_ALLOW, $roleid, $systemcontext->id, true);
 }
@@ -184,7 +184,7 @@ if (!$token) {
         $systemcontext,
         0,
         '',
-        'Fleet Monitor token'
+        'Sentinel token'
     );
     cli_writeln('  Generated new permanent token.');
 } else {
@@ -200,7 +200,7 @@ cli_writeln('Quick test:');
 cli_writeln(
     "  curl '" . $CFG->wwwroot .
     "/webservice/rest/server.php?wstoken={$tokenstring}" .
-    "&wsfunction=local_fleetmonitor_get_status&moodlewsrestformat=json'"
+    "&wsfunction=local_sentinel_get_status&moodlewsrestformat=json'"
 );
 
 exit(0);

@@ -17,12 +17,12 @@
 /**
  * Health collector: cron, tasks, disk, sessions, mail, foot-gun flags.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_fleetmonitor\collectors;
+namespace local_sentinel\collectors;
 
 /**
  * Operational health signals — the things most likely to wake an operator at night.

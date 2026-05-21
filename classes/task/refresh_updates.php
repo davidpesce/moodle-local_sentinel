@@ -17,12 +17,12 @@
 /**
  * Scheduled task: refresh Moodle's available-updates cache.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_fleetmonitor\task;
+namespace local_sentinel\task;
 
 use core\task\scheduled_task;
 
@@ -46,7 +46,7 @@ class refresh_updates extends scheduled_task {
      * @return string
      */
     public function get_name(): string {
-        return get_string('task_refresh_updates', 'local_fleetmonitor');
+        return get_string('task_refresh_updates', 'local_sentinel');
     }
 
     /**
@@ -55,7 +55,7 @@ class refresh_updates extends scheduled_task {
     public function execute(): void {
         $checker = \core\update\checker::instance();
         if (!$checker->enabled()) {
-            mtrace('local_fleetmonitor: update notifications globally disabled '
+            mtrace('local_sentinel: update notifications globally disabled '
                 . '($CFG->disableupdatenotifications), skipping fetch.');
             return;
         }
@@ -63,11 +63,11 @@ class refresh_updates extends scheduled_task {
         try {
             $checker->fetch();
         } catch (\Throwable $e) {
-            mtrace('local_fleetmonitor: update fetch failed: ' . $e->getMessage());
+            mtrace('local_sentinel: update fetch failed: ' . $e->getMessage());
             return;
         }
         $after = (int) $checker->get_last_timefetched();
-        mtrace('local_fleetmonitor: update cache refreshed (was: '
+        mtrace('local_sentinel: update cache refreshed (was: '
             . ($before > 0 ? date('c', $before) : 'never')
             . ', now: ' . date('c', $after) . ').');
     }

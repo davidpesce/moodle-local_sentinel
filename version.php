@@ -17,16 +17,16 @@
 /**
  * Version details.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026052111;
-$plugin->release   = '1.1.0';
+$plugin->version   = 2026052200;
+$plugin->release   = '2.0.0';
 $plugin->requires  = 2024100700;
-$plugin->component = 'local_fleetmonitor';
+$plugin->component = 'local_sentinel';
 $plugin->maturity  = MATURITY_ALPHA;
 $plugin->supported = [405, 501];

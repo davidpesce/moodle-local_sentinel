@@ -17,15 +17,15 @@
 /**
  * External function: get_snapshot.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_fleetmonitor\external;
+namespace local_sentinel\external;
 
 use core_external\external_single_structure;
-use local_fleetmonitor\collector;
+use local_sentinel\collector;
 
 /**
  * Returns the full monitoring snapshot.

@@ -17,12 +17,12 @@
 /**
  * Status collector: cheap liveness data.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_fleetmonitor\collectors;
+namespace local_sentinel\collectors;
 
 /**
  * Returns the minimum data needed to answer "is this site up and which Moodle is it?".

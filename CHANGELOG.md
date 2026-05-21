@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `local_fleetmonitor` are documented here.
+All notable changes to `local_sentinel` are documented here.
 
 The plugin uses two version dimensions consumers should be aware of:
 
@@ -12,6 +12,26 @@ The plugin uses two version dimensions consumers should be aware of:
 
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
+
+## [2.0.0] — schema_version 3 — 2026-05-22
+
+**Plugin renamed: `local_fleetmonitor` → `local_sentinel`.**
+
+The plugin's identity changes throughout — component name, namespace,
+capability, WS function prefix, push-secret header, lang strings, and
+operator-facing display name "Sentinel". Existing installs of
+`local_fleetmonitor` must be uninstalled before installing this version
+(Moodle treats the renamed plugin as a brand-new component).
+
+Snapshot `schema_version` is unchanged at 3; the wire shape is the same.
+Consumers must update:
+
+| Was | Now |
+|---|---|
+| WS prefix `local_fleetmonitor_*` | `local_sentinel_*` |
+| Header `X-Fleetmonitor-Secret` | `X-Sentinel-Secret` |
+| Capability `local/fleetmonitor:view` | `local/sentinel:view` |
+| `payload.plugin.component` value `local_fleetmonitor` | `local_sentinel` |
 
 ## [1.1.0] — schema_version 3 — 2026-05-21
 
@@ -55,7 +75,7 @@ Additive on the wire. Plugin self-identification embedded in every snapshot.
 
 - **Added** `plugin` field on the envelope: `{component, version, release}` —
   lets a central dashboard detect instances running outdated
-  `local_fleetmonitor` versions.
+  `local_sentinel` versions.
 - **Added** `auth.failed_logins`: total/per-account login failures from
   `mdl_user_preferences.login_failed_count_since_success`, plus current
   lockout count and top 10 targeted accounts.
@@ -102,7 +122,7 @@ Additive on the wire. Plugin self-identification embedded in every snapshot.
 
 ## [0.4.0] — schema_version 1 — 2026-05-21
 
-- **Added** `local_fleetmonitor\task\refresh_updates` scheduled task —
+- **Added** `local_sentinel\task\refresh_updates` scheduled task —
   fetches the moodle.org updates cache without sending admin notification
   email. Default daily at a randomized time.
 - **Added** `cli/refresh_updates.php` — on-demand cache refresh equivalent

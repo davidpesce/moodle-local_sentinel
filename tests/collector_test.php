@@ -17,12 +17,12 @@
 /**
  * Collector smoke tests.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_fleetmonitor;
+namespace local_sentinel;
 
 /**
  * Verifies each collector returns the expected top-level keys.
@@ -30,7 +30,7 @@ namespace local_fleetmonitor;
  * These are smoke tests: they don't pin specific values (those depend on the
  * host environment), they just ensure the shape stays stable.
  *
- * @covers \local_fleetmonitor\collector
+ * @covers \local_sentinel\collector
  */
 final class collector_test extends \advanced_testcase {
     public function test_snapshot_envelope(): void {

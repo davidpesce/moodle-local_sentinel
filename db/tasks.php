@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Scheduled task definitions for local_fleetmonitor.
+ * Scheduled task definitions for local_sentinel.
  *
- * @package    local_fleetmonitor
+ * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $tasks = [
     [
-        'classname' => 'local_fleetmonitor\\task\\push_snapshot',
+        'classname' => 'local_sentinel\\task\\push_snapshot',
         'blocking' => 0,
         'minute' => '*/15',
         'hour' => '*',
@@ -36,7 +36,7 @@ $tasks = [
         'disabled' => 1,
     ],
     [
-        'classname' => 'local_fleetmonitor\\task\\refresh_updates',
+        'classname' => 'local_sentinel\\task\\refresh_updates',
         'blocking' => 0,
         'minute' => 'R',
         'hour' => 'R',
