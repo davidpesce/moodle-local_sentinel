@@ -41,8 +41,7 @@ $string['overview_note_push'] = 'Sending uses a scheduled task that runs every 1
 $string['overview_notes_heading'] = 'Notes';
 $string['overview_pull_cta'] = 'Configure retrieval →';
 $string['overview_pull_desc'] = 'The dashboard polls this Moodle\'s web service endpoints on a schedule '
-    . 'and fetches a snapshot each time. Nothing leaves this site outbound on a timer; the request '
-    . 'originates from the dashboard.';
+    . 'and fetches a snapshot each time.';
 $string['overview_pull_requires'] = 'Requires: nothing from the dashboard. This site generates a token '
     . 'and the dashboard is configured with it.';
 $string['overview_pull_title'] = 'Allow remote dashboard to retrieve data';
@@ -50,7 +49,7 @@ $string['overview_pull_when'] = 'Use when the dashboard can reach this site\'s U
     . 'default for most production setups.';
 $string['overview_send_cta'] = 'Configure sending →';
 $string['overview_send_desc'] = 'This Moodle posts a full snapshot to a configured dashboard URL on a '
-    . 'schedule. The request originates from this site outbound; configure an https:// URL in production.';
+    . 'schedule.';
 $string['overview_send_requires'] = 'Requires: dashboard URL + shared secret. Both are issued by '
     . 'whoever runs the dashboard.';
 $string['overview_send_title'] = 'Send data to remote dashboard';

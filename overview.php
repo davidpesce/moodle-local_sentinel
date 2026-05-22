@@ -56,8 +56,8 @@ echo html_writer::start_div('d-flex justify-content-between align-items-start mb
 echo html_writer::tag('h4', s(get_string('overview_send_title', 'local_sentinel')), ['class' => 'h5 mb-0']);
 echo html_writer::tag(
     'span',
-    s(get_string($pushconfigured ? 'overview_configured' : 'overview_not_configured', 'local_sentinel')),
-    ['class' => 'badge ' . ($pushconfigured ? 'bg-success' : 'bg-secondary')]
+    '● ' . s(get_string($pushconfigured ? 'overview_configured' : 'overview_not_configured', 'local_sentinel')),
+    ['class' => 'small ' . ($pushconfigured ? 'text-success' : 'text-muted')]
 );
 echo html_writer::end_div();
 echo html_writer::tag('p', s(get_string('overview_send_desc', 'local_sentinel')));
@@ -88,8 +88,8 @@ echo html_writer::start_div('d-flex justify-content-between align-items-start mb
 echo html_writer::tag('h4', s(get_string('overview_pull_title', 'local_sentinel')), ['class' => 'h5 mb-0']);
 echo html_writer::tag(
     'span',
-    s(get_string($pullconfigured ? 'overview_configured' : 'overview_not_configured', 'local_sentinel')),
-    ['class' => 'badge ' . ($pullconfigured ? 'bg-success' : 'bg-secondary')]
+    '● ' . s(get_string($pullconfigured ? 'overview_configured' : 'overview_not_configured', 'local_sentinel')),
+    ['class' => 'small ' . ($pullconfigured ? 'text-success' : 'text-muted')]
 );
 echo html_writer::end_div();
 echo html_writer::tag('p', s(get_string('overview_pull_desc', 'local_sentinel')));
