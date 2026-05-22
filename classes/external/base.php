@@ -464,6 +464,35 @@ abstract class base extends external_api {
                     ])
                 ),
             ]),
+            'tokens' => new external_single_structure([
+                'total_count' => new external_value(PARAM_INT, 'Total active web service tokens.'),
+                'without_ip_restriction' => new external_value(
+                    PARAM_INT,
+                    'Tokens with no iprestriction set (broader attack surface).'
+                ),
+                'never_used' => new external_value(PARAM_INT, 'Tokens whose lastaccess is 0.'),
+                'active_last_7_days' => new external_value(PARAM_INT, 'Tokens used in the last 7 days.'),
+                'stale_over_90_days' => new external_value(PARAM_INT, 'Tokens with lastaccess older than 90 days.'),
+                'expiring_within_30_days' => new external_value(
+                    PARAM_INT,
+                    'Tokens with non-zero validuntil that falls in the next 30 days.'
+                ),
+                'entries' => new external_multiple_structure(
+                    new external_single_structure([
+                        'id' => new external_value(PARAM_INT, 'Token row ID (NOT the token string).'),
+                        'type' => new external_value(PARAM_RAW, 'permanent / embedded.'),
+                        'user' => new external_value(PARAM_RAW, 'Owning username (or (deleted) if user gone).'),
+                        'user_deleted' => new external_value(PARAM_BOOL, 'Whether the owning user is deleted.'),
+                        'service_shortname' => self::nullable_text('External service shortname.'),
+                        'service_name' => self::nullable_text('External service display name.'),
+                        'has_ip_restriction' => new external_value(PARAM_BOOL, 'Whether iprestriction is set.'),
+                        'ip_restriction' => new external_value(PARAM_RAW, 'IP restriction value (empty when not set).'),
+                        'created' => new external_value(PARAM_INT, 'Token creation timestamp.'),
+                        'last_access' => new external_value(PARAM_INT, 'Token last-use timestamp (0 if never used).'),
+                        'valid_until' => new external_value(PARAM_INT, 'Expiry timestamp (0 = never expires).'),
+                    ])
+                ),
+            ]),
         ]);
     }
 

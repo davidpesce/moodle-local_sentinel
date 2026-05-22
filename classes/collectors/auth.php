@@ -60,7 +60,105 @@ class auth {
             'methods' => $methods,
             'distinct_methods_in_use' => $allmethods,
             'failed_logins' => self::collect_failed_logins(),
+            'tokens' => self::collect_tokens(),
         ];
+    }
+
+    /**
+     * Inventory of web service tokens.
+     *
+     * Metadata only — the actual token strings are credentials and never
+     * leave the originating Moodle. Used to spot security drift: tokens
+     * with no IP restriction, tokens that have never been used, tokens
+     * approaching their expiry.
+     *
+     * @return array
+     */
+    protected static function collect_tokens(): array {
+        global $DB;
+
+        $sql = "SELECT t.id, t.tokentype, t.userid, t.externalserviceid,
+                       t.iprestriction, t.validuntil, t.timecreated, t.lastaccess,
+                       u.username, u.deleted AS userdeleted,
+                       s.shortname AS serviceshortname, s.name AS servicename
+                  FROM {external_tokens} t
+             LEFT JOIN {user} u ON u.id = t.userid
+             LEFT JOIN {external_services} s ON s.id = t.externalserviceid
+              ORDER BY t.id ASC";
+        $rows = $DB->get_records_sql($sql);
+
+        $entries = [];
+        $now = time();
+        $expiringthreshold = $now + (30 * DAYSECS);
+        $stalethreshold = $now - (90 * DAYSECS);
+        $recentthreshold = $now - (7 * DAYSECS);
+
+        $without_ip = 0;
+        $never_used = 0;
+        $active_recent = 0;
+        $stale = 0;
+        $expiring_soon = 0;
+
+        foreach ($rows as $row) {
+            $iprestriction = trim((string) ($row->iprestriction ?? ''));
+            $hasip = $iprestriction !== '';
+            $lastaccess = (int) $row->lastaccess;
+            $validuntil = (int) $row->validuntil;
+
+            if (!$hasip) {
+                $without_ip++;
+            }
+            if ($lastaccess === 0) {
+                $never_used++;
+            } else if ($lastaccess > $recentthreshold) {
+                $active_recent++;
+            } else if ($lastaccess < $stalethreshold) {
+                $stale++;
+            }
+            if ($validuntil > 0 && $validuntil < $expiringthreshold) {
+                $expiring_soon++;
+            }
+
+            $entries[] = [
+                'id' => (int) $row->id,
+                'type' => self::token_type_label((int) $row->tokentype),
+                'user' => $row->username ?? '(deleted)',
+                'user_deleted' => (bool) ($row->userdeleted ?? false),
+                'service_shortname' => $row->serviceshortname,
+                'service_name' => $row->servicename,
+                'has_ip_restriction' => $hasip,
+                'ip_restriction' => $iprestriction,
+                'created' => (int) $row->timecreated,
+                'last_access' => $lastaccess,
+                'valid_until' => $validuntil,
+            ];
+        }
+
+        return [
+            'total_count' => count($entries),
+            'without_ip_restriction' => $without_ip,
+            'never_used' => $never_used,
+            'active_last_7_days' => $active_recent,
+            'stale_over_90_days' => $stale,
+            'expiring_within_30_days' => $expiring_soon,
+            'entries' => $entries,
+        ];
+    }
+
+    /**
+     * Map an EXTERNAL_TOKEN_* constant to a short label.
+     *
+     * @param int $type
+     * @return string
+     */
+    protected static function token_type_label(int $type): string {
+        if (defined('EXTERNAL_TOKEN_PERMANENT') && $type === EXTERNAL_TOKEN_PERMANENT) {
+            return 'permanent';
+        }
+        if (defined('EXTERNAL_TOKEN_EMBEDDED') && $type === EXTERNAL_TOKEN_EMBEDDED) {
+            return 'embedded';
+        }
+        return (string) $type;
     }
 
     /**
