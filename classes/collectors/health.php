@@ -38,12 +38,41 @@ class health {
             'cron' => self::collect_cron(),
             'tasks' => self::collect_tasks(),
             'sessions' => self::collect_sessions(),
+            'active_users' => self::collect_active_users(),
             'disk' => self::collect_disk(),
             'mail' => self::collect_mail(),
             'admins' => self::collect_admins(),
             'backup' => self::collect_backup(),
             'upgrade_log' => self::collect_upgrade_log(),
             'flags' => self::collect_footgun_flags(),
+        ];
+    }
+
+    /**
+     * Distinct active users in the last day / week / month, by lastaccess.
+     *
+     * @return array
+     */
+    protected static function collect_active_users(): array {
+        global $DB;
+
+        $now = time();
+        return [
+            'dau' => (int) $DB->count_records_select(
+                'user',
+                'deleted = 0 AND lastaccess > :since',
+                ['since' => $now - DAYSECS]
+            ),
+            'wau' => (int) $DB->count_records_select(
+                'user',
+                'deleted = 0 AND lastaccess > :since',
+                ['since' => $now - WEEKSECS]
+            ),
+            'mau' => (int) $DB->count_records_select(
+                'user',
+                'deleted = 0 AND lastaccess > :since',
+                ['since' => $now - (30 * DAYSECS)]
+            ),
         ];
     }
 

@@ -342,6 +342,11 @@ abstract class base extends external_api {
                 'active_last_hour' => new external_value(PARAM_INT, 'Sessions touched in last hour.'),
                 'total_rows' => new external_value(PARAM_INT, 'Total rows in mdl_sessions.'),
             ]),
+            'active_users' => new external_single_structure([
+                'dau' => new external_value(PARAM_INT, 'Distinct users with lastaccess in the last 24h.'),
+                'wau' => new external_value(PARAM_INT, 'Distinct users with lastaccess in the last 7 days.'),
+                'mau' => new external_value(PARAM_INT, 'Distinct users with lastaccess in the last 30 days.'),
+            ]),
             'disk' => new external_single_structure([
                 'dataroot' => $diskpart,
                 'dirroot' => $diskpart,
