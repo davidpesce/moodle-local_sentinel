@@ -49,8 +49,8 @@ $string['overview_pull_title'] = 'Allow remote dashboard to retrieve data';
 $string['overview_pull_when'] = 'Use when the dashboard can reach this site\'s URL inbound — the simpler '
     . 'default for most production setups.';
 $string['overview_send_cta'] = 'Configure sending →';
-$string['overview_send_desc'] = 'This Moodle pushes a full snapshot to a configured dashboard URL on a '
-    . 'schedule. Outbound HTTP from this site to the dashboard.';
+$string['overview_send_desc'] = 'This Moodle posts a full snapshot to a configured dashboard URL on a '
+    . 'schedule. The request originates from this site outbound; configure an https:// URL in production.';
 $string['overview_send_requires'] = 'Requires: dashboard URL + shared secret. Both are issued by '
     . 'whoever runs the dashboard.';
 $string['overview_send_title'] = 'Send data to remote dashboard';
@@ -65,7 +65,9 @@ $string['pushenabled_desc'] = 'When enabled, this Moodle sends a full snapshot t
     . 'dashboard endpoint on a schedule (every 15 minutes by default).';
 $string['pushendpoint'] = 'Dashboard ingest URL';
 $string['pushendpoint_desc'] = 'Full URL of the dashboard\'s ingest endpoint. '
-    . 'Snapshots are POSTed here by the scheduled task.';
+    . 'Snapshots are POSTed here by the scheduled task. '
+    . 'Use https:// in production — the shared secret and the full snapshot payload should not '
+    . 'travel over plaintext HTTP across an untrusted network.';
 $string['pushsecret'] = 'Shared secret';
 $string['pushsecret_desc'] = 'Sent as the X-Sentinel-Secret header on each request. '
     . 'The dashboard must verify this value to accept the snapshot.';
