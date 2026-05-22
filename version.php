@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026052205;
-$plugin->release   = '2.4.0';
+$plugin->version   = 2026052206;
+$plugin->release   = '2.4.1';
 $plugin->requires  = 2024100700;
 $plugin->component = 'local_sentinel';
 $plugin->maturity  = MATURITY_ALPHA;

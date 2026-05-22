@@ -25,18 +25,27 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    // Parent category so the two sub-pages nest under one "Sentinel" heading
+    // Parent category so the sub-pages nest under one "Sentinel" heading
     // (same pattern as Logstore xAPI / other plugin categories under Local plugins).
     $ADMIN->add('localplugins', new admin_category(
         'local_sentinel_category',
         get_string('pluginname', 'local_sentinel')
     ));
 
-    // Sub-page 1: push / runtime settings.
+    // Sub-page 1: Overview landing page. Listed first so it appears at the top
+    // of the nav — operator's natural starting point for deciding which
+    // mechanism to set up.
+    $ADMIN->add('local_sentinel_category', new admin_externalpage(
+        'local_sentinel_overview',
+        get_string('overview_label', 'local_sentinel'),
+        new moodle_url('/local/sentinel/overview.php')
+    ));
+
+    // Sub-page 2: push / runtime settings.
     $settings = new admin_settingpage('local_sentinel', get_string('settings_label', 'local_sentinel'));
     $ADMIN->add('local_sentinel_category', $settings);
 
-    // Sub-page 2: web-UI replacement for cli/setup.php.
+    // Sub-page 3: web-UI replacement for cli/setup.php.
     $ADMIN->add('local_sentinel_category', new admin_externalpage(
         'local_sentinel_setup',
         get_string('setup_label', 'local_sentinel'),
