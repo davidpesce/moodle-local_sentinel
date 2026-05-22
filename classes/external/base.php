@@ -334,6 +334,18 @@ abstract class base extends external_api {
                         'disabled' => new external_value(PARAM_BOOL, 'Task disabled flag.'),
                     ])
                 ),
+                'scheduled_overdue_count' => new external_value(
+                    PARAM_INT,
+                    'Enabled scheduled tasks whose nextruntime is >1h in the past with no active retry.'
+                ),
+                'scheduled_overdue' => new external_multiple_structure(
+                    new external_single_structure([
+                        'classname' => new external_value(PARAM_RAW, 'Task class name.'),
+                        'last_run' => new external_value(PARAM_INT, 'Last successful run timestamp.'),
+                        'next_run' => new external_value(PARAM_INT, 'Scheduled next run timestamp (in the past).'),
+                        'seconds_late' => new external_value(PARAM_INT, 'Now minus next_run, in seconds.'),
+                    ])
+                ),
                 'adhoc_queue_depth' => new external_value(PARAM_INT, 'Number of queued adhoc tasks.'),
                 'adhoc_oldest_nextruntime' => self::nullable_int('Oldest nextruntime in adhoc queue.'),
             ]),

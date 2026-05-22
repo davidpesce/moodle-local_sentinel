@@ -216,6 +216,29 @@ class health {
             ];
         }
 
+        // Overdue: scheduled to have run >1h ago, enabled, not in active retry
+        // (those are already in scheduled_failed). Catches "zombie" tasks where
+        // cron is alive but the task itself isn't getting picked up for some
+        // reason — silent failures that don't trip faildelay.
+        $overduethreshold = time() - HOURSECS;
+        $overduerows = $DB->get_records_select(
+            'task_scheduled',
+            'disabled = 0 AND faildelay = 0 AND nextruntime > 0 AND nextruntime < :threshold',
+            ['threshold' => $overduethreshold],
+            'nextruntime ASC',
+            'id, classname, lastruntime, nextruntime'
+        );
+        $overduelist = [];
+        $now = time();
+        foreach ($overduerows as $row) {
+            $overduelist[] = [
+                'classname' => $row->classname,
+                'last_run' => (int) $row->lastruntime,
+                'next_run' => (int) $row->nextruntime,
+                'seconds_late' => $now - (int) $row->nextruntime,
+            ];
+        }
+
         $adhoctotal = (int) $DB->count_records('task_adhoc');
         $oldest = $DB->get_field_sql(
             'SELECT MIN(nextruntime) FROM {task_adhoc} WHERE nextruntime > 0'
@@ -224,6 +247,8 @@ class health {
         return [
             'scheduled_failed_count' => count($failedlist),
             'scheduled_failed' => $failedlist,
+            'scheduled_overdue_count' => count($overduelist),
+            'scheduled_overdue' => $overduelist,
             'adhoc_queue_depth' => $adhoctotal,
             'adhoc_oldest_nextruntime' => $oldest ? (int) $oldest : null,
         ];
