@@ -89,31 +89,46 @@ echo html_writer::tag(
     ['class' => 'text-muted mb-3 small']
 );
 
-// Four cards.
+// Hover styles for the clickable metric cards. Inlined so the page is
+// self-contained (no project-wide stylesheet in this plugin).
+echo '<style>
+    a.sentinel-metric-card { color: inherit; text-decoration: none; display: block; height: 100%;
+        transition: transform 0.1s, box-shadow 0.1s; }
+    a.sentinel-metric-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    a.sentinel-metric-card .metric-link-hint { opacity: 0.4; }
+    a.sentinel-metric-card:hover .metric-link-hint { opacity: 0.9; }
+</style>';
+
+// Four cards. Each is a link to the native Moodle page where the operator
+// can investigate the underlying data.
 echo html_writer::start_div('row g-3 mb-4');
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_critical', 'local_sentinel'),
     $critical,
     get_string('overview_metric_critical_subtext', 'local_sentinel'),
-    $critical > 0 ? 'border-danger' : 'border-success'
+    $critical > 0 ? 'border-danger' : 'border-success',
+    new moodle_url('/report/status/index.php')
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_errors', 'local_sentinel'),
     $errors,
     get_string('overview_metric_errors_subtext', 'local_sentinel'),
-    $errors > 0 ? 'border-danger' : 'border-success'
+    $errors > 0 ? 'border-danger' : 'border-success',
+    new moodle_url('/report/status/index.php')
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_plugin_updates', 'local_sentinel'),
     $pluginupdates,
     get_string('overview_metric_plugin_updates_subtext', 'local_sentinel'),
-    $pluginupdates > 0 ? 'border-warning' : 'border-success'
+    $pluginupdates > 0 ? 'border-warning' : 'border-success',
+    new moodle_url('/admin/plugins.php')
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_core_update', 'local_sentinel'),
     $coreupdate,
     get_string('overview_metric_core_update_subtext', 'local_sentinel'),
-    $coreupdate > 0 ? 'border-warning' : 'border-success'
+    $coreupdate > 0 ? 'border-warning' : 'border-success',
+    new moodle_url('/admin/index.php')
 );
 echo html_writer::end_div();
 
@@ -150,23 +165,6 @@ $overduevalue = $overdue > 0
         )
     : html_writer::tag('span', '0', ['class' => 'text-success']);
 echo local_sentinel_overview_kv_row(get_string('overview_overdue_tasks', 'local_sentinel'), $overduevalue);
-
-// Plugins missing from disk.
-$missing = 0;
-foreach (($plugins['standard'] ?? []) as $p) {
-    if (!empty($p['missing_from_disk'])) {
-        $missing++;
-    }
-}
-foreach (($plugins['third_party'] ?? []) as $p) {
-    if (!empty($p['missing_from_disk'])) {
-        $missing++;
-    }
-}
-$missingvalue = $missing > 0
-    ? html_writer::tag('span', $missing, ['class' => 'text-warning fw-bold'])
-    : html_writer::tag('span', '0', ['class' => 'text-success']);
-echo local_sentinel_overview_kv_row(get_string('overview_plugins_missing', 'local_sentinel'), $missingvalue);
 
 // Active users.
 $au = $health['active_users'] ?? [];
@@ -263,25 +261,42 @@ echo $OUTPUT->footer();
 /**
  * Render one metric card in the headline row.
  *
- * @param string $label
- * @param int $value
- * @param string $subtext
- * @param string $borderclass Bootstrap border-* utility, e.g. 'border-success'.
+ * The card is wrapped in an <a> so operators can click through to where the
+ * underlying data can be investigated (system status report, plugins overview,
+ * notifications page, etc.). The hover state is styled inline at the top of
+ * the page render.
+ *
+ * @param string     $label
+ * @param int        $value
+ * @param string     $subtext
+ * @param string     $borderclass Bootstrap border-* utility, e.g. 'border-success'.
+ * @param moodle_url $href Destination the card links to.
  * @return string
  */
-function local_sentinel_overview_metric_card(string $label, int $value, string $subtext, string $borderclass): string {
-    $body = html_writer::tag(
-        'div',
-        s($label),
-        ['class' => 'text-uppercase small-meta text-muted small mb-1']
-    );
+function local_sentinel_overview_metric_card(
+    string $label,
+    int $value,
+    string $subtext,
+    string $borderclass,
+    moodle_url $href
+): string {
+    $body = html_writer::start_div('d-flex justify-content-between align-items-start mb-1');
+    $body .= html_writer::tag('div', s($label), ['class' => 'text-uppercase text-muted small']);
+    $body .= html_writer::tag('span', '›', ['class' => 'metric-link-hint h5 mb-0']);
+    $body .= html_writer::end_div();
     $body .= html_writer::tag('div', (string) $value, ['class' => 'display-6 fw-bold lh-1 mb-1']);
     $body .= html_writer::tag('div', s($subtext), ['class' => 'small text-muted']);
 
+    $card = html_writer::div(
+        html_writer::div($body, 'card-body'),
+        "card border-2 {$borderclass} h-100"
+    );
+
     return html_writer::div(
-        html_writer::div(
-            html_writer::div($body, 'card-body'),
-            "card border-2 {$borderclass} h-100"
+        html_writer::link(
+            $href,
+            $card,
+            ['class' => 'sentinel-metric-card']
         ),
         'col-md-3'
     );
