@@ -32,24 +32,43 @@ if ($hassiteconfig) {
         get_string('pluginname', 'local_sentinel')
     ));
 
-    // Sub-page 1: Overview landing page. Listed first so it appears at the top
-    // of the nav — operator's natural starting point for deciding which
-    // mechanism to set up.
+    // Sub-page 1: Overview — live admin digest of this Moodle's health.
+    // First in the nav, the operator's natural return-visit page.
     $ADMIN->add('local_sentinel_category', new admin_externalpage(
         'local_sentinel_overview',
         get_string('overview_label', 'local_sentinel'),
         new moodle_url('/local/sentinel/overview.php')
     ));
 
-    // Sub-page 2: push / runtime settings.
-    $settings = new admin_settingpage('local_sentinel', get_string('settings_label', 'local_sentinel'));
+    // Sub-page 2: Connect to dashboard — single entry point for the
+    // connection-explanation cards. Links into the two hidden config
+    // routes below.
+    $ADMIN->add('local_sentinel_category', new admin_externalpage(
+        'local_sentinel_connect',
+        get_string('connect_label', 'local_sentinel'),
+        new moodle_url('/local/sentinel/connect.php')
+    ));
+
+    // Hidden in the nav, but still routable URLs that the Connect page
+    // links into. Constructor's 4th-arg ($req_capability) keeps the
+    // default 'moodle/site:config'; 5th-arg ($hidden) hides from the
+    // tree. admin_settingpage takes ($name, $visiblename, $req_capability,
+    // $hidden); admin_externalpage takes ($name, $visiblename, $url,
+    // $req_capability, $hidden, $context).
+    $settings = new admin_settingpage(
+        'local_sentinel',
+        get_string('settings_label', 'local_sentinel'),
+        'moodle/site:config',
+        true
+    );
     $ADMIN->add('local_sentinel_category', $settings);
 
-    // Sub-page 3: web-UI replacement for cli/setup.php.
     $ADMIN->add('local_sentinel_category', new admin_externalpage(
         'local_sentinel_setup',
         get_string('setup_label', 'local_sentinel'),
-        new moodle_url('/local/sentinel/setup.php')
+        new moodle_url('/local/sentinel/setup.php'),
+        'moodle/site:config',
+        true
     ));
 
     $settings->add(new admin_setting_heading(

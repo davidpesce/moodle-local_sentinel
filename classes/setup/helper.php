@@ -69,7 +69,7 @@ class helper {
         // 1. Enable web services site-wide.
         if (empty($CFG->enablewebservices)) {
             set_config('enablewebservices', 1);
-            $result->enabled_webservices_now = true;
+            $result->enabledwebservicesnow = true;
             $result->steps[] = 'Enabled $CFG->enablewebservices.';
         } else {
             $result->steps[] = 'Web services already enabled.';
@@ -81,7 +81,7 @@ class helper {
         if (!in_array('rest', $protocols, true)) {
             $protocols[] = 'rest';
             set_config('webserviceprotocols', implode(',', $protocols));
-            $result->enabled_rest_now = true;
+            $result->enabledrestnow = true;
             $result->steps[] = 'Enabled REST protocol.';
         } else {
             $result->steps[] = 'REST protocol already enabled.';
@@ -104,13 +104,13 @@ class helper {
                 ''
             );
             set_role_contextlevels($roleid, [CONTEXT_SYSTEM]);
-            $result->created_role = true;
+            $result->createdrole = true;
             $result->steps[] = "Created role '{$opts['roleshortname']}'.";
         } else {
             $roleid = (int) $role->id;
             $result->steps[] = "Reusing existing role '{$opts['roleshortname']}'.";
         }
-        $result->role_id = $roleid;
+        $result->roleid = $roleid;
 
         $systemcontext = context_system::instance();
         $requiredcaps = ['webservice/rest:use', 'local/sentinel:view'];
@@ -135,12 +135,12 @@ class helper {
             ];
             $new->id = user_create_user($new, false, false);
             $user = $new;
-            $result->created_user = true;
+            $result->createduser = true;
             $result->steps[] = "Created user '{$user->username}'.";
         } else {
             $result->steps[] = "Reusing existing user '{$user->username}'.";
         }
-        $result->user_id = (int) $user->id;
+        $result->userid = (int) $user->id;
 
         // 6. Role assignment at system context.
         $assigned = $DB->record_exists('role_assignments', [
@@ -196,7 +196,7 @@ class helper {
                 '',
                 'Sentinel token'
             );
-            $result->created_token = true;
+            $result->createdtoken = true;
             $result->steps[] = 'Generated new permanent token.';
         } else {
             $tokenstring = $existingtoken->token;

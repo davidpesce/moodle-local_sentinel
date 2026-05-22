@@ -93,11 +93,11 @@ class auth {
         $stalethreshold = $now - (90 * DAYSECS);
         $recentthreshold = $now - (7 * DAYSECS);
 
-        $without_ip = 0;
-        $never_used = 0;
-        $active_recent = 0;
+        $withoutip = 0;
+        $neverused = 0;
+        $activerecent = 0;
         $stale = 0;
-        $expiring_soon = 0;
+        $expiringsoon = 0;
 
         foreach ($rows as $row) {
             $iprestriction = trim((string) ($row->iprestriction ?? ''));
@@ -106,17 +106,17 @@ class auth {
             $validuntil = (int) $row->validuntil;
 
             if (!$hasip) {
-                $without_ip++;
+                $withoutip++;
             }
             if ($lastaccess === 0) {
-                $never_used++;
+                $neverused++;
             } else if ($lastaccess > $recentthreshold) {
-                $active_recent++;
+                $activerecent++;
             } else if ($lastaccess < $stalethreshold) {
                 $stale++;
             }
             if ($validuntil > 0 && $validuntil < $expiringthreshold) {
-                $expiring_soon++;
+                $expiringsoon++;
             }
 
             $entries[] = [
@@ -136,11 +136,11 @@ class auth {
 
         return [
             'total_count' => count($entries),
-            'without_ip_restriction' => $without_ip,
-            'never_used' => $never_used,
-            'active_last_7_days' => $active_recent,
+            'without_ip_restriction' => $withoutip,
+            'never_used' => $neverused,
+            'active_last_7_days' => $activerecent,
             'stale_over_90_days' => $stale,
-            'expiring_within_30_days' => $expiring_soon,
+            'expiring_within_30_days' => $expiringsoon,
             'entries' => $entries,
         ];
     }

@@ -24,38 +24,62 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['overview_configured'] = 'Configured';
-$string['overview_heading'] = 'Sentinel: overview';
-$string['overview_intro'] = 'Sentinel collects operational metrics about this Moodle '
+$string['connect_configured'] = 'Configured';
+$string['connect_heading'] = 'Connect to remote dashboard';
+$string['connect_intro'] = 'Sentinel collects operational metrics about this Moodle '
     . '(release, plugins, scheduled tasks, errors, active users, and more) and makes them available '
     . 'to a central dashboard. Two mechanisms move the data between this site and the dashboard. '
     . 'Choose the one that fits your network setup — or use both.';
-$string['overview_label'] = 'Overview';
-$string['overview_not_configured'] = 'Not configured';
-$string['overview_note_both'] = 'Either or both mechanisms can be enabled. The dashboard de-duplicates '
+$string['connect_label'] = 'Connect to dashboard';
+$string['connect_not_configured'] = 'Not configured';
+$string['connect_note_both'] = 'Either or both mechanisms can be enabled. The dashboard de-duplicates '
     . 'incoming snapshots by siteidentifier.';
-$string['overview_note_pull'] = 'Retrieval uses standard Moodle web service tokens. View tokens at '
+$string['connect_note_pull'] = 'Retrieval uses standard Moodle web service tokens. View tokens at '
     . 'Site administration → Server → Web services → Manage tokens.';
-$string['overview_note_push'] = 'Sending uses a scheduled task that runs every 15 minutes by default. '
+$string['connect_note_push'] = 'Sending uses a scheduled task that runs every 15 minutes by default. '
     . 'View and adjust at Site administration → Server → Scheduled tasks.';
-$string['overview_notes_heading'] = 'Notes';
-$string['overview_pull_cta'] = 'Configure retrieval →';
-$string['overview_pull_desc'] = 'The dashboard polls this Moodle\'s web service endpoints on a schedule '
+$string['connect_notes_heading'] = 'Notes';
+$string['connect_pull_cta'] = 'Configure retrieval →';
+$string['connect_pull_desc'] = 'The dashboard polls this Moodle\'s web service endpoints on a schedule '
     . 'and fetches a snapshot each time.';
-$string['overview_pull_requires'] = 'Requires: nothing from the dashboard. This site generates a token '
+$string['connect_pull_requires'] = 'Requires: nothing from the dashboard. This site generates a token '
     . 'and the dashboard is configured with it.';
-$string['overview_pull_title'] = 'Allow remote dashboard to retrieve data';
-$string['overview_pull_when'] = 'Use when the dashboard can reach this site\'s URL inbound — the simpler '
+$string['connect_pull_title'] = 'Allow remote dashboard to retrieve data';
+$string['connect_pull_when'] = 'Use when the dashboard can reach this site\'s URL inbound — the simpler '
     . 'default for most production setups.';
-$string['overview_send_cta'] = 'Configure sending →';
-$string['overview_send_desc'] = 'This Moodle posts a full snapshot to a configured dashboard URL on a '
+$string['connect_send_cta'] = 'Configure sending →';
+$string['connect_send_desc'] = 'This Moodle posts a full snapshot to a configured dashboard URL on a '
     . 'schedule.';
-$string['overview_send_requires'] = 'Requires: dashboard URL + shared secret. Both are issued by '
+$string['connect_send_requires'] = 'Requires: dashboard URL + shared secret. Both are issued by '
     . 'whoever runs the dashboard.';
-$string['overview_send_title'] = 'Send data to remote dashboard';
-$string['overview_send_when'] = 'Use when the dashboard cannot reach this site\'s URL — for example '
+$string['connect_send_title'] = 'Send data to remote dashboard';
+$string['connect_send_when'] = 'Use when the dashboard cannot reach this site\'s URL — for example '
     . 'instances behind a firewall, on a private network, or being evaluated before network access '
     . 'has been opened up.';
+$string['overview_active_users'] = 'Active users';
+$string['overview_connection_heading'] = 'Connection to remote dashboard';
+$string['overview_context_strip'] = '{$a->release} · snapshot generated {$a->generated}';
+$string['overview_cron_last_run'] = 'Cron last run';
+$string['overview_cron_never'] = 'never';
+$string['overview_disk_free'] = 'Disk free (moodledata)';
+$string['overview_heading'] = 'Sentinel: overview';
+$string['overview_label'] = 'Overview';
+$string['overview_manage_connection'] = 'Manage connection →';
+$string['overview_metric_core_update'] = 'Core update';
+$string['overview_metric_core_update_subtext'] = 'releases behind latest';
+$string['overview_metric_critical'] = 'Critical';
+$string['overview_metric_critical_subtext'] = 'system_status checks';
+$string['overview_metric_errors'] = 'Errors';
+$string['overview_metric_errors_subtext'] = 'across performance / security / system_status';
+$string['overview_metric_plugin_updates'] = 'Plugin updates';
+$string['overview_metric_plugin_updates_subtext'] = 'plugins with a newer version upstream';
+$string['overview_overdue_tasks'] = 'Overdue scheduled tasks';
+$string['overview_plugins_missing'] = 'Plugins missing from disk';
+$string['overview_pull_status'] = 'Allow dashboard to pull';
+$string['overview_section_health'] = 'Health';
+$string['overview_send_status'] = 'Send to dashboard';
+$string['overview_snapshot_error'] = 'Snapshot could not be generated: {$a}';
+$string['overview_ssl_days_remaining'] = 'SSL certificate days remaining';
 $string['pluginname'] = 'Sentinel';
 $string['privacy:metadata'] = 'The Sentinel plugin does not store any personal data. '
     . 'It exposes site-level operational metrics through web services and an optional outbound send.';
@@ -77,8 +101,8 @@ $string['servicename'] = 'Sentinel';
 $string['settings_label'] = 'Send data to remote dashboard';
 $string['settingsheading_push'] = 'Outbound configuration';
 $string['settingsheading_push_desc'] = 'Configures the scheduled task that posts snapshots to the '
-    . 'remote dashboard. See the Overview page for when to use this and how it differs from the '
-    . 'retrieval mechanism.';
+    . 'remote dashboard. See the Connect to dashboard page for when to use this and how it differs '
+    . 'from the retrieval mechanism.';
 $string['setup_back'] = '← Back to setup';
 $string['setup_copy'] = 'Copy token';
 $string['setup_dashboard_help'] = 'On the Sentinel Dashboard, register this site:';
@@ -93,7 +117,7 @@ $string['setup_existing_notice'] = 'A token already exists for this site. '
 $string['setup_heading'] = 'Allow remote dashboard to retrieve data';
 $string['setup_identity_heading'] = 'Service user identity';
 $string['setup_intro'] = 'Generates a web service token that the central dashboard uses to pull snapshots '
-    . 'from this Moodle. See the Overview page for when to use this. '
+    . 'from this Moodle. See the Connect to dashboard page for when to use this. '
     . 'This page is the GUI equivalent of running cli/setup.php; defaults match the CLI script.';
 $string['setup_label'] = 'Allow remote dashboard to retrieve data';
 $string['setup_log_label'] = 'Setup steps';

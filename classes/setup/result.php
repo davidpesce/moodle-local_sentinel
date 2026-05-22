@@ -36,25 +36,25 @@ class result {
     public array $steps = [];
 
     /** @var bool Whether $CFG->enablewebservices was flipped this run. */
-    public bool $enabled_webservices_now = false;
+    public bool $enabledwebservicesnow = false;
 
     /** @var bool Whether the REST protocol was added to the enabled list this run. */
-    public bool $enabled_rest_now = false;
+    public bool $enabledrestnow = false;
 
     /** @var bool Whether the Sentinel role was created this run. */
-    public bool $created_role = false;
+    public bool $createdrole = false;
 
     /** @var int Role ID (existing or newly created). */
-    public int $role_id = 0;
+    public int $roleid = 0;
 
     /** @var bool Whether the webservice user was created this run. */
-    public bool $created_user = false;
+    public bool $createduser = false;
 
     /** @var int User ID (existing or newly created). */
-    public int $user_id = 0;
+    public int $userid = 0;
 
     /** @var bool Whether a new token was generated this run. */
-    public bool $created_token = false;
+    public bool $createdtoken = false;
 
     /** @var string The token string (always populated on success). */
     public string $token = '';
