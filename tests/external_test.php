@@ -68,7 +68,7 @@ final class external_test extends \advanced_testcase {
      * Every external function's actual output must validate against its declared structure.
      *
      * @dataProvider endpoint_provider
-     * @param class-string $class
+     * @param class-string $class External function class under test.
      */
     public function test_response_validates_against_declared_structure(string $class): void {
         $this->resetAfterTest();

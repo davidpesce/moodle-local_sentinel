@@ -76,17 +76,20 @@ class config_drift {
 
         require_once($CFG->libdir . '/adminlib.php');
 
-        // The admin_get_root() helper only fully populates the settings tree
-        // under an admin session — without one, get_children() on category
-        // nodes returns empty. Establish admin context for this collector run;
-        // downstream code
-        // continues with the original session via the runtime context the
-        // caller (WS / scheduled task) provides.
+        /*
+         * The admin_get_root() helper only fully populates the settings tree
+         * under an admin session — without one, get_children() on category
+         * nodes returns empty. Establish admin context for this collector run;
+         * downstream code continues with the original session via the runtime
+         * context the caller (WS / scheduled task) provides.
+         */
         $originaluser = self::elevate_to_admin();
-        // The admin_get_root(true, true) call populates the full settings
-        // tree, and some setting widgets emit stray output during that
-        // process. Capture and discard so the collector is output-clean for WS callers
-        // and PHPUnit strict-output checks.
+        /*
+         * The admin_get_root(true, true) call populates the full settings
+         * tree, and some setting widgets emit stray output during that
+         * process. Capture and discard so the collector is output-clean for
+         * WS callers and PHPUnit strict-output checks.
+         */
         ob_start();
         try {
             $root = admin_get_root(true, true);
