@@ -432,6 +432,33 @@ abstract class base extends external_api {
                 'cachejs_disabled' => new external_value(PARAM_BOOL, 'JS caching disabled.'),
                 'perfdebug' => self::nullable_int('$CFG->perfdebug level.'),
             ]),
+            // MUC backend reachability. VALUE_OPTIONAL — older sites without the
+            // collector don't include this key. Each store reports its is_ready()
+            // signal plus warning strings — the same data /cache/admin.php shows.
+            'cache_stores' => new external_single_structure([
+                'available' => new external_value(PARAM_BOOL, 'True if the collector could enumerate stores.'),
+                'reason' => new external_value(PARAM_RAW, 'Failure reason when available=false.', VALUE_OPTIONAL),
+                'total_count' => new external_value(PARAM_INT, 'Number of configured stores.', VALUE_OPTIONAL),
+                'not_ready_count' => new external_value(PARAM_INT, 'Stores reporting is_ready=false.', VALUE_OPTIONAL),
+                'stores' => new external_multiple_structure(
+                    new external_single_structure([
+                        'name' => new external_value(PARAM_RAW, 'Store instance name.'),
+                        'plugin' => new external_value(PARAM_RAW, 'cachestore_* plugin name.'),
+                        'is_default' => new external_value(PARAM_BOOL, 'Default store for its mode.'),
+                        'is_ready' => new external_value(PARAM_BOOL, 'Store is reachable / ready to use.'),
+                        'requirements_met' => new external_value(PARAM_BOOL, 'PHP requirements satisfied.'),
+                        'mappings' => new external_value(PARAM_INT, 'Definitions mapped to this store.'),
+                        'warnings' => new external_multiple_structure(
+                            new external_value(PARAM_RAW, 'Warning string.')
+                        ),
+                        'supports_application_mode' => new external_value(PARAM_BOOL, 'Usable for MODE_APPLICATION.'),
+                        'supports_session_mode' => new external_value(PARAM_BOOL, 'Usable for MODE_SESSION.'),
+                        'supports_request_mode' => new external_value(PARAM_BOOL, 'Usable for MODE_REQUEST.'),
+                    ]),
+                    'Per-store summary.',
+                    VALUE_OPTIONAL
+                ),
+            ], 'MUC backend reachability summary (admin opt-out via egress filter).', VALUE_OPTIONAL),
         ]);
     }
 

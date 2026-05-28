@@ -45,6 +45,71 @@ class health {
             'backup' => self::collect_backup(),
             'upgrade_log' => self::collect_upgrade_log(),
             'flags' => self::collect_footgun_flags(),
+            'cache_stores' => self::collect_cache_stores(),
+        ];
+    }
+
+    /**
+     * Reachability summary for every configured MUC cache store.
+     *
+     * The dashboard's main consumer — it can flag a site running degraded
+     * because (say) Memcached is down even when no admin can log in to
+     * notice. Stores are probed via Moodle's own administration_helper, which
+     * calls each store's is_ready() — same signal the /cache/admin.php page
+     * shows.
+     *
+     * Caveat: probing a remote store that's TCP-unreachable can sit on a
+     * connection timeout. We wrap the whole walk in a try/catch and add a
+     * per-store catch so one bad store doesn't poison the rest.
+     *
+     * @return array
+     */
+    protected static function collect_cache_stores(): array {
+        if (!class_exists('\core_cache\administration_helper')) {
+            return ['available' => false, 'reason' => 'core_cache helpers not available'];
+        }
+
+        try {
+            // The administration_helper instantiates each store and calls
+            // is_ready() — same signal the /cache/admin.php page shows.
+            // Suppress any stray output the store classes might emit during
+            // construction (some legacy stores echo warnings).
+            ob_start();
+            $summaries = \core_cache\administration_helper::get_store_instance_summaries();
+            ob_end_clean();
+        } catch (\Throwable $e) {
+            if (ob_get_level() > 0) {
+                ob_end_clean();
+            }
+            return ['available' => false, 'reason' => 'enumeration failed: ' . $e->getMessage()];
+        }
+
+        $stores = [];
+        $notreadycount = 0;
+        foreach ($summaries as $name => $detail) {
+            $isready = !empty($detail['isready']);
+            if (!$isready) {
+                $notreadycount++;
+            }
+            $stores[] = [
+                'name' => (string) $name,
+                'plugin' => (string) ($detail['plugin'] ?? ''),
+                'is_default' => !empty($detail['default']),
+                'is_ready' => $isready,
+                'requirements_met' => !empty($detail['requirementsmet']),
+                'mappings' => (int) ($detail['mappings'] ?? 0),
+                'warnings' => array_values(array_map('strval', $detail['warnings'] ?? [])),
+                'supports_application_mode' => !empty($detail['modes'][1] ?? false),
+                'supports_session_mode' => !empty($detail['modes'][2] ?? false),
+                'supports_request_mode' => !empty($detail['modes'][4] ?? false),
+            ];
+        }
+
+        return [
+            'available' => true,
+            'total_count' => count($stores),
+            'not_ready_count' => $notreadycount,
+            'stores' => $stores,
         ];
     }
 
