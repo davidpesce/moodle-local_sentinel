@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * MUC cache definitions for local_sentinel.
  *
  * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
@@ -24,9 +24,16 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026052800;
-$plugin->release   = '2.7.0';
-$plugin->requires  = 2024100700;
-$plugin->component = 'local_sentinel';
-$plugin->maturity  = MATURITY_ALPHA;
-$plugin->supported = [405, 501];
+$definitions = [
+    // Cached full snapshot consumed by the Overview admin page so tab
+    // switching is snappy. WS endpoints bypass this cache and always
+    // run collectors live.
+    'snapshot' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'simpledata' => false,
+        'staticacceleration' => true,
+        'staticaccelerationsize' => 1,
+        'ttl' => 300,
+    ],
+];

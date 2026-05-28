@@ -591,6 +591,7 @@ abstract class base extends external_api {
                     'name' => new external_value(PARAM_RAW, 'Setting name.'),
                     'fullname' => new external_value(PARAM_RAW, 'Combined plugin/name identifier.'),
                     'visible_name' => new external_value(PARAM_RAW, 'Display label.'),
+                    'section' => new external_value(PARAM_RAW, 'Parent admin_settingpage name for deep-linking.'),
                     'class' => new external_value(PARAM_RAW, 'admin_setting subclass.'),
                     'current' => new external_value(PARAM_RAW, 'Current stored value.'),
                     'default' => new external_value(PARAM_RAW, 'Declared default value.'),

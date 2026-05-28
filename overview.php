@@ -35,13 +35,48 @@ require_once($CFG->libdir . '/adminlib.php');
 
 admin_externalpage_setup('local_sentinel_overview');
 
+// Tab dispatch.
+$allowedtabs = ['health', 'environment', 'plugins', 'auth', 'reports', 'configdrift'];
+$tab = optional_param('tab', 'health', PARAM_ALPHA);
+if (!in_array($tab, $allowedtabs, true)) {
+    $tab = 'health';
+}
+
+// Handle an explicit cache refresh before any output. Sesskey guarded so a
+// crawler can't trigger collector runs.
+if (optional_param('refresh', 0, PARAM_INT)) {
+    require_sesskey();
+    \local_sentinel\cache_helper::purge();
+    redirect(new moodle_url('/local/sentinel/overview.php', ['tab' => $tab]));
+}
+
+// Handle the per-row "Ignore" / "Show" toggles on the Config drift tab before
+// any output, so we can redirect-back instead of re-submitting on refresh.
+$driftaction = optional_param('drift_ignore_action', '', PARAM_ALPHA);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($driftaction, ['ignore', 'unignore'], true)) {
+    require_sesskey();
+    $fullname = trim(optional_param('drift_ignore_fullname', '', PARAM_RAW));
+    if ($fullname !== '') {
+        $list = \local_sentinel\output\renderer::get_ignored_list();
+        if ($driftaction === 'ignore' && !in_array($fullname, $list, true)) {
+            $list[] = $fullname;
+        } else if ($driftaction === 'unignore') {
+            $list = array_values(array_filter($list, fn($x) => $x !== $fullname));
+        }
+        \local_sentinel\output\renderer::set_ignored_list($list);
+    }
+    redirect(new moodle_url('/local/sentinel/overview.php', ['tab' => 'configdrift']));
+}
+
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('overview_heading', 'local_sentinel'));
+echo $PAGE->get_renderer('local_sentinel')->sentinel_subnav('overview');
 
-// Collect everything in one call. Catch surface errors so a broken collector
-// never breaks the page — operators get a notification instead.
+// Collect everything in one call (via the UI-side cache). Catch surface
+// errors so a broken collector never breaks the page — operators get a
+// notification instead.
 try {
-    $snapshot = \local_sentinel\collector::get_snapshot();
+    $snapshot = \local_sentinel\cache_helper::get_snapshot();
 } catch (\Throwable $e) {
     echo $OUTPUT->notification(
         get_string('overview_snapshot_error', 'local_sentinel', $e->getMessage()),
@@ -51,10 +86,7 @@ try {
     return;
 }
 
-// ---------------------------------------------------------------------------
-// Headline metrics.
-// ---------------------------------------------------------------------------
-
+// Section: Headline metrics.
 $reports = $snapshot['reports'] ?? [];
 $plugins = $snapshot['plugins'] ?? [];
 $status = $snapshot['status'] ?? [];
@@ -102,26 +134,31 @@ echo '<style>
 // Four cards. Each is a link to the native Moodle page where the operator
 // can investigate the underlying data.
 echo html_writer::start_div('row g-3 mb-4');
+// Both Critical and Errors aggregate across multiple reports (critical = status,
+// errors = perf + security + status). Linking to the in-plugin Reports tab —
+// which shows all three side-by-side — avoids dropping the user onto only one
+// of the contributing native pages.
+$reportstaburl = new moodle_url('/local/sentinel/overview.php', ['tab' => 'reports']);
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_critical', 'local_sentinel'),
     $critical,
     get_string('overview_metric_critical_subtext', 'local_sentinel'),
     $critical > 0 ? 'border-danger' : 'border-success',
-    new moodle_url('/report/status/index.php')
+    $reportstaburl
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_errors', 'local_sentinel'),
     $errors,
     get_string('overview_metric_errors_subtext', 'local_sentinel'),
     $errors > 0 ? 'border-danger' : 'border-success',
-    new moodle_url('/report/status/index.php')
+    $reportstaburl
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_plugin_updates', 'local_sentinel'),
     $pluginupdates,
     get_string('overview_metric_plugin_updates_subtext', 'local_sentinel'),
     $pluginupdates > 0 ? 'border-warning' : 'border-success',
-    new moodle_url('/admin/plugins.php')
+    new moodle_url('/admin/plugins.php', null, 'additional')
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_core_update', 'local_sentinel'),
@@ -132,79 +169,20 @@ echo local_sentinel_overview_metric_card(
 );
 echo html_writer::end_div();
 
-// ---------------------------------------------------------------------------
-// Supporting rows.
-// ---------------------------------------------------------------------------
-
-echo html_writer::tag(
-    'h4',
-    s(get_string('overview_section_health', 'local_sentinel')),
-    ['class' => 'h6 text-uppercase text-muted mt-4']
-);
-
-echo html_writer::start_tag('table', ['class' => 'table table-sm']);
-echo html_writer::start_tag('tbody');
-
-// Cron last run.
-$cronlast = (int) ($health['cron']['last_run'] ?? 0);
-$cronlag = (int) ($health['cron']['seconds_since_last_run'] ?? 0);
-$cronvalue = $cronlast === 0
-    ? html_writer::tag('span', s(get_string('overview_cron_never', 'local_sentinel')), ['class' => 'text-danger'])
-    : (userdate($cronlast, '%Y-%m-%d %H:%M:%S') . ' '
-        . html_writer::tag('span', "({$cronlag}s ago)", ['class' => 'text-muted small']));
-echo local_sentinel_overview_kv_row(get_string('overview_cron_last_run', 'local_sentinel'), $cronvalue);
-
-// Overdue tasks.
-$overdue = (int) ($health['tasks']['scheduled_overdue_count'] ?? 0);
-$overduevalue = $overdue > 0
-    ? html_writer::tag('span', $overdue, ['class' => 'text-danger fw-bold'])
-        . ' ' . html_writer::link(
-            new moodle_url('/admin/tool/task/scheduledtasks.php'),
-            get_string('view'),
-            ['class' => 'small ms-2']
-        )
-    : html_writer::tag('span', '0', ['class' => 'text-success']);
-echo local_sentinel_overview_kv_row(get_string('overview_overdue_tasks', 'local_sentinel'), $overduevalue);
-
-// Active users.
-$au = $health['active_users'] ?? [];
-$dau = (int) ($au['dau'] ?? 0);
-$wau = (int) ($au['wau'] ?? 0);
-$mau = (int) ($au['mau'] ?? 0);
-echo local_sentinel_overview_kv_row(
-    get_string('overview_active_users', 'local_sentinel'),
-    "DAU {$dau} · WAU {$wau} · MAU {$mau}"
-);
-
-// Disk free on moodledata.
-$dataroot = $health['disk']['dataroot'] ?? [];
-$diskfree = $dataroot['free_bytes'] ?? null;
-$disktotal = $dataroot['total_bytes'] ?? null;
-if ($diskfree !== null && $disktotal !== null && $disktotal > 0) {
-    $pct = round(($diskfree / $disktotal) * 100, 1);
-    $diskvalue = display_size($diskfree) . ' / ' . display_size($disktotal) . " ({$pct}% free)";
-} else {
-    $diskvalue = '—';
+// Section: Tab strip + active tab body.
+$tabs = [];
+foreach ($allowedtabs as $name) {
+    $tabs[] = new tabobject(
+        $name,
+        new moodle_url('/local/sentinel/overview.php', ['tab' => $name]),
+        get_string('overview_tab_' . $name, 'local_sentinel')
+    );
 }
-echo local_sentinel_overview_kv_row(get_string('overview_disk_free', 'local_sentinel'), $diskvalue);
+echo $OUTPUT->tabtree($tabs, $tab);
 
-// SSL cert days remaining — only when checked succeeded.
-$ssl = $snapshot['environment']['ssl'] ?? [];
-if (!empty($ssl['checked'])) {
-    $days = (int) ($ssl['days_remaining'] ?? 0);
-    if ($days < 14) {
-        $sslclass = 'text-danger fw-bold';
-    } else if ($days < 60) {
-        $sslclass = 'text-warning';
-    } else {
-        $sslclass = 'text-success';
-    }
-    $sslvalue = html_writer::tag('span', "{$days} days", ['class' => $sslclass]);
-    echo local_sentinel_overview_kv_row(get_string('overview_ssl_days_remaining', 'local_sentinel'), $sslvalue);
-}
-
-echo html_writer::end_tag('tbody');
-echo html_writer::end_tag('table');
+$renderer = $PAGE->get_renderer('local_sentinel');
+$method = 'render_' . ($tab === 'configdrift' ? 'config_drift' : $tab) . '_tab';
+echo $renderer->$method($snapshot);
 
 echo $OUTPUT->footer();
 

@@ -159,8 +159,9 @@ class config_drift {
         if (!($node instanceof \admin_settingpage)) {
             return;
         }
+        $section = (string) $node->name;
         foreach ($node->settings as $setting) {
-            self::check_setting($setting, $entries, $skipped);
+            self::check_setting($setting, $section, $entries, $skipped);
         }
     }
 
@@ -168,10 +169,11 @@ class config_drift {
      * Compare a single setting to its default, recording drift if any.
      *
      * @param \admin_setting $setting
+     * @param string $section Parent admin_settingpage name — used to deep-link to the setting in the UI.
      * @param array $entries
      * @param array $skipped
      */
-    protected static function check_setting($setting, array &$entries, array &$skipped): void {
+    protected static function check_setting($setting, string $section, array &$entries, array &$skipped): void {
         if (!($setting instanceof \admin_setting)) {
             return;
         }
@@ -204,6 +206,7 @@ class config_drift {
             'name' => (string) $setting->name,
             'fullname' => self::fullname($setting),
             'visible_name' => self::stringify_visible_name($setting),
+            'section' => $section,
             'class' => self::short_class_name($setting),
             'current' => self::stringify_value($current),
             'default' => self::stringify_value($default),

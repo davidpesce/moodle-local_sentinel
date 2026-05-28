@@ -46,6 +46,7 @@ $pullurl = new moodle_url('/local/sentinel/setup.php');
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('connect_heading', 'local_sentinel'));
+echo $PAGE->get_renderer('local_sentinel')->sentinel_subnav('connect');
 echo $OUTPUT->box(get_string('connect_intro', 'local_sentinel'));
 
 echo html_writer::start_div('row g-3 mb-3');
@@ -78,9 +79,9 @@ echo html_writer::link(
     s(get_string('connect_send_cta', 'local_sentinel')),
     ['class' => 'btn btn-primary mt-auto align-self-start']
 );
-echo html_writer::end_div(); // card-body.
-echo html_writer::end_div(); // card.
-echo html_writer::end_div(); // col.
+echo html_writer::end_div(); // End card-body.
+echo html_writer::end_div(); // End card.
+echo html_writer::end_div(); // End col.
 
 // Card 2: Allow retrieval (pull).
 echo html_writer::start_div('col-md-6');
@@ -114,7 +115,7 @@ echo html_writer::end_div();
 echo html_writer::end_div();
 echo html_writer::end_div();
 
-echo html_writer::end_div(); // row.
+echo html_writer::end_div(); // End row.
 
 // Notes.
 echo html_writer::tag(

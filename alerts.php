@@ -49,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('alertemails_submit'
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('alerts_heading', 'local_sentinel'));
+echo $PAGE->get_renderer('local_sentinel')->sentinel_subnav('alerts');
 
 // Section: Alert recipients.
 echo html_writer::tag(
