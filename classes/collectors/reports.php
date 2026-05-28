@@ -59,49 +59,58 @@ class reports {
      * @return array
      */
     protected static function collect_checks(string $type): array {
-        $checks = match ($type) {
-            'performance' => manager::get_performance_checks(),
-            'security' => manager::get_security_checks(),
-            'status' => manager::get_status_checks(),
-            default => [],
-        };
+        // Some core checks (e.g. core\check\environment\upgradecheck) emit
+        // stray output (a newline) when get_result() runs, which trips
+        // PHPUnit's strict output-buffering check and would leak through a WS
+        // response. Wrap the whole walk in a buffer and discard it.
+        ob_start();
+        try {
+            $checks = match ($type) {
+                'performance' => manager::get_performance_checks(),
+                'security' => manager::get_security_checks(),
+                'status' => manager::get_status_checks(),
+                default => [],
+            };
 
-        // All possible status keys, so the output shape is stable regardless
-        // of which statuses happen to occur on this site.
-        $countsbystatus = array_fill_keys([
-            result::NA,
-            result::OK,
-            result::INFO,
-            result::UNKNOWN,
-            result::WARNING,
-            result::ERROR,
-            result::CRITICAL,
-        ], 0);
+            // All possible status keys, so the output shape is stable
+            // regardless of which statuses happen to occur on this site.
+            $countsbystatus = array_fill_keys([
+                result::NA,
+                result::OK,
+                result::INFO,
+                result::UNKNOWN,
+                result::WARNING,
+                result::ERROR,
+                result::CRITICAL,
+            ], 0);
 
-        $entries = [];
-        foreach ($checks as $check) {
-            try {
-                $checkresult = $check->get_result();
-            } catch (\Throwable $e) {
+            $entries = [];
+            foreach ($checks as $check) {
+                try {
+                    $checkresult = $check->get_result();
+                } catch (\Throwable $e) {
+                    $entries[] = [
+                        'ref' => $check->get_ref(),
+                        'component' => $check->get_component(),
+                        'name' => $check->get_name(),
+                        'status' => result::UNKNOWN,
+                        'summary' => 'Check threw: ' . $e->getMessage(),
+                    ];
+                    $countsbystatus[result::UNKNOWN]++;
+                    continue;
+                }
+                $status = $checkresult->get_status();
+                $countsbystatus[$status] = ($countsbystatus[$status] ?? 0) + 1;
                 $entries[] = [
                     'ref' => $check->get_ref(),
                     'component' => $check->get_component(),
                     'name' => $check->get_name(),
-                    'status' => result::UNKNOWN,
-                    'summary' => 'Check threw: ' . $e->getMessage(),
+                    'status' => $status,
+                    'summary' => trim(html_to_text($checkresult->get_summary(), 0, false)),
                 ];
-                $countsbystatus[result::UNKNOWN]++;
-                continue;
             }
-            $status = $checkresult->get_status();
-            $countsbystatus[$status] = ($countsbystatus[$status] ?? 0) + 1;
-            $entries[] = [
-                'ref' => $check->get_ref(),
-                'component' => $check->get_component(),
-                'name' => $check->get_name(),
-                'status' => $status,
-                'summary' => trim(html_to_text($checkresult->get_summary(), 0, false)),
-            ];
+        } finally {
+            ob_end_clean();
         }
 
         return [

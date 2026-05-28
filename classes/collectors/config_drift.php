@@ -76,18 +76,25 @@ class config_drift {
 
         require_once($CFG->libdir . '/adminlib.php');
 
-        // admin_get_root only fully populates the settings tree under an admin
-        // session — without one, get_children() on category nodes returns empty.
-        // Establish admin context for this collector run; downstream code
+        // The admin_get_root() helper only fully populates the settings tree
+        // under an admin session — without one, get_children() on category
+        // nodes returns empty. Establish admin context for this collector run;
+        // downstream code
         // continues with the original session via the runtime context the
         // caller (WS / scheduled task) provides.
         $originaluser = self::elevate_to_admin();
+        // The admin_get_root(true, true) call populates the full settings
+        // tree, and some setting widgets emit stray output during that
+        // process. Capture and discard so the collector is output-clean for WS callers
+        // and PHPUnit strict-output checks.
+        ob_start();
         try {
             $root = admin_get_root(true, true);
             $entries = [];
             $skipped = ['sensitive' => 0, 'no_default' => 0];
             self::walk($root, $entries, $skipped);
         } finally {
+            ob_end_clean();
             self::restore_user($originaluser);
         }
 
@@ -258,7 +265,7 @@ class config_drift {
             return '[' . implode(',', $parts) . ']';
         }
         if (is_object($value)) {
-            // lang_string and similar implement __toString; use that if present.
+            // The lang_string class and similar implement __toString; use that if present.
             if (method_exists($value, '__toString')) {
                 return (string) $value;
             }

@@ -110,14 +110,19 @@ class plugins {
      * @return array
      */
     protected static function collect_updates(core_plugin_manager $pluginman): array {
+        // The available_updates() call delegates to \core\update\checker
+        // which emits a stray newline under CLI / PHPUnit. Capture and discard.
+        ob_start();
         $updates = $pluginman->available_updates();
+        ob_end_clean();
         if (empty($updates)) {
             return [];
         }
         $out = [];
         foreach ($updates as $component => $remoteinfo) {
-            // available_updates() returns one \core\update\remote_info per component;
-            // the actual version metadata lives in $remoteinfo->version (a stdClass).
+            // The available_updates() call returns one \core\update\remote_info per
+            // component; the actual version metadata lives in $remoteinfo->version
+            // (a stdClass).
             $v = $remoteinfo->version ?? null;
             $out[] = [
                 'component' => $component,

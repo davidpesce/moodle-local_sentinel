@@ -83,7 +83,12 @@ class status {
     protected static function collect_core_update(): array {
         global $CFG;
 
+        // Moodle's update checker emits a stray newline to stdout under some
+        // contexts (CLI / PHPUnit). Capture and discard so the snapshot
+        // collection stays output-clean.
+        ob_start();
         $cachedinfo = \core\update\checker::instance()->get_update_info('core');
+        ob_end_clean();
         if (empty($cachedinfo)) {
             return [
                 'update_available' => false,
