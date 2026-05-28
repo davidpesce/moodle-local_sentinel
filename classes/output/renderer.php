@@ -58,16 +58,19 @@ class renderer extends plugin_renderer_base {
                 . html_writer::tag('span', "({$cronlag}s ago)", ['class' => 'text-muted small']));
         $rows .= $this->kv_row(get_string('overview_cron_last_run', 'local_sentinel'), $cronvalue);
 
-        // Overdue scheduled tasks.
+        // Overdue scheduled tasks — show the actual list inline so the
+        // operator can see WHICH tasks are late. Moodle's
+        // /admin/tool/task/scheduledtasks.php has no overdue filter, so
+        // sending the user there blind was unhelpful. Each task name links
+        // to its edit page on that screen.
         $overdue = (int) ($health['tasks']['scheduled_overdue_count'] ?? 0);
-        $overduevalue = $overdue > 0
-            ? html_writer::tag('span', $overdue, ['class' => 'text-danger fw-bold'])
-                . ' ' . html_writer::link(
-                    new moodle_url('/admin/tool/task/scheduledtasks.php'),
-                    get_string('view'),
-                    ['class' => 'small ms-2']
-                )
-            : html_writer::tag('span', '0', ['class' => 'text-success']);
+        $overduerows = $health['tasks']['scheduled_overdue'] ?? [];
+        if ($overdue > 0) {
+            $overduevalue = html_writer::tag('span', $overdue, ['class' => 'text-danger fw-bold'])
+                . $this->overdue_tasks_detail($overduerows);
+        } else {
+            $overduevalue = html_writer::tag('span', '0', ['class' => 'text-success']);
+        }
         $rows .= $this->kv_row(get_string('overview_overdue_tasks', 'local_sentinel'), $overduevalue);
 
         // Active users.
@@ -828,6 +831,100 @@ class renderer extends plugin_renderer_base {
      * One row of a key/value table.
      *
      * @param string     $label
+     * @param string|int $value Already-escaped HTML or a scalar.
+     * @return string
+     */
+    /**
+     * Render the per-row overdue-task detail block under the count.
+     *
+     * Each row shows the task classname (linked to its edit page on
+     * /admin/tool/task/scheduledtasks.php), the scheduled next-run time
+     * the cron runner missed, and how late it is. Wrapped in a `<details>`
+     * so the row stays compact when collapsed and the operator opts in
+     * to seeing the list.
+     *
+     * @param array $tasks Per the collector: each entry has classname,
+     *                     last_run, next_run, seconds_late.
+     * @return string
+     */
+    protected function overdue_tasks_detail(array $tasks): string {
+        if (empty($tasks)) {
+            return '';
+        }
+        $rows = '';
+        foreach (array_slice($tasks, 0, 25) as $task) {
+            $classname = (string) ($task['classname'] ?? '');
+            $editurl = new moodle_url(
+                '/admin/tool/task/scheduledtasks.php',
+                ['action' => 'edit', 'task' => $classname]
+            );
+            $lastrun = (int) ($task['last_run'] ?? 0);
+            $nextrun = (int) ($task['next_run'] ?? 0);
+            $lateby = (int) ($task['seconds_late'] ?? 0);
+            $rows .= html_writer::tag(
+                'tr',
+                html_writer::tag('td', html_writer::link(
+                    $editurl,
+                    s($classname),
+                    ['class' => 'small']
+                ))
+                . html_writer::tag(
+                    'td',
+                    $lastrun > 0
+                    ? userdate($lastrun, '%Y-%m-%d %H:%M') : '<span class="text-muted">never</span>',
+                    ['class' => 'small text-muted']
+                )
+                . html_writer::tag(
+                    'td',
+                    $nextrun > 0
+                    ? userdate($nextrun, '%Y-%m-%d %H:%M') : '—',
+                    ['class' => 'small text-muted']
+                )
+                . html_writer::tag(
+                    'td',
+                    format_time($lateby) . ' late',
+                    ['class' => 'small text-danger']
+                )
+            );
+        }
+        $extra = count($tasks) > 25
+            ? html_writer::tag(
+                'div',
+                '… and ' . (count($tasks) - 25) . ' more.',
+                ['class' => 'small-meta text-muted']
+            )
+            : '';
+        $table = html_writer::tag(
+            'table',
+            html_writer::tag(
+                'thead',
+                html_writer::tag(
+                    'tr',
+                    html_writer::tag('th', 'Task', ['class' => 'small'])
+                    . html_writer::tag('th', 'Last run', ['class' => 'small'])
+                    . html_writer::tag('th', 'Scheduled for', ['class' => 'small'])
+                    . html_writer::tag('th', 'Late by', ['class' => 'small'])
+                )
+            )
+            . html_writer::tag('tbody', $rows),
+            ['class' => 'table table-sm mt-2 mb-0']
+        );
+        $summary = html_writer::tag(
+            'summary',
+            'Show overdue tasks',
+            ['class' => 'small ms-2 text-muted', 'style' => 'cursor: pointer']
+        );
+        return html_writer::tag(
+            'details',
+            $summary . $table . $extra,
+            ['class' => 'd-inline-block']
+        );
+    }
+
+    /**
+     * Render one row of a key/value table.
+     *
+     * @param string     $label Plain text; will be htmlspecialchars-escaped.
      * @param string|int $value Already-escaped HTML or a scalar.
      * @return string
      */
