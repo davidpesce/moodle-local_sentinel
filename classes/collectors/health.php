@@ -275,15 +275,31 @@ class health {
     protected static function collect_tasks(): array {
         global $DB;
 
+        /*
+         * Failed: faildelay > 0 means the task tripped its retry timer.
+         * Filtered to match Moodle's own cron loop, same as the overdue
+         * list below: skip rows where the task is disabled at the row
+         * level, where can_run() returns false (plugin is disabled), or
+         * where the class no longer exists (uninstalled plugin left
+         * orphan rows). The result is the set of failed tasks Moodle
+         * would actually retry on the next cron tick.
+         */
         $failed = $DB->get_records_select(
             'task_scheduled',
-            'faildelay > 0',
+            'faildelay > 0 AND disabled = 0',
             null,
-            'classname ASC',
-            'id, classname, lastruntime, faildelay, disabled'
+            'classname ASC'
         );
         $failedlist = [];
         foreach ($failed as $row) {
+            try {
+                $task = \core\task\manager::scheduled_task_from_record($row);
+            } catch (\Throwable $e) {
+                continue;
+            }
+            if (!$task || !$task->can_run()) {
+                continue;
+            }
             $failedlist[] = [
                 'classname' => $row->classname,
                 'last_run' => (int) $row->lastruntime,
