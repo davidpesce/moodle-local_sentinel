@@ -330,6 +330,18 @@ abstract class base extends external_api {
             'cron' => new external_single_structure([
                 'last_run' => new external_value(PARAM_INT, 'Unix timestamp of last cron run (0 = never).'),
                 'seconds_since_last_run' => self::nullable_int('Seconds since last cron run.'),
+                'last_interval_seconds' => new external_value(
+                    PARAM_INT,
+                    'Seconds between the two most recent cron starts (null if only one run so far).',
+                    VALUE_OPTIONAL,
+                    null,
+                    NULL_ALLOWED
+                ),
+                'expected_frequency_seconds' => new external_value(
+                    PARAM_INT,
+                    "Expected interval between cron runs (\$CFG->expectedcronfrequency, default 60).",
+                    VALUE_OPTIONAL
+                ),
                 'now' => new external_value(PARAM_INT, 'Current server time.'),
             ]),
             'tasks' => new external_single_structure([

@@ -248,11 +248,21 @@ class health {
      * @return array
      */
     protected static function collect_cron(): array {
-        $lastcron = (int) get_config('core', 'lastcron');
+        global $CFG;
+        // The tool_task/lastcronstart config is what modern Moodle (4.x+)
+        // updates on every cron tick — same field /admin/tool/task/check/
+        // cronrunning reads. The legacy core/lastcron we used previously
+        // is no longer written by Moodle's task runner, so it stayed at 0
+        // forever and made healthy sites look broken.
+        $lastcron = (int) get_config('tool_task', 'lastcronstart');
+        $lastinterval = (int) get_config('tool_task', 'lastcroninterval');
+        $expected = (int) ($CFG->expectedcronfrequency ?? MINSECS);
         $now = time();
         return [
             'last_run' => $lastcron,
             'seconds_since_last_run' => $lastcron > 0 ? $now - $lastcron : null,
+            'last_interval_seconds' => $lastinterval > 0 ? $lastinterval : null,
+            'expected_frequency_seconds' => $expected,
             'now' => $now,
         ];
     }
