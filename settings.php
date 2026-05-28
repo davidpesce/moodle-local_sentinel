@@ -40,7 +40,14 @@ if ($hassiteconfig) {
         new moodle_url('/local/sentinel/overview.php')
     ));
 
-    // Sub-page 2: Connect to dashboard — single entry point for the
+    // Sub-page 2: Settings — alert recipients + connection-status summary.
+    $ADMIN->add('local_sentinel_category', new admin_externalpage(
+        'local_sentinel_alerts',
+        get_string('alerts_label', 'local_sentinel'),
+        new moodle_url('/local/sentinel/alerts.php')
+    ));
+
+    // Sub-page 3: Connect to dashboard — single entry point for the
     // connection-explanation cards. Links into the two hidden config
     // routes below.
     $ADMIN->add('local_sentinel_category', new admin_externalpage(

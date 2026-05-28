@@ -206,55 +206,6 @@ if (!empty($ssl['checked'])) {
 echo html_writer::end_tag('tbody');
 echo html_writer::end_tag('table');
 
-// ---------------------------------------------------------------------------
-// Connection status footer.
-// ---------------------------------------------------------------------------
-
-$pushconfigured = (
-    !empty(get_config('local_sentinel', 'pushenabled')) &&
-    !empty(get_config('local_sentinel', 'pushendpoint')) &&
-    !empty(get_config('local_sentinel', 'pushsecret'))
-);
-$pullconfigured = \local_sentinel\setup\helper::existing_token() !== null;
-
-echo html_writer::tag(
-    'h4',
-    s(get_string('overview_connection_heading', 'local_sentinel')),
-    ['class' => 'h6 text-uppercase text-muted mt-4']
-);
-
-echo html_writer::start_div('card');
-echo html_writer::start_div('card-body py-2');
-echo html_writer::start_div('d-flex justify-content-between align-items-center');
-echo html_writer::start_div();
-echo html_writer::tag(
-    'div',
-    s(get_string('overview_send_status', 'local_sentinel')) . ': '
-    . html_writer::tag(
-        'span',
-        '● ' . s(get_string($pushconfigured ? 'connect_configured' : 'connect_not_configured', 'local_sentinel')),
-        ['class' => 'small ' . ($pushconfigured ? 'text-success' : 'text-muted')]
-    )
-);
-echo html_writer::tag(
-    'div',
-    s(get_string('overview_pull_status', 'local_sentinel')) . ': '
-    . html_writer::tag(
-        'span',
-        '● ' . s(get_string($pullconfigured ? 'connect_configured' : 'connect_not_configured', 'local_sentinel')),
-        ['class' => 'small ' . ($pullconfigured ? 'text-success' : 'text-muted')]
-    )
-);
-echo html_writer::end_div();
-echo html_writer::link(
-    new moodle_url('/local/sentinel/connect.php'),
-    s(get_string('overview_manage_connection', 'local_sentinel')),
-    ['class' => 'btn btn-outline-secondary btn-sm']
-);
-echo html_writer::end_div();
-echo html_writer::end_div();
-echo html_writer::end_div();
-
 echo $OUTPUT->footer();
 
 

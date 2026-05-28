@@ -1,0 +1,175 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Admin web page: Sentinel — Settings.
+ *
+ * Operator-facing settings that aren't part of the push/pull connection flow:
+ * for now, the alert recipients list and the at-a-glance connection-status
+ * indicator. Operators land here to change who gets notified and to confirm
+ * which transports the dashboard is using to reach this site.
+ *
+ * @package    local_sentinel
+ * @copyright  2026 David Pesce - Exputo Inc.
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+require(__DIR__ . '/../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
+
+admin_externalpage_setup('local_sentinel_alerts');
+
+// Handle the alert-recipients save before any output (so we can redirect).
+$alertsaved = false;
+$alertinvalid = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('alertemails_submit', 0, PARAM_INT)) {
+    require_sesskey();
+    $raw = optional_param('alertemails', '', PARAM_RAW_TRIMMED);
+    [$valid, $invalid] = local_sentinel_alerts_parse_recipients($raw);
+    if ($invalid !== null) {
+        $alertinvalid = $invalid;
+    } else {
+        set_config('alertemails', implode("\n", $valid), 'local_sentinel');
+        $alertsaved = true;
+    }
+}
+
+echo $OUTPUT->header();
+echo $OUTPUT->heading(get_string('alerts_heading', 'local_sentinel'));
+
+// Section: Alert recipients.
+echo html_writer::tag(
+    'h4',
+    s(get_string('alertemails_section', 'local_sentinel')),
+    ['class' => 'h6 text-uppercase text-muted mt-4']
+);
+
+if ($alertsaved) {
+    echo $OUTPUT->notification(
+        get_string('alertemails_saved', 'local_sentinel'),
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+} else if ($alertinvalid !== '') {
+    echo $OUTPUT->notification(
+        get_string('alertemails_invalid', 'local_sentinel', s($alertinvalid)),
+        \core\output\notification::NOTIFY_ERROR
+    );
+}
+
+$currentvalue = (string) get_config('local_sentinel', 'alertemails');
+
+echo html_writer::start_div('card');
+echo html_writer::start_div('card-body');
+echo html_writer::start_tag('form', [
+    'method' => 'post',
+    'action' => (new moodle_url('/local/sentinel/alerts.php'))->out(false),
+]);
+echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
+echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'alertemails_submit', 'value' => 1]);
+echo html_writer::tag(
+    'p',
+    s(get_string('alertemails_desc', 'local_sentinel')),
+    ['class' => 'small text-muted mb-2']
+);
+echo html_writer::tag('textarea', s($currentvalue), [
+    'name' => 'alertemails',
+    'class' => 'form-control',
+    'rows' => 4,
+    'placeholder' => "alice@example.com\nbob@example.com",
+]);
+echo html_writer::tag('button', s(get_string('alertemails_save', 'local_sentinel')), [
+    'type' => 'submit',
+    'class' => 'btn btn-primary btn-sm mt-2',
+]);
+echo html_writer::end_tag('form');
+echo html_writer::end_div();
+echo html_writer::end_div();
+
+// Section: Connection status (read-only summary; configure on Connect page).
+$pushconfigured = (
+    !empty(get_config('local_sentinel', 'pushenabled')) &&
+    !empty(get_config('local_sentinel', 'pushendpoint')) &&
+    !empty(get_config('local_sentinel', 'pushsecret'))
+);
+$pullconfigured = \local_sentinel\setup\helper::existing_token() !== null;
+
+echo html_writer::tag(
+    'h4',
+    s(get_string('overview_connection_heading', 'local_sentinel')),
+    ['class' => 'h6 text-uppercase text-muted mt-4']
+);
+
+echo html_writer::start_div('card');
+echo html_writer::start_div('card-body py-2');
+echo html_writer::start_div('d-flex justify-content-between align-items-center');
+echo html_writer::start_div();
+echo html_writer::tag(
+    'div',
+    s(get_string('overview_send_status', 'local_sentinel')) . ': '
+    . html_writer::tag(
+        'span',
+        '● ' . s(get_string($pushconfigured ? 'connect_configured' : 'connect_not_configured', 'local_sentinel')),
+        ['class' => 'small ' . ($pushconfigured ? 'text-success' : 'text-muted')]
+    )
+);
+echo html_writer::tag(
+    'div',
+    s(get_string('overview_pull_status', 'local_sentinel')) . ': '
+    . html_writer::tag(
+        'span',
+        '● ' . s(get_string($pullconfigured ? 'connect_configured' : 'connect_not_configured', 'local_sentinel')),
+        ['class' => 'small ' . ($pullconfigured ? 'text-success' : 'text-muted')]
+    )
+);
+echo html_writer::end_div();
+echo html_writer::link(
+    new moodle_url('/local/sentinel/connect.php'),
+    s(get_string('overview_manage_connection', 'local_sentinel')),
+    ['class' => 'btn btn-outline-secondary btn-sm']
+);
+echo html_writer::end_div();
+echo html_writer::end_div();
+echo html_writer::end_div();
+
+echo $OUTPUT->footer();
+
+
+/**
+ * Parse a textarea of alert recipients into a clean, deduped list.
+ *
+ * Splits on whitespace, commas, and semicolons; preserves entry order;
+ * validates each address. Returns [list, null] on success, [list_so_far,
+ * first_invalid] on validation failure.
+ *
+ * @param string $raw
+ * @return array{0: string[], 1: string|null}
+ */
+function local_sentinel_alerts_parse_recipients(string $raw): array {
+    $valid = [];
+    $seen = [];
+    foreach (preg_split('/[\s,;]+/', $raw) as $token) {
+        $token = trim($token);
+        if ($token === '' || isset($seen[$token])) {
+            continue;
+        }
+        if (!validate_email($token)) {
+            return [$valid, $token];
+        }
+        $seen[$token] = true;
+        $valid[] = $token;
+    }
+    return [$valid, null];
+}

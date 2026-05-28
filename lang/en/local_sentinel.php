@@ -24,6 +24,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['alertemails'] = 'Alert recipients';
+$string['alertemails_desc'] = 'Email addresses to notify when this site reports issues. One address per line. '
+    . 'Storage only — actual alert delivery is not yet wired up.';
+$string['alertemails_invalid'] = 'Not a valid email address: {$a}';
+$string['alertemails_save'] = 'Save recipients';
+$string['alertemails_saved'] = 'Alert recipients updated.';
+$string['alertemails_section'] = 'Alert recipients';
+$string['alerts_heading'] = 'Sentinel: settings';
+$string['alerts_label'] = 'Settings';
 $string['connect_configured'] = 'Configured';
 $string['connect_heading'] = 'Connect to remote dashboard';
 $string['connect_intro'] = 'Sentinel collects operational metrics about this Moodle '
