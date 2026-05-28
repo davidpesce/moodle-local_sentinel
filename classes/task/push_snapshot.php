@@ -26,6 +26,7 @@ namespace local_sentinel\task;
 
 use core\task\scheduled_task;
 use local_sentinel\collector;
+use local_sentinel\push_state;
 
 /**
  * Push the current snapshot to the configured central collector.
@@ -65,6 +66,10 @@ class push_snapshot extends scheduled_task {
             return;
         }
 
+        // Only after the gating checks pass do we count this as an attempt —
+        // we don't want skipped-when-disabled runs to inflate the counter.
+        push_state::record_attempt();
+
         $snapshot = collector::get_snapshot_for_egress();
         $body = json_encode($snapshot);
 
@@ -78,14 +83,18 @@ class push_snapshot extends scheduled_task {
         $httpcode = (int) ($curl->get_info()['http_code'] ?? 0);
 
         if ($curl->get_errno() !== 0) {
+            push_state::record_failure('curl: ' . $curl->error, 0);
             mtrace('local_sentinel: push failed: ' . $curl->error);
             return;
         }
         if ($httpcode < 200 || $httpcode >= 300) {
+            $snippet = substr((string) $response, 0, 200);
+            push_state::record_failure("HTTP $httpcode — $snippet", $httpcode);
             mtrace("local_sentinel: push got HTTP $httpcode from $endpoint");
             mtrace('local_sentinel: response body: ' . substr((string) $response, 0, 500));
             return;
         }
+        push_state::record_success($httpcode);
         mtrace("local_sentinel: pushed snapshot to $endpoint (HTTP $httpcode, " . strlen($body) . ' bytes).');
     }
 }

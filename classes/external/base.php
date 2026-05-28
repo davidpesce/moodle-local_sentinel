@@ -459,6 +459,20 @@ abstract class base extends external_api {
                     VALUE_OPTIONAL
                 ),
             ], 'MUC backend reachability summary (admin opt-out via egress filter).', VALUE_OPTIONAL),
+            // Push pipeline self-monitoring. VALUE_OPTIONAL so older sites
+            // (or pull-only sites that never recorded a push) don't break the
+            // dashboard's clean_returnvalue check.
+            'push_state' => new external_single_structure([
+                'last_attempt_at' => new external_value(PARAM_INT, 'Unix ts of the most recent push attempt (0 = never).'),
+                'last_success_at' => new external_value(PARAM_INT, 'Unix ts of the most recent successful push (0 = never).'),
+                'last_failure_at' => new external_value(PARAM_INT, 'Unix ts of the most recent failed push (0 = never).'),
+                'last_status' => new external_value(PARAM_RAW, 'never / success / failed.'),
+                'last_http_status' => new external_value(PARAM_INT, 'HTTP status of the most recent attempt (0 if no response).'),
+                'last_error' => new external_value(PARAM_RAW, 'Short error message from the most recent failure.'),
+                'consecutive_failures' => new external_value(PARAM_INT, 'Failures since the most recent success.'),
+                'total_attempts' => new external_value(PARAM_INT, 'Lifetime count of push attempts.'),
+                'total_successes' => new external_value(PARAM_INT, 'Lifetime count of successful pushes.'),
+            ], 'Self-monitoring counters for the push scheduled task.', VALUE_OPTIONAL),
         ]);
     }
 

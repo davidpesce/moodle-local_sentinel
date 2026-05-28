@@ -169,6 +169,15 @@ $string['pushendpoint_desc'] = 'Full URL of the dashboard\'s ingest endpoint. '
 $string['pushsecret'] = 'Shared secret';
 $string['pushsecret_desc'] = 'Sent as the X-Sentinel-Secret header on each request. '
     . 'The dashboard must verify this value to accept the snapshot.';
+$string['pushstate_consecutive_failures'] = 'Consecutive failures';
+$string['pushstate_heading'] = 'Push pipeline';
+$string['pushstate_last_attempt'] = 'Last attempt';
+$string['pushstate_last_error'] = 'Last error';
+$string['pushstate_last_success'] = 'Last success';
+$string['pushstate_never'] = 'never';
+$string['pushstate_test_button'] = 'Test push now';
+$string['pushstate_test_failed'] = 'Test push failed: {$a}';
+$string['pushstate_test_success'] = 'Test push completed — see status below.';
 $string['sentinel:view'] = 'View Sentinel snapshot data';
 $string['servicemissing'] = 'The Sentinel external service was not found. '
     . 'Visit Site administration → Notifications to finish plugin installation, then retry.';

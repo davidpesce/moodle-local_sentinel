@@ -33,6 +33,20 @@ require_once($CFG->libdir . '/adminlib.php');
 
 admin_externalpage_setup('local_sentinel_connect');
 
+// Test-push handler runs before any output so we can redirect cleanly.
+$testpushresult = null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('test_push', 0, PARAM_INT)) {
+    require_sesskey();
+    try {
+        (new \local_sentinel\task\push_snapshot())->execute();
+        $testpushresult = 'ok';
+    } catch (\Throwable $e) {
+        $testpushresult = 'thrown:' . $e->getMessage();
+    }
+    redirect(new moodle_url('/local/sentinel/connect.php', ['testresult' => $testpushresult]));
+}
+$testpushresult = optional_param('testresult', '', PARAM_RAW);
+
 // Status checks.
 $pushconfigured = (
     !empty(get_config('local_sentinel', 'pushenabled')) &&
@@ -74,6 +88,25 @@ echo html_writer::tag(
     html_writer::tag('strong', 'Requires: ') . s(get_string('connect_send_requires', 'local_sentinel')),
     ['class' => 'mb-3']
 );
+// Push pipeline self-monitoring panel — only shown when push is configured.
+if ($pushconfigured) {
+    $pushstate = \local_sentinel\push_state::get();
+    if ($testpushresult === 'ok') {
+        // The test-push handler already updated push_state via the task; just
+        // surface a success notification next to the panel.
+        echo $OUTPUT->notification(
+            get_string('pushstate_test_success', 'local_sentinel'),
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    } else if (strpos((string) $testpushresult, 'thrown:') === 0) {
+        echo $OUTPUT->notification(
+            get_string('pushstate_test_failed', 'local_sentinel', substr($testpushresult, 7)),
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    echo local_sentinel_connect_push_state_panel($pushstate);
+}
+
 echo html_writer::link(
     $sendurl,
     s(get_string('connect_send_cta', 'local_sentinel')),
@@ -130,3 +163,85 @@ echo html_writer::tag('li', s(get_string('connect_note_push', 'local_sentinel'))
 echo html_writer::end_tag('ul');
 
 echo $OUTPUT->footer();
+
+
+/**
+ * Render the push-state diagnostic panel (timestamps, failure count, last error).
+ *
+ * Only called when push is configured. Returns an HTML string suitable for
+ * embedding inside the Send card on the Connect page.
+ *
+ * @param array $state Push state from \local_sentinel\push_state::get().
+ * @return string
+ */
+function local_sentinel_connect_push_state_panel(array $state): string {
+    $never = (int) $state['last_attempt_at'] === 0;
+    $consecutive = (int) $state['consecutive_failures'];
+    $statusclass = 'text-muted';
+    if (!$never) {
+        if ($state['last_status'] === 'success' && $consecutive === 0) {
+            $statusclass = 'text-success';
+        } else if ($consecutive > 0) {
+            $statusclass = 'text-danger';
+        }
+    }
+
+    $rows = '';
+    $neverstr = get_string('pushstate_never', 'local_sentinel');
+    $fmt = fn(int $ts) => $ts > 0
+        ? userdate($ts, '%Y-%m-%d %H:%M:%S') . ' (' . format_time(time() - $ts) . ' ago)'
+        : $neverstr;
+
+    $rows .= html_writer::tag(
+        'tr',
+        html_writer::tag('th', s(get_string('pushstate_last_attempt', 'local_sentinel')), ['scope' => 'row'])
+        . html_writer::tag('td', $fmt((int) $state['last_attempt_at']))
+    );
+    $rows .= html_writer::tag(
+        'tr',
+        html_writer::tag('th', s(get_string('pushstate_last_success', 'local_sentinel')), ['scope' => 'row'])
+        . html_writer::tag('td', $fmt((int) $state['last_success_at']))
+    );
+    $consvalue = $consecutive > 0
+        ? html_writer::tag('span', $consecutive, ['class' => 'text-danger fw-bold'])
+        : html_writer::tag('span', '0', ['class' => 'text-success']);
+    $rows .= html_writer::tag(
+        'tr',
+        html_writer::tag('th', s(get_string('pushstate_consecutive_failures', 'local_sentinel')), ['scope' => 'row'])
+        . html_writer::tag('td', $consvalue)
+    );
+    if (!empty($state['last_error'])) {
+        $rows .= html_writer::tag(
+            'tr',
+            html_writer::tag('th', s(get_string('pushstate_last_error', 'local_sentinel')), ['scope' => 'row'])
+            . html_writer::tag('td', html_writer::tag('code', s((string) $state['last_error'])))
+        );
+    }
+
+    $out = html_writer::tag(
+        'h5',
+        s(get_string('pushstate_heading', 'local_sentinel')) . ' '
+            . html_writer::tag('span', '●', ['class' => 'ms-1 ' . $statusclass]),
+        ['class' => 'h6 text-uppercase text-muted mt-3 mb-2']
+    );
+    $out .= html_writer::tag(
+        'table',
+        html_writer::tag('tbody', $rows),
+        ['class' => 'table table-sm mb-2']
+    );
+
+    // Test-push button — POSTs back to this page with sesskey.
+    $out .= html_writer::start_tag('form', [
+        'method' => 'post',
+        'action' => (new moodle_url('/local/sentinel/connect.php'))->out(false),
+        'class' => 'mb-3',
+    ]);
+    $out .= html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
+    $out .= html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'test_push', 'value' => 1]);
+    $out .= html_writer::tag('button', s(get_string('pushstate_test_button', 'local_sentinel')), [
+        'type' => 'submit', 'class' => 'btn btn-outline-secondary btn-sm',
+    ]);
+    $out .= html_writer::end_tag('form');
+
+    return $out;
+}

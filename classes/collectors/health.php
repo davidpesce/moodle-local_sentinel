@@ -46,6 +46,7 @@ class health {
             'upgrade_log' => self::collect_upgrade_log(),
             'flags' => self::collect_footgun_flags(),
             'cache_stores' => self::collect_cache_stores(),
+            'push_state' => \local_sentinel\push_state::get(),
         ];
     }
 
