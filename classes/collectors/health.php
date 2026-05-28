@@ -292,21 +292,37 @@ class health {
             ];
         }
 
-        // Overdue: scheduled to have run >1h ago, enabled, not in active retry
-        // (those are already in scheduled_failed). Catches "zombie" tasks where
-        // cron is alive but the task itself isn't getting picked up for some
-        // reason — silent failures that don't trip faildelay.
+        /*
+         * Overdue: scheduled to have run >1h ago, enabled, not in active
+         * retry (those are already in scheduled_failed). Catches "zombie"
+         * tasks where cron is alive but the task itself isn't getting picked
+         * up for some reason — silent failures that don't trip faildelay.
+         *
+         * Filtered to match Moodle's own cron loop: each candidate is
+         * hydrated into a scheduled_task instance and dropped unless
+         * can_run() is true. This drops tasks owned by a disabled plugin
+         * (e.g. auth_oauth2 tasks while auth_oauth2 is disabled) — Moodle
+         * wouldn't run them and we shouldn't flag them as overdue.
+         */
         $overduethreshold = time() - HOURSECS;
         $overduerows = $DB->get_records_select(
             'task_scheduled',
             'disabled = 0 AND faildelay = 0 AND nextruntime > 0 AND nextruntime < :threshold',
             ['threshold' => $overduethreshold],
-            'nextruntime ASC',
-            'id, classname, lastruntime, nextruntime'
+            'nextruntime ASC'
         );
         $overduelist = [];
         $now = time();
         foreach ($overduerows as $row) {
+            try {
+                $task = \core\task\manager::scheduled_task_from_record($row);
+            } catch (\Throwable $e) {
+                // Class no longer exists (e.g. uninstalled plugin) — skip.
+                continue;
+            }
+            if (!$task || !$task->can_run()) {
+                continue;
+            }
             $overduelist[] = [
                 'classname' => $row->classname,
                 'last_run' => (int) $row->lastruntime,
