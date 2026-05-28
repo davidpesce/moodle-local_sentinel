@@ -204,4 +204,43 @@ final class collector_test extends \advanced_testcase {
         $this->assertArrayNotHasKey('environment', $snapshot);
         $this->assertArrayNotHasKey('plugins', $snapshot);
     }
+
+    public function test_get_snapshot_for_egress_omits_excluded_slices(): void {
+        $this->resetAfterTest();
+        set_config('egress_excluded_slices', json_encode(['health', 'auth']), 'local_sentinel');
+
+        $snapshot = collector::get_snapshot_for_egress();
+
+        $this->assertArrayHasKey('site', $snapshot);
+        $this->assertArrayHasKey('status', $snapshot);
+        $this->assertArrayHasKey('environment', $snapshot);
+        $this->assertArrayNotHasKey('health', $snapshot);
+        $this->assertArrayNotHasKey('auth', $snapshot);
+    }
+
+    public function test_get_snapshot_for_egress_omits_excluded_fields(): void {
+        $this->resetAfterTest();
+        set_config(
+            'egress_excluded_fields',
+            json_encode(['environment.database.host', 'environment.os.hostname']),
+            'local_sentinel'
+        );
+
+        $snapshot = collector::get_snapshot_for_egress();
+
+        $this->assertArrayHasKey('database', $snapshot['environment']);
+        $this->assertArrayNotHasKey('host', $snapshot['environment']['database']);
+        $this->assertArrayHasKey('type', $snapshot['environment']['database']);
+        $this->assertArrayNotHasKey('hostname', $snapshot['environment']['os']);
+    }
+
+    public function test_get_slice_for_egress_returns_empty_envelope_when_excluded(): void {
+        $this->resetAfterTest();
+        set_config('egress_excluded_slices', json_encode(['health']), 'local_sentinel');
+
+        $snapshot = collector::get_slice_for_egress('health');
+
+        $this->assertArrayHasKey('site', $snapshot);
+        $this->assertArrayNotHasKey('health', $snapshot);
+    }
 }

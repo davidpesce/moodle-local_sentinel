@@ -128,4 +128,117 @@ class collector {
             'shortname' => format_string($SITE->shortname),
         ];
     }
+
+    /** All top-level slice names the snapshot contains. */
+    public const ALL_SLICES = [
+        'status', 'environment', 'plugins', 'health',
+        'auth', 'reports', 'config_changes', 'config_drift',
+    ];
+
+    /** Sub-field dotted paths that admins can opt out of independently. */
+    public const REDACTABLE_FIELDS = [
+        'auth.failed_logins.top_accounts',
+        'auth.tokens.entries',
+        'environment.database.host',
+        'environment.os.hostname',
+    ];
+
+    /**
+     * Build the egress-filtered snapshot for WS / push consumers.
+     *
+     * @return array
+     */
+    public static function get_snapshot_for_egress(): array {
+        return self::apply_egress_filter(self::get_snapshot());
+    }
+
+    /**
+     * Build the egress-filtered envelope for a single slice (WS slice endpoint).
+     *
+     * If the requested slice is excluded by the admin, an envelope is still
+     * returned (with site identity + plugin self-identification) but the
+     * slice key is absent — the WS schema marks it as VALUE_OPTIONAL.
+     *
+     * @param string $slice
+     * @return array
+     */
+    public static function get_slice_for_egress(string $slice): array {
+        if (in_array($slice, self::excluded_slices(), true)) {
+            return self::envelope(['site' => self::get_site_identity()]);
+        }
+        return self::apply_egress_filter(self::get_slice($slice));
+    }
+
+    /**
+     * Read the admin-configured list of excluded slice names.
+     *
+     * @return string[]
+     */
+    public static function excluded_slices(): array {
+        return self::decode_list((string) get_config('local_sentinel', 'egress_excluded_slices'));
+    }
+
+    /**
+     * Read the admin-configured list of excluded dotted field paths.
+     *
+     * @return string[]
+     */
+    public static function excluded_fields(): array {
+        return self::decode_list((string) get_config('local_sentinel', 'egress_excluded_fields'));
+    }
+
+    /**
+     * Decode a JSON list of strings as stored in plugin config.
+     *
+     * @param string $raw
+     * @return string[]
+     */
+    protected static function decode_list(string $raw): array {
+        if ($raw === '') {
+            return [];
+        }
+        $decoded = json_decode($raw, true);
+        return is_array($decoded) ? array_values(array_filter($decoded, 'is_string')) : [];
+    }
+
+    /**
+     * Remove excluded slices and excluded sub-field paths from a snapshot envelope.
+     *
+     * Robust to missing keys at any level — operates in-place on a copy.
+     *
+     * @param array $envelope
+     * @return array
+     */
+    protected static function apply_egress_filter(array $envelope): array {
+        foreach (self::excluded_slices() as $slice) {
+            unset($envelope[$slice]);
+        }
+        foreach (self::excluded_fields() as $path) {
+            self::unset_path($envelope, explode('.', $path));
+        }
+        return $envelope;
+    }
+
+    /**
+     * Unset a deep array key by dotted-path segments.
+     *
+     * @param array    $array
+     * @param string[] $segments
+     */
+    protected static function unset_path(array &$array, array $segments): void {
+        if (empty($segments)) {
+            return;
+        }
+        $head = array_shift($segments);
+        if (!array_key_exists($head, $array)) {
+            return;
+        }
+        if (empty($segments)) {
+            unset($array[$head]);
+            return;
+        }
+        if (is_array($array[$head])) {
+            self::unset_path($array[$head], $segments);
+        }
+    }
 }

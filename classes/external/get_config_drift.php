@@ -38,7 +38,7 @@ class get_config_drift extends base {
      */
     public static function execute(): array {
         self::authorise();
-        return collector::get_slice('config_drift');
+        return collector::get_slice_for_egress('config_drift');
     }
 
     /**

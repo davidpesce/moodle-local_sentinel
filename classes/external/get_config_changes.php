@@ -62,7 +62,7 @@ class get_config_changes extends base {
             'limit' => $limit,
         ] = self::validate_parameters(self::execute_parameters(), ['limit' => $limit]);
 
-        $snapshot = collector::get_slice('config_changes');
+        $snapshot = collector::get_slice_for_egress('config_changes');
         $snapshot['config_changes'] = config_changes::collect($limit);
         return $snapshot;
     }

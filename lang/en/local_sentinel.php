@@ -65,6 +65,30 @@ $string['connect_send_title'] = 'Send data to remote dashboard';
 $string['connect_send_when'] = 'Use when the dashboard cannot reach this site\'s URL — for example '
     . 'instances behind a firewall, on a private network, or being evaluated before network access '
     . 'has been opened up.';
+$string['egress_field_db_host'] = 'Database hostname';
+$string['egress_field_failed_logins'] = 'Top failed-login accounts';
+$string['egress_field_os_hostname'] = 'Server hostname';
+$string['egress_field_tokens_entries'] = 'Per-token detail rows';
+$string['egress_fields_heading'] = 'Sensitive sub-fields';
+$string['egress_fields_intro'] = 'Even when the parent slice is enabled, these specific fields can be redacted. '
+    . 'Unchecked items are removed from the response sent to the dashboard.';
+$string['egress_heading'] = 'Data shared with dashboard';
+$string['egress_intro'] = 'Choose which parts of the snapshot are sent to the central dashboard. '
+    . 'The Overview page above continues to show full data regardless of what you choose here. '
+    . 'These settings affect both the pull web service endpoints and the push scheduled task.';
+$string['egress_preview_heading'] = 'Egress preview';
+$string['egress_preview_link'] = 'Preview what the dashboard sees';
+$string['egress_save'] = 'Save data-sharing settings';
+$string['egress_saved'] = 'Data-sharing preferences saved.';
+$string['egress_slice_label_auth'] = 'Authentication — methods, tokens, failed logins';
+$string['egress_slice_label_config_changes'] = 'Config changes — recent admin-setting edits';
+$string['egress_slice_label_config_drift'] = 'Config drift — settings that differ from default';
+$string['egress_slice_label_environment'] = 'Environment — PHP, OS, DB, OPcache, extensions, SSL';
+$string['egress_slice_label_health'] = 'Health — cron, tasks, users, disk, backup';
+$string['egress_slice_label_plugins'] = 'Plugins — installed plugins, available updates';
+$string['egress_slice_label_reports'] = 'Reports — performance, security, system status';
+$string['egress_slice_label_status'] = 'Status — release, branch, EOL, core update';
+$string['egress_slices_heading'] = 'Snapshot slices';
 $string['overview_active_users'] = 'Active users';
 $string['overview_auth_failed'] = 'Failed logins';
 $string['overview_auth_method'] = 'Method';

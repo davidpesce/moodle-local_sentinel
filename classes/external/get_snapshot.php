@@ -38,7 +38,7 @@ class get_snapshot extends base {
      */
     public static function execute(): array {
         self::authorise();
-        return collector::get_snapshot();
+        return collector::get_snapshot_for_egress();
     }
 
     /**

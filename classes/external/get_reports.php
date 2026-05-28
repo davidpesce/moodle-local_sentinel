@@ -38,7 +38,7 @@ class get_reports extends base {
      */
     public static function execute(): array {
         self::authorise();
-        return collector::get_slice('reports');
+        return collector::get_slice_for_egress('reports');
     }
 
     /**

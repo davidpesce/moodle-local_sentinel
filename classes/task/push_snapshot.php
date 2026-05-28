@@ -65,7 +65,7 @@ class push_snapshot extends scheduled_task {
             return;
         }
 
-        $snapshot = collector::get_snapshot();
+        $snapshot = collector::get_snapshot_for_egress();
         $body = json_encode($snapshot);
 
         $curl = new \curl(['ignoresecurity' => false]);

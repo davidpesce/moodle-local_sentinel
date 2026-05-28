@@ -86,7 +86,15 @@ abstract class base extends external_api {
         ];
         foreach ($slicekeys as $key) {
             $method = $builders[$key];
-            $structure[$key] = self::$method();
+            // Slices are VALUE_OPTIONAL: admins may exclude any slice from
+            // egress via the Settings page. Older clients that hard-required
+            // a slice get null back; clients using ->get('key') style reads
+            // simply see the absent key. Defensive on the dashboard side.
+            $structure[$key] = new external_single_structure(
+                self::$method()->keys,
+                self::$method()->desc,
+                VALUE_OPTIONAL
+            );
         }
         return new external_single_structure($structure);
     }
@@ -200,7 +208,7 @@ abstract class base extends external_api {
                 'release' => new external_value(PARAM_RAW, 'OS release.'),
                 'version' => new external_value(PARAM_RAW, 'OS version.'),
                 'machine' => new external_value(PARAM_RAW, 'CPU architecture.'),
-                'hostname' => new external_value(PARAM_RAW, 'Hostname.'),
+                'hostname' => new external_value(PARAM_RAW, 'Hostname.', VALUE_OPTIONAL),
             ]),
             'webserver' => new external_single_structure([
                 'software' => new external_value(PARAM_RAW, 'SERVER_SOFTWARE value (empty under CLI).'),
@@ -212,7 +220,7 @@ abstract class base extends external_api {
                 'type' => new external_value(PARAM_RAW, 'DB driver type.'),
                 'version' => new external_value(PARAM_RAW, 'DB server version.'),
                 'description' => new external_value(PARAM_RAW, 'DB server description.'),
-                'host' => new external_value(PARAM_RAW, 'DB host.'),
+                'host' => new external_value(PARAM_RAW, 'DB host.', VALUE_OPTIONAL),
                 'name' => new external_value(PARAM_RAW, 'DB name.'),
                 'prefix' => new external_value(PARAM_RAW, 'Table prefix.'),
                 'size_bytes' => self::nullable_int('Total DB size in bytes (null if unsupported).'),
@@ -461,7 +469,9 @@ abstract class base extends external_api {
                         'last_login' => new external_value(PARAM_INT, 'Last successful login timestamp.'),
                         'locked' => new external_value(PARAM_BOOL, 'True if the account is currently locked.'),
                         'suspended' => new external_value(PARAM_BOOL, 'Suspended flag.'),
-                    ])
+                    ]),
+                    'Per-user details for top failed-login accounts (admin opt-out).',
+                    VALUE_OPTIONAL
                 ),
             ]),
             'tokens' => new external_single_structure([
@@ -490,7 +500,9 @@ abstract class base extends external_api {
                         'created' => new external_value(PARAM_INT, 'Token creation timestamp.'),
                         'last_access' => new external_value(PARAM_INT, 'Token last-use timestamp (0 if never used).'),
                         'valid_until' => new external_value(PARAM_INT, 'Expiry timestamp (0 = never expires).'),
-                    ])
+                    ]),
+                    'Per-token detail rows (admin opt-out).',
+                    VALUE_OPTIONAL
                 ),
             ]),
         ]);

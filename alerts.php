@@ -47,6 +47,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('alertemails_submit'
     }
 }
 
+// Handle the egress-policy save before any output.
+$egresssaved = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('egress_submit', 0, PARAM_INT)) {
+    require_sesskey();
+    $keptslices = optional_param_array('egress_slices', [], PARAM_ALPHAEXT);
+    $keptfields = optional_param_array('egress_fields', [], PARAM_RAW);
+    // Store the INVERSE — settings to exclude — so an empty stored list
+    // means "send everything" (graceful default for fresh installs).
+    $excludedslices = array_values(array_diff(\local_sentinel\collector::ALL_SLICES, $keptslices));
+    $excludedfields = array_values(array_diff(\local_sentinel\collector::REDACTABLE_FIELDS, $keptfields));
+    set_config('egress_excluded_slices', json_encode($excludedslices), 'local_sentinel');
+    set_config('egress_excluded_fields', json_encode($excludedfields), 'local_sentinel');
+    \local_sentinel\cache_helper::purge();
+    redirect(new moodle_url('/local/sentinel/alerts.php', ['egresssaved' => 1]));
+}
+$egresssaved = (bool) optional_param('egresssaved', 0, PARAM_INT);
+$showpreview = (bool) optional_param('preview', 0, PARAM_INT);
+
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('alerts_heading', 'local_sentinel'));
 echo $PAGE->get_renderer('local_sentinel')->sentinel_subnav('alerts');
@@ -142,6 +160,124 @@ echo html_writer::link(
     ['class' => 'btn btn-outline-secondary btn-sm']
 );
 echo html_writer::end_div();
+echo html_writer::end_div();
+echo html_writer::end_div();
+
+// Section: Data shared with dashboard.
+echo html_writer::tag(
+    'h4',
+    s(get_string('egress_heading', 'local_sentinel')),
+    ['class' => 'h6 text-uppercase text-muted mt-4']
+);
+
+if ($egresssaved) {
+    echo $OUTPUT->notification(
+        get_string('egress_saved', 'local_sentinel'),
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
+$excludedslices = \local_sentinel\collector::excluded_slices();
+$excludedfields = \local_sentinel\collector::excluded_fields();
+
+echo html_writer::start_div('card');
+echo html_writer::start_div('card-body');
+echo html_writer::tag(
+    'p',
+    s(get_string('egress_intro', 'local_sentinel')),
+    ['class' => 'small text-muted mb-3']
+);
+
+echo html_writer::start_tag('form', [
+    'method' => 'post',
+    'action' => (new moodle_url('/local/sentinel/alerts.php'))->out(false),
+]);
+echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
+echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'egress_submit', 'value' => 1]);
+
+echo html_writer::tag(
+    'h5',
+    s(get_string('egress_slices_heading', 'local_sentinel')),
+    ['class' => 'h6 mb-2']
+);
+foreach (\local_sentinel\collector::ALL_SLICES as $slice) {
+    $checked = !in_array($slice, $excludedslices, true);
+    echo html_writer::start_div('form-check');
+    echo html_writer::empty_tag('input', array_merge(
+        ['type' => 'checkbox', 'class' => 'form-check-input',
+         'name' => 'egress_slices[]', 'value' => $slice, 'id' => "egress_slice_$slice"],
+        $checked ? ['checked' => 'checked'] : []
+    ));
+    echo html_writer::tag(
+        'label',
+        s(get_string('egress_slice_label_' . $slice, 'local_sentinel')),
+        ['class' => 'form-check-label', 'for' => "egress_slice_$slice"]
+    );
+    echo html_writer::end_div();
+}
+
+echo html_writer::tag(
+    'h5',
+    s(get_string('egress_fields_heading', 'local_sentinel')),
+    ['class' => 'h6 mt-3 mb-2']
+);
+echo html_writer::tag(
+    'p',
+    s(get_string('egress_fields_intro', 'local_sentinel')),
+    ['class' => 'small text-muted']
+);
+$fieldlabels = [
+    'auth.failed_logins.top_accounts' => 'egress_field_failed_logins',
+    'auth.tokens.entries' => 'egress_field_tokens_entries',
+    'environment.database.host' => 'egress_field_db_host',
+    'environment.os.hostname' => 'egress_field_os_hostname',
+];
+foreach (\local_sentinel\collector::REDACTABLE_FIELDS as $path) {
+    $checked = !in_array($path, $excludedfields, true);
+    $id = 'egress_field_' . md5($path);
+    echo html_writer::start_div('form-check');
+    echo html_writer::empty_tag('input', array_merge(
+        ['type' => 'checkbox', 'class' => 'form-check-input',
+         'name' => 'egress_fields[]', 'value' => $path, 'id' => $id],
+        $checked ? ['checked' => 'checked'] : []
+    ));
+    echo html_writer::tag(
+        'label',
+        s(get_string($fieldlabels[$path], 'local_sentinel'))
+            . ' ' . html_writer::tag('code', $path, ['class' => 'small text-muted ms-1']),
+        ['class' => 'form-check-label', 'for' => $id]
+    );
+    echo html_writer::end_div();
+}
+
+echo html_writer::start_div('mt-3 d-flex gap-2 align-items-center');
+echo html_writer::tag('button', s(get_string('egress_save', 'local_sentinel')), [
+    'type' => 'submit', 'class' => 'btn btn-primary btn-sm',
+]);
+echo html_writer::link(
+    new moodle_url('/local/sentinel/alerts.php', ['preview' => 1]),
+    s(get_string('egress_preview_link', 'local_sentinel')) . ' →',
+    ['class' => 'small ms-2']
+);
+echo html_writer::end_div();
+
+echo html_writer::end_tag('form');
+
+if ($showpreview) {
+    $preview = \local_sentinel\collector::get_snapshot_for_egress();
+    echo html_writer::tag(
+        'h5',
+        s(get_string('egress_preview_heading', 'local_sentinel')),
+        ['class' => 'h6 mt-4']
+    );
+    echo html_writer::tag(
+        'pre',
+        s(json_encode($preview, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)),
+        ['style' => 'max-height: 60vh; overflow: auto; background: #f6f8fa; padding: 12px; '
+        . 'border-radius: 4px; font-size: 0.85em;']
+    );
+}
+
 echo html_writer::end_div();
 echo html_writer::end_div();
 

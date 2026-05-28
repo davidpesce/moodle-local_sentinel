@@ -38,7 +38,7 @@ class get_plugins extends base {
      */
     public static function execute(): array {
         self::authorise();
-        return collector::get_slice('plugins');
+        return collector::get_slice_for_egress('plugins');
     }
 
     /**
