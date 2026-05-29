@@ -628,7 +628,6 @@ abstract class base extends external_api {
                     'time' => new external_value(PARAM_INT, 'Modification timestamp.'),
                     'userid' => new external_value(PARAM_INT, 'User ID who made the change.'),
                     'username' => self::nullable_text('Username (null for system user).'),
-                    'fullname' => new external_value(PARAM_RAW, 'User full name.'),
                     'plugin' => self::nullable_text('Plugin component (null for core).'),
                     'name' => new external_value(PARAM_RAW, 'Setting name.'),
                     'oldvalue' => self::nullable_text('Previous value.'),

@@ -156,8 +156,27 @@ $string['overview_tab_plugins'] = 'Plugins';
 $string['overview_tab_reports'] = 'Reports';
 $string['overview_view_native'] = 'view native page';
 $string['pluginname'] = 'Sentinel';
-$string['privacy:metadata'] = 'The Sentinel plugin does not store any personal data. '
-    . 'It exposes site-level operational metrics through web services and an optional outbound send.';
+$string['privacy:metadata'] = 'The Sentinel plugin stores no personal data in its own tables. '
+    . 'It does, however, read a small set of personal data from existing Moodle tables and transmit '
+    . 'it to a central Sentinel dashboard either via a scheduled push or in response to a pull web-service call. '
+    . 'See below for the fields involved.';
+$string['privacy:metadata:sentinel_dashboard'] = 'Operational snapshot transmitted to the central Sentinel dashboard. '
+    . 'The dashboard\'s purpose is fleet-wide monitoring of Moodle health, security, and configuration. '
+    . 'Site administrators can opt out of specific personal-data fields on the Sentinel Settings page (the egress filter).';
+$string['privacy:metadata:sentinel_dashboard:admin_lastaccess'] = 'Timestamp of each site administrator\'s most recent activity on the site, used so the dashboard can show last-seen ages.';
+$string['privacy:metadata:sentinel_dashboard:admin_lastlogin'] = 'Timestamp of each site administrator\'s most recent successful login.';
+$string['privacy:metadata:sentinel_dashboard:admin_username'] = 'Username of each user listed in $CFG->siteadmins, so the dashboard can attribute admin activity per site.';
+$string['privacy:metadata:sentinel_dashboard:config_change_userid'] = 'Internal user ID of the admin who made each recently-recorded admin-setting change (from mdl_config_log).';
+$string['privacy:metadata:sentinel_dashboard:config_change_username'] = 'Username of the admin who made each recent admin-setting change, for accountability in the change log.';
+$string['privacy:metadata:sentinel_dashboard:failed_login_count'] = 'Number of failed login attempts since the last successful login for each top affected account.';
+$string['privacy:metadata:sentinel_dashboard:failed_login_lastfailure'] = 'Timestamp of the most recent failed login attempt for each top affected account.';
+$string['privacy:metadata:sentinel_dashboard:failed_login_lastlogin'] = 'Timestamp of the most recent successful login for each top affected account.';
+$string['privacy:metadata:sentinel_dashboard:failed_login_userid'] = 'Internal user ID of accounts with active failed-login counters (admin-opt-out via the egress filter).';
+$string['privacy:metadata:sentinel_dashboard:failed_login_username'] = 'Username of accounts under active failed-login attack (admin-opt-out via the egress filter).';
+$string['privacy:metadata:sentinel_dashboard:siteidentifier'] = 'Stable per-site identifier used as the primary key the dashboard correlates a site by.';
+$string['privacy:metadata:sentinel_dashboard:token_created'] = 'Timestamp each web-service token was issued, for spotting tokens that have been around a long time.';
+$string['privacy:metadata:sentinel_dashboard:token_lastaccess'] = 'Timestamp each web-service token was most recently used, for spotting stale or unused tokens.';
+$string['privacy:metadata:sentinel_dashboard:token_owner_username'] = 'Username of each web-service token\'s owner (admin-opt-out via the egress filter).';
 $string['pushenabled'] = 'Enable sending';
 $string['pushenabled_desc'] = 'When enabled, this Moodle sends a full snapshot to the configured '
     . 'dashboard endpoint on a schedule (every 15 minutes by default).';

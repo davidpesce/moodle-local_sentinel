@@ -42,9 +42,13 @@ class config_changes {
 
         $limit = max(1, min(500, $limit ?? self::DEFAULT_LIMIT));
 
+        // Pull username for accountability but skip firstname/lastname —
+        // those add no operational value to a config-change audit, are
+        // personal data we'd rather not ship, and make the privacy story
+        // simpler.
         $sql = "SELECT cl.id, cl.timemodified, cl.userid, cl.plugin, cl.name,
                        cl.oldvalue, cl.value,
-                       u.username, u.firstname, u.lastname
+                       u.username
                   FROM {config_log} cl
              LEFT JOIN {user} u ON u.id = cl.userid
               ORDER BY cl.timemodified DESC, cl.id DESC";
@@ -57,7 +61,6 @@ class config_changes {
                 'time' => (int) $row->timemodified,
                 'userid' => (int) $row->userid,
                 'username' => $row->username,
-                'fullname' => trim(($row->firstname ?? '') . ' ' . ($row->lastname ?? '')),
                 'plugin' => $row->plugin,
                 'name' => $row->name,
                 'oldvalue' => $row->oldvalue,
