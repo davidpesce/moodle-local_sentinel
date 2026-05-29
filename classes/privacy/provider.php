@@ -34,9 +34,10 @@ use core_privacy\local\metadata\provider as metadata_provider;
  * install.xml). It does, however, read a small set of personal data from
  * Moodle's existing tables (admin usernames, last-login timestamps, who made
  * recent admin-setting changes, web-service token owners, top failed-login
- * accounts) and send it to an external Sentinel dashboard via either a
- * scheduled push or a web-service pull. That external transmission is
- * declared below via add_external_location_link().
+ * accounts) plus the admin-entered report-recipient email addresses, and sends
+ * it to an external Sentinel dashboard via either a scheduled push or a
+ * web-service pull. That external transmission is declared below via
+ * add_external_location_link().
  *
  * Site admins can opt out of two of the more sensitive field groups
  * (auth.failed_logins.top_accounts and auth.tokens.entries) per-site on the
@@ -72,6 +73,7 @@ class provider implements metadata_provider {
                 'token_owner_username'       => 'privacy:metadata:sentinel_dashboard:token_owner_username',
                 'token_lastaccess'           => 'privacy:metadata:sentinel_dashboard:token_lastaccess',
                 'token_created'              => 'privacy:metadata:sentinel_dashboard:token_created',
+                'report_recipients'          => 'privacy:metadata:sentinel_dashboard:report_recipients',
             ],
             'privacy:metadata:sentinel_dashboard'
         );

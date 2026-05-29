@@ -50,6 +50,7 @@ class collector {
             'reports' => collectors\reports::collect(),
             'config_changes' => collectors\config_changes::collect(),
             'config_drift' => collectors\config_drift::collect(),
+            'reporting' => collectors\reporting::collect(),
         ]);
     }
 
@@ -57,7 +58,7 @@ class collector {
      * Build a single-slice envelope, used by the granular external functions.
      *
      * @param string $slice One of: status, environment, plugins, health, auth, reports,
-     *                      config_changes, config_drift.
+     *                      config_changes, config_drift, reporting.
      * @return array Envelope containing only the requested slice plus site identity.
      */
     public static function get_slice(string $slice): array {
@@ -132,7 +133,7 @@ class collector {
     /** All top-level slice names the snapshot contains. */
     public const ALL_SLICES = [
         'status', 'environment', 'plugins', 'health',
-        'auth', 'reports', 'config_changes', 'config_drift',
+        'auth', 'reports', 'config_changes', 'config_drift', 'reporting',
     ];
 
     /** Sub-field dotted paths that admins can opt out of independently. */

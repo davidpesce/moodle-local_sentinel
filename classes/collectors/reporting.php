@@ -15,18 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Report-recipient forwarding collector.
  *
  * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_sentinel\collectors;
 
-$plugin->version   = 2026052905;
-$plugin->release   = '2.11.0';
-$plugin->requires  = 2024100700;
-$plugin->component = 'local_sentinel';
-$plugin->maturity  = MATURITY_ALPHA;
-$plugin->supported = [405, 501];
+/**
+ * Forwards the site's report-recipient list to the central dashboard.
+ *
+ * The plugin sends no reports itself; this slice just tells the dashboard who
+ * the local admin wants enhanced reports delivered to for this site. As a
+ * regular slice it is egress-toggleable on the Settings page — excluding it
+ * means the dashboard falls back to its own vendor-set recipient list.
+ */
+class reporting {
+    /**
+     * Collect the recipient list.
+     *
+     * @return array
+     */
+    public static function collect(): array {
+        $recipients = \local_sentinel\recipients::all();
+        return [
+            'recipients' => $recipients,
+            'count' => count($recipients),
+        ];
+    }
+}

@@ -24,13 +24,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['alertemails'] = 'Alert recipients';
-$string['alertemails_desc'] = 'Email addresses to notify when this site reports issues. One address per line. '
-    . 'Storage only — actual alert delivery is not yet wired up.';
+$string['alertemails'] = 'Report recipients';
+$string['alertemails_desc'] = 'Who should receive monitoring reports and alerts for this site — one address per line. '
+    . 'Shared with the Sentinel monitoring service, which handles delivery.';
 $string['alertemails_invalid'] = 'Not a valid email address: {$a}';
 $string['alertemails_save'] = 'Save recipients';
-$string['alertemails_saved'] = 'Alert recipients updated.';
-$string['alertemails_section'] = 'Alert recipients';
+$string['alertemails_saved'] = 'Report recipients updated.';
+$string['alertemails_section'] = 'Report recipients';
 $string['alerts_heading'] = 'Sentinel: Settings';
 $string['alerts_label'] = 'Settings';
 $string['connect_configured'] = 'Configured';
@@ -173,6 +173,7 @@ $string['privacy:metadata:sentinel_dashboard:failed_login_lastfailure'] = 'Times
 $string['privacy:metadata:sentinel_dashboard:failed_login_lastlogin'] = 'Timestamp of the most recent successful login for each top affected account.';
 $string['privacy:metadata:sentinel_dashboard:failed_login_userid'] = 'Internal user ID of accounts with active failed-login counters (admin-opt-out via the egress filter).';
 $string['privacy:metadata:sentinel_dashboard:failed_login_username'] = 'Username of accounts under active failed-login attack (admin-opt-out via the egress filter).';
+$string['privacy:metadata:sentinel_dashboard:report_recipients'] = 'Email addresses the site admin nominated to receive enhanced reports for this site (admin-opt-out via the egress filter).';
 $string['privacy:metadata:sentinel_dashboard:siteidentifier'] = 'Stable per-site identifier used as the primary key the dashboard correlates a site by.';
 $string['privacy:metadata:sentinel_dashboard:token_created'] = 'Timestamp each web-service token was issued, for spotting tokens that have been around a long time.';
 $string['privacy:metadata:sentinel_dashboard:token_lastaccess'] = 'Timestamp each web-service token was most recently used, for spotting stale or unused tokens.';

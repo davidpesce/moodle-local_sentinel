@@ -38,7 +38,7 @@ $alertinvalid = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('alertemails_submit', 0, PARAM_INT)) {
     require_sesskey();
     $raw = optional_param('alertemails', '', PARAM_RAW_TRIMMED);
-    [$valid, $invalid] = local_sentinel_alerts_parse_recipients($raw);
+    [$valid, $invalid] = \local_sentinel\recipients::parse($raw);
     if ($invalid !== null) {
         $alertinvalid = $invalid;
     } else {
@@ -282,31 +282,3 @@ echo html_writer::end_div();
 echo html_writer::end_div();
 
 echo $OUTPUT->footer();
-
-
-/**
- * Parse a textarea of alert recipients into a clean, deduped list.
- *
- * Splits on whitespace, commas, and semicolons; preserves entry order;
- * validates each address. Returns [list, null] on success, [list_so_far,
- * first_invalid] on validation failure.
- *
- * @param string $raw
- * @return array{0: string[], 1: string|null}
- */
-function local_sentinel_alerts_parse_recipients(string $raw): array {
-    $valid = [];
-    $seen = [];
-    foreach (preg_split('/[\s,;]+/', $raw) as $token) {
-        $token = trim($token);
-        if ($token === '' || isset($seen[$token])) {
-            continue;
-        }
-        if (!validate_email($token)) {
-            return [$valid, $token];
-        }
-        $seen[$token] = true;
-        $valid[] = $token;
-    }
-    return [$valid, null];
-}

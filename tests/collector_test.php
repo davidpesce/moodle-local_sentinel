@@ -49,6 +49,19 @@ final class collector_test extends \advanced_testcase {
         $this->assertArrayHasKey('reports', $snapshot);
         $this->assertArrayHasKey('config_changes', $snapshot);
         $this->assertArrayHasKey('config_drift', $snapshot);
+        $this->assertArrayHasKey('reporting', $snapshot);
+        $this->assertArrayHasKey('recipients', $snapshot['reporting']);
+        $this->assertArrayHasKey('count', $snapshot['reporting']);
+    }
+
+    public function test_reporting_slice_forwards_configured_recipients(): void {
+        $this->resetAfterTest();
+        set_config('alertemails', "alice@example.com\nbob@example.com", 'local_sentinel');
+
+        $reporting = collectors\reporting::collect();
+
+        $this->assertSame(['alice@example.com', 'bob@example.com'], $reporting['recipients']);
+        $this->assertSame(2, $reporting['count']);
     }
 
     public function test_reports_keys(): void {
@@ -216,6 +229,16 @@ final class collector_test extends \advanced_testcase {
         $this->assertArrayHasKey('environment', $snapshot);
         $this->assertArrayNotHasKey('health', $snapshot);
         $this->assertArrayNotHasKey('auth', $snapshot);
+    }
+
+    public function test_get_snapshot_for_egress_omits_excluded_reporting_slice(): void {
+        $this->resetAfterTest();
+        set_config('alertemails', 'alice@example.com', 'local_sentinel');
+        set_config('egress_excluded_slices', json_encode(['reporting']), 'local_sentinel');
+
+        $snapshot = collector::get_snapshot_for_egress();
+
+        $this->assertArrayNotHasKey('reporting', $snapshot);
     }
 
     public function test_get_snapshot_for_egress_omits_excluded_fields(): void {

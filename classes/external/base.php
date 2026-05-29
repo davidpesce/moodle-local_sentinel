@@ -83,6 +83,7 @@ abstract class base extends external_api {
             'reports' => 'reports_structure',
             'config_changes' => 'config_changes_structure',
             'config_drift' => 'config_drift_structure',
+            'reporting' => 'reporting_structure',
         ];
         foreach ($slicekeys as $key) {
             $method = $builders[$key];
@@ -661,6 +662,20 @@ abstract class base extends external_api {
                     'default' => new external_value(PARAM_RAW, 'Declared default value.'),
                 ])
             ),
+        ]);
+    }
+
+    /**
+     * Reporting slice: who the dashboard should send enhanced reports to.
+     *
+     * @return external_single_structure
+     */
+    protected static function reporting_structure(): external_single_structure {
+        return new external_single_structure([
+            'recipients' => new external_multiple_structure(
+                new external_value(PARAM_RAW_TRIMMED, 'Recipient email address.')
+            ),
+            'count' => new external_value(PARAM_INT, 'Number of recipients.'),
         ]);
     }
 }
