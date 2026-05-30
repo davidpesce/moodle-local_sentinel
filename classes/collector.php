@@ -91,6 +91,12 @@ class collector {
             'schema_version' => self::SCHEMA_VERSION,
             'generated_at' => gmdate('c'),
             'plugin' => self::get_plugin_identity(),
+            // Declare what this site withholds so the dashboard can show
+            // "excluded by the site" instead of treating it as missing data.
+            'egress' => [
+                'excluded_slices' => array_values(self::excluded_slices()),
+                'excluded_fields' => array_values(self::excluded_fields()),
+            ],
         ], $data);
     }
 

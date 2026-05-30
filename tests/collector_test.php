@@ -40,6 +40,9 @@ final class collector_test extends \advanced_testcase {
 
         $this->assertSame(collector::SCHEMA_VERSION, $snapshot['schema_version']);
         $this->assertNotEmpty($snapshot['generated_at']);
+        $this->assertArrayHasKey('egress', $snapshot);
+        $this->assertArrayHasKey('excluded_slices', $snapshot['egress']);
+        $this->assertArrayHasKey('excluded_fields', $snapshot['egress']);
         $this->assertArrayHasKey('site', $snapshot);
         $this->assertArrayHasKey('status', $snapshot);
         $this->assertArrayHasKey('environment', $snapshot);

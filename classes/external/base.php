@@ -72,6 +72,14 @@ abstract class base extends external_api {
                 'version' => self::nullable_int('local_sentinel version int.'),
                 'release' => self::nullable_text('local_sentinel release string.'),
             ], 'local_sentinel self-identification.'),
+            'egress' => new external_single_structure([
+                'excluded_slices' => new external_multiple_structure(
+                    new external_value(PARAM_RAW, 'Excluded slice name.')
+                ),
+                'excluded_fields' => new external_multiple_structure(
+                    new external_value(PARAM_RAW, 'Excluded dotted field path.')
+                ),
+            ], 'What this site withholds from egress.', VALUE_OPTIONAL),
             'site' => self::site_structure(),
         ];
         $builders = [
