@@ -138,6 +138,10 @@ final class collector_test extends \advanced_testcase {
         $this->assertArrayHasKey('extensions', $env);
         $this->assertSame(PHP_VERSION, $env['php']['version']);
         $this->assertSame(PHP_SAPI, $env['php']['sapi']);
+        // OS distro fields (parsed from /etc/os-release; empty on non-Linux).
+        $this->assertArrayHasKey('distro', $env['os']);
+        $this->assertArrayHasKey('distro_version', $env['os']);
+        $this->assertArrayHasKey('distro_name', $env['os']);
         $this->assertIsArray($env['extensions']);
         $this->assertArrayHasKey('size_bytes', $env['database']);
         $this->assertArrayHasKey('largest_tables', $env['database']);

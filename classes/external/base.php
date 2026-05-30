@@ -210,6 +210,9 @@ abstract class base extends external_api {
                 'version' => new external_value(PARAM_RAW, 'OS version.'),
                 'machine' => new external_value(PARAM_RAW, 'CPU architecture.'),
                 'hostname' => new external_value(PARAM_RAW, 'Hostname.', VALUE_OPTIONAL),
+                'distro' => new external_value(PARAM_RAW, 'Linux distribution ID (/etc/os-release).', VALUE_OPTIONAL),
+                'distro_version' => new external_value(PARAM_RAW, 'Distribution VERSION_ID.', VALUE_OPTIONAL),
+                'distro_name' => new external_value(PARAM_RAW, 'Distribution PRETTY_NAME.', VALUE_OPTIONAL),
             ]),
             'webserver' => new external_single_structure([
                 'software' => new external_value(PARAM_RAW, 'SERVER_SOFTWARE value (empty under CLI).'),

@@ -68,13 +68,42 @@ class environment {
      * @return array
      */
     protected static function collect_os(): array {
+        $osrelease = self::os_release();
         return [
             'sysname' => php_uname('s'),
             'release' => php_uname('r'),
             'version' => php_uname('v'),
             'machine' => php_uname('m'),
             'hostname' => php_uname('n'),
+            // Linux distribution from /etc/os-release (php_uname only gives the
+            // kernel). Lets the dashboard check distro EOL (e.g. Ubuntu 22.04).
+            'distro' => $osrelease['ID'] ?? '',
+            'distro_version' => $osrelease['VERSION_ID'] ?? '',
+            'distro_name' => $osrelease['PRETTY_NAME'] ?? '',
         ];
+    }
+
+    /**
+     * Parse /etc/os-release into a key => value map (empty on non-Linux/missing).
+     *
+     * The file is shell-style: KEY=value or KEY="value with spaces".
+     *
+     * @return array<string, string>
+     */
+    protected static function os_release(): array {
+        $path = '/etc/os-release';
+        if (!is_readable($path)) {
+            return [];
+        }
+        $values = [];
+        foreach (file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
+            if (strpos($line, '=') === false || $line[0] === '#') {
+                continue;
+            }
+            [$key, $value] = explode('=', $line, 2);
+            $values[trim($key)] = trim($value, " \t\"'");
+        }
+        return $values;
     }
 
     /**
