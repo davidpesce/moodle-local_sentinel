@@ -13,6 +13,15 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.14.1] — schema_version 3 — 2026-06-01
+
+Additive; no envelope shape change.
+
+- New `cli/register.php` — headless equivalent of the Connect-page Register
+  action, so fleet automation (Ansible) can onboard many sites without a UI
+  session. Same off-by-default gate + HTTPS-only guard as the UI path; exits 0
+  when the dashboard accepts (activated/pending), 1 otherwise.
+
 ## [2.14.0] — schema_version 3 — 2026-06-01
 
 Additive; no envelope shape change (`schema_version` unchanged).
