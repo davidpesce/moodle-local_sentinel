@@ -62,13 +62,18 @@ available at `admin/webservice/documentation.php` for the deployed token.
   "generated_at": "2026-05-21T14:23:11+00:00",
   "plugin": {
     "component": "local_sentinel",
-    "version": 2026052108,
-    "release": "0.9.0"
+    "version": 2026053001,
+    "release": "2.13.0"
   },
   "site": { "wwwroot": "...", "siteidentifier": "...", "sitename": "...", "shortname": "..." },
+  "egress": { "excluded_slices": [], "excluded_fields": [] },
   "<slice_name>": { ... }
 }
 ```
+
+The `egress` block (see **Data egress filter** below) declares what the site
+admin has chosen to withhold, so a central dashboard can distinguish
+"withheld by the site" from missing/broken data.
 
 `get_snapshot` returns every slice keyed at the top level; the granular
 functions (`get_status`, `get_environment`, …) return only their own slice
@@ -77,7 +82,7 @@ plus `site`. Snapshot slices and their high-level contents:
 | Slice | Contents |
 |---|---|
 | `status` | Moodle version, branch, release, maintenance flag, branch EOL date, build age |
-| `environment` | PHP / OS / web server / DB / OPcache / SSL / loaded extensions |
+| `environment` | PHP / OS (incl. Linux `distro` / `distro_version` from `/etc/os-release`) / web server / DB / OPcache / SSL / loaded extensions |
 | `plugins` | Standard + third-party plugin lists with install status, available updates with `update_available` cross-reference |
 | `health` | Cron, scheduled + adhoc tasks, sessions, disk, mail, admins (with last-changed), backup, upgrade log, foot-gun flags |
 | `auth` | Enabled auth methods, per-method user counts, failed-login signals (locked accounts, top targets) |
@@ -101,6 +106,20 @@ snapshots outbound on a schedule. Configure under Site administration → Plugin
 - **Enable push** — flip the scheduled task on
 
 The central collector must verify the secret header before accepting the body.
+
+## Data egress filter
+
+A site admin can withhold data from the snapshot under Site administration →
+Plugins → Local plugins → Sentinel:
+
+- **Excluded slices** (`egress_excluded_slices`) — whole slices to omit (e.g.
+  `health`, `auth`).
+- **Excluded fields** (`egress_excluded_fields`) — dotted paths to redact within
+  a slice (e.g. `environment.database.host`, `environment.os.hostname`).
+
+Excluded data is removed from the payload, and the envelope's **`egress` block**
+lists exactly what was withheld. This lets a central dashboard show "withheld by
+the site administrator" rather than mistaking the gap for missing or broken data.
 
 ## Available-updates freshness
 

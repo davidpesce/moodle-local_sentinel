@@ -13,6 +13,50 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.13.0] — schema_version 3 — 2026-05-30
+
+Additive. The envelope now carries an **`egress`** block
+(`{ excluded_slices, excluded_fields }`) declaring exactly what the site's
+egress filter withholds, so a dashboard can show "withheld by the site" instead
+of treating the gap as missing/broken data.
+
+## [2.12.0] — schema_version 3 — 2026-05-30
+
+Additive. `environment.os` now reports the Linux distribution (`distro`,
+`distro_version`, `distro_name`) parsed from `/etc/os-release` — previously only
+the kernel (from `php_uname()`) was available. Empty on non-Linux.
+
+## [2.11.0] — schema_version 3 — 2026-05-29
+
+Additive. Forwards the site's alert-recipient list in the snapshot
+(`reporting.recipients`, from the `alertemails` setting) so the dashboard knows
+who to send reports to. Reporting itself stays a dashboard concern.
+
+## [2.10.0] — schema_version 3 — 2026-05-28
+
+Privacy API now declares external transmission to a remote dashboard; actor
+`firstname`/`lastname` are stripped from outbound data.
+
+## [2.9.0] — [2.9.1] — schema_version 3 — 2026-05-28
+
+Push pipeline **self-monitoring**: the plugin records its own push attempts /
+successes / failures (`push_state`) and surfaces them in the `health` slice.
+2.9.1 stops counting tasks whose plugin or row is disabled as overdue/failed.
+
+## [2.8.0] — [2.8.1] — schema_version 3 — 2026-05-28
+
+Adds the **admin-controlled data egress filter** (`egress_excluded_slices` /
+`egress_excluded_fields`) — slice- and field-level toggles to withhold data from
+the snapshot. 2.8.1 adds MUC cache-store reachability to the `health` slice.
+
+## [2.1.0] – [2.7.0] — schema_version 3 — 2026-05-22..28
+
+In-plugin **Overview** admin digest and consolidated **Connect** UI, a
+**Settings/alerts** admin page, modern Moodle cron last-run field, inline
+overdue-task reporting, and assorted health/collector hardening. See the git
+history for per-commit detail (these versions were not individually recorded
+here at the time).
+
 ## [2.0.0] — schema_version 3 — 2026-05-22
 
 **Plugin renamed: `local_fleetmonitor` → `local_sentinel`.**
