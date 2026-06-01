@@ -47,6 +47,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('test_push', 0, PARA
 }
 $testpushresult = optional_param('testresult', '', PARAM_RAW);
 
+// Self-registration handler — runs before output so we can redirect cleanly.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('do_register', 0, PARAM_INT)) {
+    require_sesskey();
+    require_capability('moodle/site:config', context_system::instance());
+    [$registerok, $registermessage] = \local_sentinel\register::run();
+    redirect(
+        new moodle_url('/local/sentinel/connect.php'),
+        $registermessage,
+        null,
+        $registerok ? \core\output\notification::NOTIFY_SUCCESS : \core\output\notification::NOTIFY_ERROR
+    );
+}
+
 // Status checks.
 $pushconfigured = (
     !empty(get_config('local_sentinel', 'pushenabled')) &&
@@ -149,6 +162,63 @@ echo html_writer::end_div();
 echo html_writer::end_div();
 
 echo html_writer::end_div(); // End row.
+
+// Self-registration card (full width) — the automated alternative to manually
+// configuring push and hand-creating the instance on the dashboard.
+$regstate = \local_sentinel\registration_state::get();
+$regconfigured = (
+    !empty(get_config('local_sentinel', 'registrationenabled')) &&
+    trim((string) get_config('local_sentinel', 'dashboardbaseurl')) !== '' &&
+    (string) get_config('local_sentinel', 'enrollmentkey') !== ''
+);
+
+echo html_writer::start_div('card mb-3');
+echo html_writer::start_div('card-body');
+echo html_writer::tag('h4', s(get_string('registration_heading', 'local_sentinel')), ['class' => 'h5']);
+echo html_writer::tag('p', s(get_string('registration_intro', 'local_sentinel')));
+
+if ($regstate['last_status'] === \local_sentinel\registration_state::STATUS_FAILED && $regstate['last_error'] !== '') {
+    $regstatustext = get_string('registration_failed', 'local_sentinel', $regstate['last_error']);
+} else {
+    $regstatustext = get_string('registration_' . $regstate['last_status'], 'local_sentinel');
+}
+$regstatusclass = 'text-muted';
+if ($regstate['last_status'] === \local_sentinel\registration_state::STATUS_ACTIVATED) {
+    $regstatusclass = 'text-success';
+} else if ($regstate['last_status'] === \local_sentinel\registration_state::STATUS_PENDING) {
+    $regstatusclass = 'text-info';
+} else if (in_array($regstate['last_status'], ['rejected', 'failed'], true)) {
+    $regstatusclass = 'text-danger';
+}
+echo html_writer::tag(
+    'p',
+    html_writer::tag('strong', s(get_string('registration_status_label', 'local_sentinel')) . ': ')
+        . html_writer::tag('span', s($regstatustext), ['class' => $regstatusclass])
+);
+
+if ($regconfigured) {
+    echo html_writer::start_tag('form', [
+        'method' => 'post',
+        'action' => (new moodle_url('/local/sentinel/connect.php'))->out(false),
+        'class' => 'mb-0',
+    ]);
+    echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
+    echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'do_register', 'value' => 1]);
+    echo html_writer::tag('button', s(get_string('registration_register_button', 'local_sentinel')), [
+        'type' => 'submit', 'class' => 'btn btn-primary',
+    ]);
+    echo html_writer::end_tag('form');
+} else {
+    echo html_writer::tag(
+        'p',
+        html_writer::link($sendurl, s(get_string('connect_send_cta', 'local_sentinel')), [
+            'class' => 'btn btn-outline-secondary',
+        ]),
+        ['class' => 'mb-0']
+    );
+}
+echo html_writer::end_div(); // End card-body.
+echo html_writer::end_div(); // End card.
 
 // Notes.
 echo html_writer::tag(

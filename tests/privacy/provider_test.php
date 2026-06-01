@@ -43,19 +43,20 @@ final class provider_test extends \core_privacy\tests\provider_testcase {
      * get_metadata() returns exactly one external-location item, summarised
      * by a resolvable lang string.
      */
-    public function test_get_metadata_declares_external_location(): void {
+    public function test_get_metadata_declares_external_locations(): void {
         $collection = provider::get_metadata(new collection('local_sentinel'));
         $items = $collection->get_collection();
 
-        $this->assertCount(1, $items, 'Expected a single external-location declaration.');
+        $this->assertCount(2, $items, 'Expected two external-location declarations.');
 
-        $item = reset($items);
-        $this->assertNotFalse($item);
-        $this->assertInstanceOf(external_location::class, $item);
-        $this->assertSame('sentinel_dashboard', $item->get_name());
-
-        // The summary string must exist (get_string throws on a missing key).
-        $this->assertNotEmpty(get_string($item->get_summary(), 'local_sentinel'));
+        $names = [];
+        foreach ($items as $item) {
+            $this->assertInstanceOf(external_location::class, $item);
+            $names[] = $item->get_name();
+            // The summary string must exist (get_string throws on a missing key).
+            $this->assertNotEmpty(get_string($item->get_summary(), 'local_sentinel'));
+        }
+        $this->assertEqualsCanonicalizing(['sentinel_dashboard', 'sentinel_registration'], $names);
     }
 
     /**
@@ -64,19 +65,18 @@ final class provider_test extends \core_privacy\tests\provider_testcase {
      */
     public function test_every_declared_field_has_a_lang_string(): void {
         $collection = provider::get_metadata(new collection('local_sentinel'));
-        $items = $collection->get_collection();
-        $item = reset($items);
 
-        $fields = $item->get_privacy_fields();
-        $this->assertNotEmpty($fields, 'Expected the dashboard link to declare fields.');
-
-        foreach ($fields as $field => $stringkey) {
-            /* get_string() raises a coding_exception if the key is missing,
-               which fails the test with a clear message naming the field. */
-            $this->assertNotEmpty(
-                get_string($stringkey, 'local_sentinel'),
-                "Lang string '{$stringkey}' for field '{$field}' is empty."
-            );
+        foreach ($collection->get_collection() as $item) {
+            $fields = $item->get_privacy_fields();
+            $this->assertNotEmpty($fields, "Link '{$item->get_name()}' declared no fields.");
+            foreach ($fields as $field => $stringkey) {
+                /* get_string() raises a coding_exception if the key is missing,
+                   which fails the test with a clear message naming the field. */
+                $this->assertNotEmpty(
+                    get_string($stringkey, 'local_sentinel'),
+                    "Lang string '{$stringkey}' for field '{$field}' is empty."
+                );
+            }
         }
     }
 }

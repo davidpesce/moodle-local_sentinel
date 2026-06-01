@@ -13,6 +13,25 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.14.0] — schema_version 3 — 2026-06-01
+
+Additive; no envelope shape change (`schema_version` unchanged).
+
+Adds **self-registration**: a site can register itself with a Sentinel
+dashboard instead of the operator hand-creating the instance.
+
+- New settings (all off/empty by default): `registrationenabled`,
+  `dashboardbaseurl` (HTTPS only), `enrollmentkey`.
+- New `\local_sentinel\register::run()` — generates its own push secret,
+  submits site identity + the enrollment key to the dashboard's
+  `/api/register/`, and records the outcome in
+  `\local_sentinel\registration_state` (mirrors `push_state`). Triggered
+  explicitly from the **Connect to dashboard** page (sesskey + capability);
+  never automatic, never a hardcoded URL.
+- Privacy: declares the registration transmission via the metadata provider.
+  The payload carries site identity + a generated machine credential only —
+  no user personal data.
+
 ## [2.13.0] — schema_version 3 — 2026-05-30
 
 Additive. The envelope now carries an **`egress`** block

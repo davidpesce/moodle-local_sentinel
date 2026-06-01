@@ -65,6 +65,9 @@ $string['connect_send_title'] = 'Send data to remote dashboard';
 $string['connect_send_when'] = 'Use when the dashboard cannot reach this site\'s URL — for example '
     . 'instances behind a firewall, on a private network, or being evaluated before network access '
     . 'has been opened up.';
+$string['dashboardbaseurl'] = 'Dashboard base URL';
+$string['dashboardbaseurl_desc'] = 'Base URL of the Sentinel dashboard (e.g. https://dash.example.com), '
+    . 'with no path. The registration and ingest endpoints are derived from it. Must use HTTPS.';
 $string['egress_field_db_host'] = 'Database hostname';
 $string['egress_field_failed_logins'] = 'Top failed-login accounts';
 $string['egress_field_os_hostname'] = 'Server hostname';
@@ -89,6 +92,9 @@ $string['egress_slice_label_plugins'] = 'Plugins — installed plugins, availabl
 $string['egress_slice_label_reports'] = 'Reports — performance, security, system status';
 $string['egress_slice_label_status'] = 'Status — release, branch, EOL, core update';
 $string['egress_slices_heading'] = 'Snapshot slices';
+$string['enrollmentkey'] = 'Enrollment key';
+$string['enrollmentkey_desc'] = 'The shared enrollment key issued by the dashboard operator. '
+    . 'Sent as the X-Sentinel-Enrollment-Key header when registering. Stored encrypted by Moodle.';
 $string['overview_active_users'] = 'Active users';
 $string['overview_auth_failed'] = 'Failed logins';
 $string['overview_auth_method'] = 'Method';
@@ -178,6 +184,14 @@ $string['privacy:metadata:sentinel_dashboard:siteidentifier'] = 'Stable per-site
 $string['privacy:metadata:sentinel_dashboard:token_created'] = 'Timestamp each web-service token was issued, for spotting tokens that have been around a long time.';
 $string['privacy:metadata:sentinel_dashboard:token_lastaccess'] = 'Timestamp each web-service token was most recently used, for spotting stale or unused tokens.';
 $string['privacy:metadata:sentinel_dashboard:token_owner_username'] = 'Username of each web-service token\'s owner (admin-opt-out via the egress filter).';
+$string['privacy:metadata:sentinel_registration'] = 'Identity sent to the central Sentinel dashboard when this site self-registers. '
+    . 'No user personal data is included — only site identity and a generated machine credential (push secret).';
+$string['privacy:metadata:sentinel_registration:plugin_release'] = 'The local_sentinel plugin release string, so the dashboard knows the registering site\'s plugin version.';
+$string['privacy:metadata:sentinel_registration:push_secret'] = 'A randomly-generated machine credential the dashboard stores to authenticate this site\'s future snapshot pushes. Not user data.';
+$string['privacy:metadata:sentinel_registration:shortname'] = 'The site short name, shown on the dashboard to identify the site.';
+$string['privacy:metadata:sentinel_registration:siteidentifier'] = 'Stable per-site identifier the dashboard uses as the primary key for this site.';
+$string['privacy:metadata:sentinel_registration:sitename'] = 'The site full name, shown on the dashboard to identify the site.';
+$string['privacy:metadata:sentinel_registration:wwwroot'] = 'The site URL, so the dashboard knows where to poll and link back to this site.';
 $string['pushenabled'] = 'Enable sending';
 $string['pushenabled_desc'] = 'When enabled, this Moodle sends a full snapshot to the configured '
     . 'dashboard endpoint on a schedule (every 15 minutes by default).';
@@ -198,6 +212,24 @@ $string['pushstate_never'] = 'never';
 $string['pushstate_test_button'] = 'Test push now';
 $string['pushstate_test_failed'] = 'Test push failed: {$a}';
 $string['pushstate_test_success'] = 'Test push completed — see status below.';
+$string['registration_activated'] = 'Registered and activated — this site is now monitored. Sending is enabled.';
+$string['registration_disabled'] = 'Self-registration is turned off. Enable it in Settings first.';
+$string['registration_failed'] = 'Registration failed: {$a}';
+$string['registration_heading'] = 'Self-register with dashboard';
+$string['registration_https_required'] = 'The dashboard base URL must use HTTPS.';
+$string['registration_intro'] = 'Register this site with the dashboard in one step: it generates a sending secret, '
+    . 'submits this site\'s identity with your enrollment key, and the operator approves it on the dashboard — '
+    . 'no secrets to copy by hand. Configure the dashboard base URL and enrollment key in Settings first.';
+$string['registration_misconfigured'] = 'Set the dashboard base URL and enrollment key in Settings first.';
+$string['registration_never'] = 'Not yet registered.';
+$string['registration_pending'] = 'Registered. Awaiting operator approval on the dashboard.';
+$string['registration_register_button'] = 'Register with dashboard';
+$string['registration_rejected'] = 'This site\'s registration was rejected by the dashboard operator.';
+$string['registration_status_label'] = 'Status';
+$string['registrationenabled'] = 'Enable self-registration';
+$string['registrationenabled_desc'] = 'Allows this site to register itself with a Sentinel dashboard using the base URL '
+    . 'and enrollment key below. Off by default; registration happens only when you click Register on the '
+    . 'Connect to dashboard page — nothing is contacted automatically.';
 $string['sentinel:view'] = 'View Sentinel snapshot data';
 $string['servicemissing'] = 'The Sentinel external service was not found. '
     . 'Visit Site administration → Notifications to finish plugin installation, then retry.';
@@ -207,6 +239,10 @@ $string['settingsheading_push'] = 'Outbound configuration';
 $string['settingsheading_push_desc'] = 'Configures the scheduled task that posts snapshots to the '
     . 'remote dashboard. See the Connect to dashboard page for when to use this and how it differs '
     . 'from the retrieval mechanism.';
+$string['settingsheading_registration'] = 'Self-registration';
+$string['settingsheading_registration_desc'] = 'Lets this site register itself with a Sentinel dashboard '
+    . 'instead of the operator creating it by hand. Trigger registration from the Connect to dashboard page '
+    . 'after setting the base URL and enrollment key here.';
 $string['setup_back'] = '← Back to setup';
 $string['setup_copy'] = 'Copy token';
 $string['setup_dashboard_help'] = 'On the Sentinel Dashboard, register this site:';

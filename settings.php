@@ -105,4 +105,32 @@ if ($hassiteconfig) {
         get_string('pushsecret_desc', 'local_sentinel'),
         ''
     ));
+
+    $settings->add(new admin_setting_heading(
+        'local_sentinel/settingsheading_registration',
+        get_string('settingsheading_registration', 'local_sentinel'),
+        get_string('settingsheading_registration_desc', 'local_sentinel')
+    ));
+
+    $settings->add(new admin_setting_configcheckbox(
+        'local_sentinel/registrationenabled',
+        get_string('registrationenabled', 'local_sentinel'),
+        get_string('registrationenabled_desc', 'local_sentinel'),
+        0
+    ));
+
+    $settings->add(new admin_setting_configtext(
+        'local_sentinel/dashboardbaseurl',
+        get_string('dashboardbaseurl', 'local_sentinel'),
+        get_string('dashboardbaseurl_desc', 'local_sentinel'),
+        '',
+        PARAM_URL
+    ));
+
+    $settings->add(new admin_setting_configpasswordunmask(
+        'local_sentinel/enrollmentkey',
+        get_string('enrollmentkey', 'local_sentinel'),
+        get_string('enrollmentkey_desc', 'local_sentinel'),
+        ''
+    ));
 }
