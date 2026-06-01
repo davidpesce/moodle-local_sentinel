@@ -73,6 +73,10 @@ class push_snapshot extends scheduled_task {
         $snapshot = collector::get_snapshot_for_egress();
         $body = json_encode($snapshot);
 
+        // The Moodle curl wrapper is defined in filelib.php; ensure it's loaded
+        // (a bare CLI bootstrap doesn't autoload it).
+        global $CFG;
+        require_once($CFG->libdir . '/filelib.php');
         $curl = new \curl(['ignoresecurity' => false]);
         $curl->setHeader([
             'Content-Type: application/json',

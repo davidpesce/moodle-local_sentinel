@@ -103,6 +103,10 @@ class register {
 
         registration_state::record_attempt();
 
+        // The Moodle curl wrapper is defined in filelib.php, which a bare CLI
+        // bootstrap doesn't load — require it before use.
+        global $CFG;
+        require_once($CFG->libdir . '/filelib.php');
         $curl = new \curl(['ignoresecurity' => false]);
         $curl->setHeader([
             'Content-Type: application/json',
