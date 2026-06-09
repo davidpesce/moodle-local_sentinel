@@ -13,6 +13,21 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.15.2] — schema_version 3 — 2026-06-09
+
+Bug fix; no envelope shape change.
+
+- `health.sessions.active_last_5_min` / `active_last_hour` are now measured by
+  `mdl_user.lastaccess`, **not** the `mdl_sessions` table. The session table is
+  only populated under the *database* session handler; busy sites commonly store
+  sessions in Redis/Memcached, leaving `mdl_sessions` empty — so the previous
+  query read **0 active users even with dozens online**. `lastaccess` is updated
+  on activity regardless of the session backend and is the same source as the
+  day/week/month figures (so they stay consistent). Still excludes deleted users
+  and the Guest account; real users of any role count. (Supersedes the 2.15.1
+  session-table approach, which fixed over-counting but broke on external session
+  stores.)
+
 ## [2.15.1] — schema_version 3 — 2026-06-09
 
 Bug fix; no envelope shape change.

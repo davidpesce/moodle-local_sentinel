@@ -365,13 +365,16 @@ class health {
     /**
      * Collect sessions.
      *
-     * `active_*` count **distinct real logged-in users** active in the window,
-     * not raw session rows. Moodle opens a session for every visitor, so the raw
-     * count is inflated by: anonymous / not-logged-in sessions (userid 0, e.g.
-     * crawlers and logged-out browsing), the shared **Guest** account
-     * (`$CFG->siteguest`), and multiple sessions per user (several devices/tabs).
-     * So we exclude `userid 0` and the guest id and `COUNT(DISTINCT userid)`;
-     * `total_rows` keeps the raw table size (all sessions) for context.
+     * `active_*` count **real logged-in users** active in the window, measured by
+     * `mdl_user.lastaccess` — **not** the `mdl_sessions` table. Sessions only live
+     * in the DB under the *database* session handler; busy sites commonly store
+     * them in Redis/Memcached, leaving `mdl_sessions` empty (so a session-row
+     * count read 0 despite many users being online). `lastaccess` is updated on
+     * activity regardless of the session backend, and is the same source as the
+     * day/week/month figures, so the numbers stay consistent. Excludes deleted
+     * users and the shared **Guest** account (`$CFG->siteguest`) — real users of
+     * any role (students/teachers/admins) count. `session_rows` keeps the raw
+     * `mdl_sessions` size for context (0 under an external session store).
      *
      * @return array
      */
@@ -379,20 +382,18 @@ class health {
         global $DB, $CFG;
 
         $now = time();
-        $guestid = (int) $CFG->siteguest;
-        $select = 'userid > 0 AND userid <> :guestid AND timemodified > :since';
+        $select = 'deleted = 0 AND id <> :guestid AND lastaccess > :since';
+        $params = ['guestid' => (int) $CFG->siteguest];
         return [
             'active_last_5_min' => (int) $DB->count_records_select(
-                'sessions',
+                'user',
                 $select,
-                ['guestid' => $guestid, 'since' => $now - 300],
-                'COUNT(DISTINCT userid)'
+                $params + ['since' => $now - 300]
             ),
             'active_last_hour' => (int) $DB->count_records_select(
-                'sessions',
+                'user',
                 $select,
-                ['guestid' => $guestid, 'since' => $now - 3600],
-                'COUNT(DISTINCT userid)'
+                $params + ['since' => $now - 3600]
             ),
             'total_rows' => (int) $DB->count_records('sessions'),
         ];
