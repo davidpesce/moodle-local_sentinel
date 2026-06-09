@@ -78,9 +78,33 @@ class environment {
             // Linux distribution from /etc/os-release (php_uname only gives the
             // kernel). Lets the dashboard check distro EOL (e.g. Ubuntu 22.04).
             'distro' => $osrelease['ID'] ?? '',
-            'distro_version' => $osrelease['VERSION_ID'] ?? '',
+            'distro_version' => self::distro_version($osrelease),
             'distro_name' => $osrelease['PRETTY_NAME'] ?? '',
         ];
+    }
+
+    /**
+     * Most precise installed distro version from /etc/os-release.
+     *
+     * `VERSION_ID` carries only the cycle on some distros — notably Ubuntu, where
+     * `VERSION_ID="24.04"` omits the point release that `VERSION` includes
+     * (`VERSION="24.04.4 LTS (Noble Numbat)"`). Reporting only `VERSION_ID` makes
+     * the dashboard compare the cycle ("24.04") against endoflife's latest patch
+     * ("24.04.4") and wrongly flag an available update. Prefer the more precise
+     * `VERSION` token when it extends `VERSION_ID`; otherwise fall back to
+     * `VERSION_ID` (e.g. Debian "12", RHEL "9.4", which already carry the patch).
+     *
+     * @param array $osrelease parsed /etc/os-release map (key => value)
+     * @return string
+     */
+    protected static function distro_version(array $osrelease): string {
+        $versionid = $osrelease['VERSION_ID'] ?? '';
+        $version = $osrelease['VERSION'] ?? '';
+        $first = $version === '' ? '' : explode(' ', $version, 2)[0];
+        if ($versionid !== '' && strpos($first, $versionid . '.') === 0) {
+            return $first;
+        }
+        return $versionid;
     }
 
     /**

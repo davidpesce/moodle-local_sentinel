@@ -82,7 +82,7 @@ plus `site`. Snapshot slices and their high-level contents:
 | Slice | Contents |
 |---|---|
 | `status` | Moodle version, branch, release, maintenance flag, branch EOL date, build age |
-| `environment` | PHP / OS (incl. Linux `distro` / `distro_version` from `/etc/os-release`) / web server / DB / OPcache / SSL / loaded extensions |
+| `environment` | PHP / OS (incl. Linux `distro` / `distro_version` — the precise installed version incl. point release — from `/etc/os-release`) / web server / DB / OPcache / SSL / loaded extensions |
 | `plugins` | Standard + third-party plugin lists with install status, available updates with `update_available` cross-reference |
 | `health` | Cron, scheduled + adhoc tasks, sessions, disk, mail, admins (with last-changed), backup, upgrade log, foot-gun flags |
 | `auth` | Enabled auth methods, per-method user counts, failed-login signals (locked accounts, top targets) |

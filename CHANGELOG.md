@@ -13,6 +13,21 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.14.2] — schema_version 3 — 2026-06-08
+
+Bug fix; no envelope shape change.
+
+- `environment.os.distro_version` now reports the precise installed version,
+  including the point release. Previously it carried only `VERSION_ID`, which on
+  Ubuntu omits the patch (e.g. `24.04` rather than `24.04.4` — the point release
+  lives in `VERSION`/`PRETTY_NAME`, not `VERSION_ID`). The dashboard compared
+  that bare cycle against endoflife's latest patch and falsely flagged an
+  available OS update on every up-to-date Ubuntu host. The collector now prefers
+  the `VERSION` token when it extends `VERSION_ID`, and falls back to
+  `VERSION_ID` for distros that already carry the patch there (Debian `12`,
+  RHEL `9.4`). The dashboard derives the endoflife cycle (major.minor) from this
+  precise value.
+
 ## [2.14.1] — schema_version 3 — 2026-06-01
 
 Additive; no envelope shape change.

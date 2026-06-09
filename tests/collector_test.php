@@ -151,6 +151,55 @@ final class collector_test extends \advanced_testcase {
         $this->assertIsArray($env['database']['largest_tables']);
     }
 
+    /**
+     * distro_version() prefers the point release from VERSION when it extends
+     * VERSION_ID (Ubuntu), else falls back to VERSION_ID.
+     *
+     * @dataProvider distro_version_provider
+     * @param array $osrelease parsed /etc/os-release map (key => value)
+     * @param string $expected resolved version
+     */
+    public function test_distro_version(array $osrelease, string $expected): void {
+        $method = new \ReflectionMethod(collectors\environment::class, 'distro_version');
+        $method->setAccessible(true);
+        $this->assertSame($expected, $method->invoke(null, $osrelease));
+    }
+
+    /**
+     * Data for test_distro_version.
+     *
+     * @return array<string, array{0: array<string, string>, 1: string}>
+     */
+    public static function distro_version_provider(): array {
+        return [
+            'ubuntu point release from VERSION' => [
+                ['VERSION_ID' => '24.04', 'VERSION' => '24.04.4 LTS (Noble Numbat)'],
+                '24.04.4',
+            ],
+            'ubuntu without point release' => [
+                ['VERSION_ID' => '24.04', 'VERSION' => '24.04 LTS (Noble Numbat)'],
+                '24.04',
+            ],
+            'debian (no patch in os-release)' => [
+                ['VERSION_ID' => '12', 'VERSION' => '12 (bookworm)'],
+                '12',
+            ],
+            'rhel already carries patch in VERSION_ID' => [
+                ['VERSION_ID' => '9.4', 'VERSION' => '9.4 (Plow)'],
+                '9.4',
+            ],
+            'VERSION absent falls back to VERSION_ID' => [
+                ['VERSION_ID' => '24.04'],
+                '24.04',
+            ],
+            'unrelated VERSION token ignored' => [
+                ['VERSION_ID' => '24.04', 'VERSION' => 'rolling'],
+                '24.04',
+            ],
+            'empty map' => [[], ''],
+        ];
+    }
+
     public function test_plugins_keys(): void {
         $this->resetAfterTest();
 
