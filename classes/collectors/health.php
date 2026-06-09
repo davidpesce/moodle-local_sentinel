@@ -365,22 +365,34 @@ class health {
     /**
      * Collect sessions.
      *
+     * `active_*` count **distinct real logged-in users** active in the window,
+     * not raw session rows. Moodle opens a session for every visitor, so the raw
+     * count is inflated by: anonymous / not-logged-in sessions (userid 0, e.g.
+     * crawlers and logged-out browsing), the shared **Guest** account
+     * (`$CFG->siteguest`), and multiple sessions per user (several devices/tabs).
+     * So we exclude `userid 0` and the guest id and `COUNT(DISTINCT userid)`;
+     * `total_rows` keeps the raw table size (all sessions) for context.
+     *
      * @return array
      */
     protected static function collect_sessions(): array {
-        global $DB;
+        global $DB, $CFG;
 
         $now = time();
+        $guestid = (int) $CFG->siteguest;
+        $select = 'userid > 0 AND userid <> :guestid AND timemodified > :since';
         return [
             'active_last_5_min' => (int) $DB->count_records_select(
                 'sessions',
-                'timemodified > :since',
-                ['since' => $now - 300]
+                $select,
+                ['guestid' => $guestid, 'since' => $now - 300],
+                'COUNT(DISTINCT userid)'
             ),
             'active_last_hour' => (int) $DB->count_records_select(
                 'sessions',
-                'timemodified > :since',
-                ['since' => $now - 3600]
+                $select,
+                ['guestid' => $guestid, 'since' => $now - 3600],
+                'COUNT(DISTINCT userid)'
             ),
             'total_rows' => (int) $DB->count_records('sessions'),
         ];

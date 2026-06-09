@@ -13,6 +13,18 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.15.1] — schema_version 3 — 2026-06-09
+
+Bug fix; no envelope shape change.
+
+- `health.sessions.active_last_5_min` / `active_last_hour` now count **distinct
+  logged-in users**, not raw `mdl_sessions` rows. Moodle creates a session for
+  every visitor — including anonymous/not-logged-in ones (`userid 0`, e.g.
+  crawlers and logged-out browsing) — and a single user can hold several
+  (multiple devices/tabs), so the old count was badly inflated (e.g. reporting 8
+  when one user was online). Now filters `userid <> 0` and `COUNT(DISTINCT
+  userid)`. `total_rows` still reports the raw session-table size for context.
+
 ## [2.15.0] — schema_version 3 — 2026-06-09
 
 Self-registration now provisions **pull** as well as push. The register payload

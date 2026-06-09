@@ -200,6 +200,35 @@ final class collector_test extends \advanced_testcase {
         ];
     }
 
+    public function test_sessions_count_distinct_real_logged_in_users(): void {
+        global $DB, $CFG;
+        $this->resetAfterTest();
+
+        $now = time();
+        $insert = function (string $sid, int $userid, int $time) use ($DB) {
+            $DB->insert_record('sessions', (object) [
+                'state' => 0, 'sid' => $sid, 'userid' => $userid, 'sessdata' => null,
+                'timecreated' => $time, 'timemodified' => $time,
+                'firstip' => '127.0.0.1', 'lastip' => '127.0.0.1',
+            ]);
+        };
+        // One real user on two devices + an anonymous session + a Guest-account
+        // session + a logged-in-but-stale session. Only one real user is active.
+        $insert('sidA', 5, $now - 60);
+        $insert('sidB', 5, $now - 120);                    // Same user, second device — must dedupe.
+        $insert('sidC', 0, $now - 60);                     // Anonymous / not logged in — excluded.
+        $insert('sidE', (int) $CFG->siteguest, $now - 30); // Guest account — excluded.
+        $insert('sidD', 7, $now - 600);                    // Logged in but outside the 5-min window.
+
+        $method = new \ReflectionMethod(collectors\health::class, 'collect_sessions');
+        $method->setAccessible(true);
+        $sessions = $method->invoke(null);
+
+        $this->assertSame(1, $sessions['active_last_5_min']);  // User 5 only (dedup; no guest/anon/stale).
+        $this->assertSame(2, $sessions['active_last_hour']);   // Users 5 and 7.
+        $this->assertSame(5, $sessions['total_rows']);         // Raw rows, all sessions.
+    }
+
     public function test_plugins_keys(): void {
         $this->resetAfterTest();
 
