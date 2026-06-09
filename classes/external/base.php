@@ -193,6 +193,10 @@ abstract class base extends external_api {
                     'Latest release per newer branch (one entry per branch).'
                 ),
             ]),
+            'active' => new external_single_structure([
+                'last_5_min' => new external_value(PARAM_INT, 'Logged-in users active in the last 5 minutes.'),
+                'last_hour' => new external_value(PARAM_INT, 'Logged-in users active in the last hour.'),
+            ], 'Lightweight active-user counts for high-frequency liveness.', VALUE_OPTIONAL),
         ]);
     }
 

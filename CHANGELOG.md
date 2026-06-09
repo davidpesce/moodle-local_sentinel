@@ -13,6 +13,19 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.16.0] — schema_version 3 — 2026-06-09
+
+Additive; no envelope shape change (`schema_version` unchanged).
+
+- The cheap `get_status` liveness probe now carries an **`active`** block
+  (`status.active.last_5_min` / `last_hour`) — the same lastaccess-based
+  logged-in-user counts as the `health` slice, factored into a shared
+  `health::active_user_counts()` helper. This lets a dashboard refresh
+  "who's active right now" on the 5-minute liveness cadence **without** a full
+  snapshot pull. The counts are indexed `lastaccess` range scans, so the probe
+  stays cheap. The field is `VALUE_OPTIONAL` so the egress filter can still
+  withhold it.
+
 ## [2.15.3] — schema_version 3 — 2026-06-09
 
 Bug fix; no envelope shape change.

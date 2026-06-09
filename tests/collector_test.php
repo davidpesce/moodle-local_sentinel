@@ -126,6 +126,24 @@ final class collector_test extends \advanced_testcase {
         $this->assertArrayHasKey('branch_eol_days_remaining', $status);
         $this->assertArrayHasKey('build_age_days', $status);
         $this->assertIsBool($status['maintenance_enabled']);
+        // Lightweight active-user counts ride the cheap liveness probe.
+        $this->assertArrayHasKey('active', $status);
+        $this->assertArrayHasKey('last_5_min', $status['active']);
+        $this->assertArrayHasKey('last_hour', $status['active']);
+        $this->assertIsInt($status['active']['last_5_min']);
+    }
+
+    public function test_active_user_counts_match_status_and_health(): void {
+        $this->resetAfterTest();
+        $this->getDataGenerator()->create_user(['lastaccess' => time() - 60]);
+
+        $counts = collectors\health::active_user_counts();
+        $status = collectors\status::collect();
+
+        $this->assertGreaterThanOrEqual(1, $counts['last_5_min']);
+        // The status slice reports the same shared figures.
+        $this->assertSame($counts['last_5_min'], $status['active']['last_5_min']);
+        $this->assertSame($counts['last_hour'], $status['active']['last_hour']);
     }
 
     public function test_environment_keys(): void {

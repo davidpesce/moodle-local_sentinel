@@ -379,23 +379,34 @@ class health {
      * @return array
      */
     protected static function collect_sessions(): array {
+        global $DB;
+
+        $counts = self::active_user_counts();
+        return [
+            'active_last_5_min' => $counts['last_5_min'],
+            'active_last_hour' => $counts['last_hour'],
+            'total_rows' => (int) $DB->count_records('sessions'),
+        ];
+    }
+
+    /**
+     * Distinct real logged-in users active in the last 5 minutes / hour, by
+     * `mdl_user.lastaccess` (indexed — a cheap range count, safe for the
+     * high-frequency liveness probe). Excludes deleted users and the Guest
+     * account; real users of any role count. Shared by the `health` slice and
+     * the cheap `status`/get_status slice so both report identical figures.
+     *
+     * @return array{last_5_min: int, last_hour: int}
+     */
+    public static function active_user_counts(): array {
         global $DB, $CFG;
 
         $now = time();
         $select = 'deleted = 0 AND id <> :guestid AND lastaccess > :since';
         $params = ['guestid' => (int) $CFG->siteguest];
         return [
-            'active_last_5_min' => (int) $DB->count_records_select(
-                'user',
-                $select,
-                $params + ['since' => $now - 300]
-            ),
-            'active_last_hour' => (int) $DB->count_records_select(
-                'user',
-                $select,
-                $params + ['since' => $now - 3600]
-            ),
-            'total_rows' => (int) $DB->count_records('sessions'),
+            'last_5_min' => (int) $DB->count_records_select('user', $select, $params + ['since' => $now - 300]),
+            'last_hour' => (int) $DB->count_records_select('user', $select, $params + ['since' => $now - 3600]),
         ];
     }
 

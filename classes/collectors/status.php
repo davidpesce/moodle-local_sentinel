@@ -65,6 +65,10 @@ class status {
             'branch_eol_days_remaining' => self::branch_eol_days_remaining((int) $CFG->branch),
             'build_age_days' => self::build_age_days((int) $CFG->version),
             'core_update' => self::collect_core_update(),
+            // Lightweight active-user counts carried on the cheap liveness probe
+            // (get_status), so the dashboard can refresh "who's active now" on
+            // the 5-min liveness cadence without a full snapshot pull.
+            'active' => health::active_user_counts(),
         ];
     }
 
