@@ -13,6 +13,25 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.15.0] — schema_version 3 — 2026-06-09
+
+Self-registration now provisions **pull** as well as push. The register payload
+carries a freshly-minted (or reused) web-service `ws_token` alongside the push
+secret, so the dashboard can fetch on demand — e.g. a fresh "who's active right
+now" read before a maintenance window — instead of waiting for the next 15-minute
+push.
+
+- `register::run()` calls the idempotent setup helper to ensure a WS token
+  (enabling web services + REST and the Sentinel user/role as a side effect of
+  registering) and includes it in the body; `build_payload()` gains a `ws_token`
+  field. Best-effort: if minting fails, registration proceeds **push-only**
+  (empty token).
+- Privacy: the registration metadata now declares the transmitted `ws_token`
+  (a machine credential, not user data). HTTPS-only is still enforced, so the
+  token never crosses plaintext.
+- No envelope shape change (`schema_version` unchanged) — this is a
+  registration-protocol addition.
+
 ## [2.14.2] — schema_version 3 — 2026-06-08
 
 Bug fix; no envelope shape change.

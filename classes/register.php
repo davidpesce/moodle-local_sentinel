@@ -46,19 +46,42 @@ class register {
     /**
      * Build the registration request body.
      *
-     * Deliberately carries only site identity + the generated machine credential
-     * — no user personal data. Kept as a separate method so the no-PII guarantee
-     * is unit-testable without mocking the HTTP layer.
+     * Deliberately carries only site identity + generated machine credentials
+     * (a push secret and a web-service token) — no user personal data. Kept as a
+     * separate method so the no-PII guarantee is unit-testable without mocking
+     * the HTTP layer.
      *
      * @param string $secret The push secret to register.
+     * @param string $wstoken The web-service token to register (may be empty if
+     *                        minting failed — the site stays push-only).
      * @return array
      */
-    public static function build_payload(string $secret): array {
+    public static function build_payload(string $secret, string $wstoken = ''): array {
         return [
             'site' => collector::get_site_identity(),
             'plugin' => collector::get_plugin_identity(),
             'push_secret' => $secret,
+            'ws_token' => $wstoken,
         ];
+    }
+
+    /**
+     * Ensure a web-service token exists for the dashboard to pull with, and
+     * return it. Idempotent via the setup helper (enables web services + REST,
+     * ensures the Sentinel user/role, mints or reuses the token). Returns '' if
+     * provisioning fails, so registration degrades to push-only rather than
+     * aborting.
+     *
+     * @return string
+     */
+    protected static function ensure_ws_token(): string {
+        try {
+            return \local_sentinel\setup\helper::run()->token;
+        } catch (\Throwable $e) {
+            debugging('local_sentinel: WS token provisioning failed during registration: '
+                . $e->getMessage(), DEBUG_DEVELOPER);
+            return '';
+        }
     }
 
     /**
@@ -98,7 +121,12 @@ class register {
         }
         set_config('pushendpoint', $base . '/ingest/snapshot/', 'local_sentinel');
 
-        $payload = self::build_payload($secret);
+        // Provision a pull token too, so the dashboard can fetch on demand (e.g.
+        // a fresh "who's active right now" read before a maintenance window).
+        // Best-effort: registration proceeds push-only if minting fails.
+        $wstoken = self::ensure_ws_token();
+
+        $payload = self::build_payload($secret, $wstoken);
         $identity = $payload['site'];
 
         registration_state::record_attempt();

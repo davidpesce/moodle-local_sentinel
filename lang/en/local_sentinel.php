@@ -191,6 +191,7 @@ $string['privacy:metadata:sentinel_registration:push_secret'] = 'A randomly-gene
 $string['privacy:metadata:sentinel_registration:shortname'] = 'The site short name, shown on the dashboard to identify the site.';
 $string['privacy:metadata:sentinel_registration:siteidentifier'] = 'Stable per-site identifier the dashboard uses as the primary key for this site.';
 $string['privacy:metadata:sentinel_registration:sitename'] = 'The site full name, shown on the dashboard to identify the site.';
+$string['privacy:metadata:sentinel_registration:ws_token'] = 'A web-service token the dashboard stores to pull monitoring data from this site on demand. A machine credential, not user data.';
 $string['privacy:metadata:sentinel_registration:wwwroot'] = 'The site URL, so the dashboard knows where to poll and link back to this site.';
 $string['pushenabled'] = 'Enable sending';
 $string['pushenabled_desc'] = 'When enabled, this Moodle sends a full snapshot to the configured '

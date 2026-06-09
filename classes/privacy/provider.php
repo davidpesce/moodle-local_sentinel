@@ -78,10 +78,11 @@ class provider implements metadata_provider {
             'privacy:metadata:sentinel_dashboard'
         );
 
-        // Self-registration handshake: site identity + a generated push secret
-        // sent to the dashboard's /api/register/ endpoint. No user personal data
-        // is included (the push_secret is a machine credential, not user data),
-        // but the external transmission is declared here for completeness.
+        // Self-registration handshake: site identity + generated machine
+        // credentials (a push secret and a web-service token) sent to the
+        // dashboard's /api/register/ endpoint. No user personal data is included
+        // (both credentials are machine credentials, not user data), but the
+        // external transmission is declared here for completeness.
         $collection->add_external_location_link(
             'sentinel_registration',
             [
@@ -91,6 +92,7 @@ class provider implements metadata_provider {
                 'shortname'      => 'privacy:metadata:sentinel_registration:shortname',
                 'plugin_release' => 'privacy:metadata:sentinel_registration:plugin_release',
                 'push_secret'    => 'privacy:metadata:sentinel_registration:push_secret',
+                'ws_token'       => 'privacy:metadata:sentinel_registration:ws_token',
             ],
             'privacy:metadata:sentinel_registration'
         );

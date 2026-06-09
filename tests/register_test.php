@@ -48,20 +48,33 @@ final class register_test extends \advanced_testcase {
         // incidental framework output; absorb it so the assertions below stay
         // deterministic (the same condition flags the snapshot collector tests).
         ob_start();
-        $payload = register::build_payload('sek');
+        $payload = register::build_payload('sek', 'wstok');
         ob_end_clean();
 
-        $this->assertSame(['site', 'plugin', 'push_secret'], array_keys($payload));
+        $this->assertSame(['site', 'plugin', 'push_secret', 'ws_token'], array_keys($payload));
         $this->assertSame('sek', $payload['push_secret']);
+        $this->assertSame('wstok', $payload['ws_token']);
         $this->assertSame(
             ['wwwroot', 'siteidentifier', 'sitename', 'shortname'],
             array_keys($payload['site'])
         );
-        // No user-identifying keys anywhere in the body.
+        // No user-identifying keys anywhere in the body (both credentials are
+        // machine credentials, not user data).
         $flat = json_encode($payload);
         foreach (['username', 'firstname', 'lastname', 'email', 'userid'] as $forbidden) {
             $this->assertStringNotContainsString($forbidden, $flat);
         }
+    }
+
+    public function test_build_payload_ws_token_defaults_empty(): void {
+        $this->resetAfterTest();
+
+        ob_start();
+        $payload = register::build_payload('sek');
+        ob_end_clean();
+
+        // Push-only fallback: an omitted token registers as empty, not missing.
+        $this->assertSame('', $payload['ws_token']);
     }
 
     public function test_run_refuses_when_disabled(): void {
