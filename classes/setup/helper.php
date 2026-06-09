@@ -142,6 +142,26 @@ class helper {
         }
         $result->userid = (int) $user->id;
 
+        // 5b. Required custom profile fields would otherwise make the service
+        // account "not fully set up", which Moodle rejects WS auth for
+        // (errorcode usernotfullysetup) — seen on sites with a required custom
+        // user profile field. The account never uses the site UI, so fill any
+        // required/visible/unlocked-but-empty field with a placeholder.
+        $filled = self::satisfy_required_profile_fields($user->id);
+        if ($filled) {
+            $result->steps[] = 'Filled required profile field(s) for the service user: '
+                . implode(', ', $filled) . '.';
+        }
+        // Safety net: surface the rare case a (third-party) field type's
+        // is_empty() validates the value rather than just checking presence, so
+        // the placeholder didn't satisfy it — better a visible warning than a
+        // silent usernotfullysetup at pull time.
+        require_once($CFG->dirroot . '/lib/moodlelib.php');
+        if (user_not_fully_set_up(\core_user::get_user($user->id))) {
+            $result->steps[] = 'WARNING: the service user is still not fully set up — a required '
+                . 'profile field likely needs a manual value (its field type rejects the placeholder).';
+        }
+
         // 6. Role assignment at system context.
         $assigned = $DB->record_exists('role_assignments', [
             'roleid' => $roleid,
@@ -234,5 +254,47 @@ class helper {
             'tokentype' => EXTERNAL_TOKEN_PERMANENT,
         ]);
         return $token ? $token->token : null;
+    }
+
+    /** Placeholder stored in required profile fields for the service account. */
+    protected const PROFILE_PLACEHOLDER = 'n/a';
+
+    /**
+     * Give the service account a placeholder for any required custom profile
+     * field it has left empty, so `user_not_fully_set_up()` passes and WS auth
+     * isn't rejected with `usernotfullysetup`. Mirrors the condition in
+     * `profile_has_required_custom_fields_set()` (required, not locked, empty).
+     * The value is immaterial — the account never uses the site UI.
+     *
+     * @param int $userid
+     * @return string[] shortnames of the fields filled (empty if none needed)
+     */
+    protected static function satisfy_required_profile_fields(int $userid): array {
+        global $CFG, $DB;
+
+        require_once($CFG->dirroot . '/user/profile/lib.php');
+
+        $filled = [];
+        foreach (profile_get_user_fields_with_data($userid) as $field) {
+            if (!$field->is_required() || $field->is_locked() || !$field->is_empty()) {
+                continue;
+            }
+            $fieldid = (int) $field->fieldid;
+            $existing = $DB->get_record('user_info_data', ['userid' => $userid, 'fieldid' => $fieldid]);
+            if ($existing) {
+                $existing->data = self::PROFILE_PLACEHOLDER;
+                $existing->dataformat = FORMAT_MOODLE;
+                $DB->update_record('user_info_data', $existing);
+            } else {
+                $DB->insert_record('user_info_data', (object) [
+                    'userid' => $userid,
+                    'fieldid' => $fieldid,
+                    'data' => self::PROFILE_PLACEHOLDER,
+                    'dataformat' => FORMAT_MOODLE,
+                ]);
+            }
+            $filled[] = $field->field->shortname;
+        }
+        return $filled;
     }
 }

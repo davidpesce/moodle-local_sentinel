@@ -13,6 +13,20 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.15.3] — schema_version 3 — 2026-06-09
+
+Bug fix; no envelope shape change.
+
+- Setup now satisfies **required custom profile fields** for the `sentinel`
+  web-service user. On a site with a required custom user profile field, the
+  auto-created service account counted as "not fully set up", so the dashboard's
+  pull was rejected with `usernotfullysetup`. Setup (and registration, which runs
+  setup) now fills any required/visible/unlocked-but-empty field with a
+  placeholder — the account never uses the site UI, so the value is immaterial.
+  Idempotent and self-healing: re-running setup / re-registering fixes an
+  already-created account.
+- Maturity raised `ALPHA` → `BETA` (in production across the fleet).
+
 ## [2.15.2] — schema_version 3 — 2026-06-09
 
 Bug fix; no envelope shape change.
