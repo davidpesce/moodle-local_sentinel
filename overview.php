@@ -68,9 +68,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($driftaction, ['ignore', '
     redirect(new moodle_url('/local/sentinel/overview.php', ['tab' => 'configdrift']));
 }
 
+// Per-user dismissal of the "connect a dashboard" pointer below.
+if (optional_param('dismissdashboardnote', 0, PARAM_INT)) {
+    require_sesskey();
+    set_user_preference('local_sentinel_dashboard_note_dismissed', 1);
+    redirect(new moodle_url('/local/sentinel/overview.php', ['tab' => $tab]));
+}
+
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('overview_heading', 'local_sentinel'));
 echo $PAGE->get_renderer('local_sentinel')->sentinel_subnav('overview');
+
+// Gentle pointer to central monitoring for sites not yet connected (neither
+// push configured nor a registration activated). Dismissible per user, and
+// disappears on its own once the site connects.
+$overviewpushenabled = (bool) get_config('local_sentinel', 'pushenabled');
+$overviewregstatus = \local_sentinel\registration_state::get()['status'] ?? 'never';
+if (
+    !$overviewpushenabled && $overviewregstatus !== 'activated'
+        && !get_user_preferences('local_sentinel_dashboard_note_dismissed', false)
+) {
+    $dismissurl = new moodle_url(
+        '/local/sentinel/overview.php',
+        ['tab' => $tab, 'dismissdashboardnote' => 1, 'sesskey' => sesskey()]
+    );
+    $connecturl = new moodle_url('/local/sentinel/connect.php');
+    echo $OUTPUT->notification(
+        get_string('overview_dashboard_note', 'local_sentinel', [
+            'connecturl' => $connecturl->out(false),
+            'dismissurl' => $dismissurl->out(false),
+        ]),
+        \core\output\notification::NOTIFY_INFO,
+        false
+    );
+}
 
 // Collect everything in one call (via the UI-side cache). Catch surface
 // errors so a broken collector never breaks the page — operators get a

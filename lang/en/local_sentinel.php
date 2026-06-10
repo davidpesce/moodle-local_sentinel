@@ -106,6 +106,7 @@ $string['overview_connection_heading'] = 'Connection to remote dashboard';
 $string['overview_context_strip'] = '{$a->release} · snapshot generated {$a->generated}';
 $string['overview_cron_last_run'] = 'Cron last run';
 $string['overview_cron_never'] = 'never';
+$string['overview_dashboard_note'] = 'This page shows a live snapshot of this site only. Connect it to a Sentinel dashboard for continuous monitoring with alerting, uptime history, and scheduled reports across your whole fleet. <a href="{$a->connecturl}">Connect to a dashboard</a> · <a href="{$a->dismissurl}">Dismiss</a>';
 $string['overview_disk_free'] = 'Disk free (moodledata)';
 $string['overview_drift_current'] = 'Current';
 $string['overview_drift_default'] = 'Default';

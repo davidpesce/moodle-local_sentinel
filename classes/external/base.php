@@ -225,6 +225,13 @@ abstract class base extends external_api {
                 'distro' => new external_value(PARAM_RAW, 'Linux distribution ID (/etc/os-release).', VALUE_OPTIONAL),
                 'distro_version' => new external_value(PARAM_RAW, 'Distribution VERSION_ID.', VALUE_OPTIONAL),
                 'distro_name' => new external_value(PARAM_RAW, 'Distribution PRETTY_NAME.', VALUE_OPTIONAL),
+                'package_updates' => new external_single_structure([
+                    'checked' => new external_value(PARAM_BOOL, 'Whether update-notifier data was readable.'),
+                    'available' => self::nullable_int('Pending package updates (null = unknown).'),
+                    'security' => self::nullable_int('Pending security updates (null = unknown).'),
+                    'reboot_required' => new external_value(PARAM_BOOL, 'Whether /var/run/reboot-required exists.'),
+                    'source' => new external_value(PARAM_RAW, "Data source ('update-notifier') or empty."),
+                ], 'Pending OS package updates (Debian/Ubuntu, best-effort).', VALUE_OPTIONAL),
             ]),
             'webserver' => new external_single_structure([
                 'software' => new external_value(PARAM_RAW, 'SERVER_SOFTWARE value (empty under CLI).'),

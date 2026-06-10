@@ -80,7 +80,71 @@ class environment {
             'distro' => $osrelease['ID'] ?? '',
             'distro_version' => self::distro_version($osrelease),
             'distro_name' => $osrelease['PRETTY_NAME'] ?? '',
+            'package_updates' => self::collect_package_updates(),
         ];
+    }
+
+    /**
+     * Pending OS package updates + reboot-required flag (Debian/Ubuntu, best-effort).
+     *
+     * Raw facts only — the dashboard interprets. Sources readable without root:
+     *  - /var/lib/update-notifier/updates-available — text maintained by
+     *    update-notifier-common, e.g. "97 updates can be applied immediately." /
+     *    "60 of these updates are standard security updates."
+     *  - /var/run/reboot-required — existence flags a pending reboot.
+     *
+     * On hosts without update-notifier (non-Debian, containers, RHEL) the counts
+     * are null and `checked` is false; reboot_required is still reported when
+     * the flag file is detectable.
+     *
+     * @return array
+     */
+    protected static function collect_package_updates(): array {
+        $path = '/var/lib/update-notifier/updates-available';
+        $counts = ['available' => null, 'security' => null];
+        $checked = false;
+        if (is_readable($path)) {
+            $text = (string) @file_get_contents($path);
+            if ($text !== '') {
+                $counts = self::parse_updates_available($text);
+                $checked = true;
+            }
+        }
+        return [
+            'checked' => $checked,
+            'available' => $counts['available'],
+            'security' => $counts['security'],
+            'reboot_required' => file_exists('/var/run/reboot-required'),
+            'source' => $checked ? 'update-notifier' : '',
+        ];
+    }
+
+    /**
+     * Parse update-notifier's updates-available text into counts.
+     *
+     * Locale caveat: the file is written in the system locale. The security
+     * line is matched on the word "security" (English); on other locales the
+     * security count stays null while the total may still parse. Best-effort
+     * by design — null means "unknown", never 0.
+     *
+     * @param string $text contents of updates-available
+     * @return array{available: int|null, security: int|null}
+     */
+    public static function parse_updates_available(string $text): array {
+        $available = null;
+        $security = null;
+        foreach (preg_split('/\r?\n/', $text) as $line) {
+            if (!preg_match('/\d+/', $line, $m)) {
+                continue;
+            }
+            $count = (int) $m[0];
+            if ($security === null && stripos($line, 'security') !== false) {
+                $security = $count;
+            } else if ($available === null) {
+                $available = $count;
+            }
+        }
+        return ['available' => $available, 'security' => $security];
     }
 
     /**

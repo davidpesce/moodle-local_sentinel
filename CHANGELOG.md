@@ -13,6 +13,25 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.17.0] — schema_version 3 — 2026-06-10
+
+Additive; no envelope shape change (`schema_version` unchanged).
+
+- **OS package-update signal**: the `environment.os` block now carries a
+  **`package_updates`** object — `checked`, `available`, `security` (pending
+  update counts, null = unknown), `reboot_required`, and `source`. Read
+  root-free from update-notifier's `/var/lib/update-notifier/updates-available`
+  and `/var/run/reboot-required` on Debian/Ubuntu; on other hosts the counts
+  are null. Raw facts only — the dashboard decides what warrants attention.
+  `VALUE_OPTIONAL` so existing consumers are unaffected.
+- **Maturity raised to STABLE** ahead of a Moodle plugins-directory listing.
+  The collectors, setup, push pipeline, egress filter, and self-registration
+  have been stable across the 2.14–2.16 line.
+- The local Overview page now shows a **dismissible pointer to connecting a
+  Sentinel dashboard** (alerting, uptime history, scheduled reports) on sites
+  that have neither push configured nor a registration activated. It
+  disappears once connected, or permanently per user via Dismiss.
+
 ## [2.16.0] — schema_version 3 — 2026-06-09
 
 Additive; no envelope shape change (`schema_version` unchanged).
