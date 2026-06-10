@@ -13,6 +13,19 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.19.0] — schema_version 3 — 2026-06-10
+
+No envelope shape change (`schema_version` unchanged).
+
+- **One-paste provisioning codes.** The Connect page now accepts a single
+  provisioning code (`SNTL1.<base64url(JSON)>` carrying the dashboard base URL
+  + enrollment key) that fills in the connection settings, registers the site,
+  and enables the push pipeline in one step — replacing the type-the-URL,
+  type-the-key, click-register sequence. Vendor-neutral: any Sentinel
+  dashboard can issue codes; nothing is hardcoded. HTTPS-only, strict offline
+  parsing (`\local_sentinel\provisioning_code`), registration remains
+  explicit and opt-in.
+
 ## [2.18.0] — schema_version 3 — 2026-06-10
 
 No envelope shape change (`schema_version` unchanged).

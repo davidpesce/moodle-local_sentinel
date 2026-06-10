@@ -47,6 +47,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('test_push', 0, PARA
 }
 $testpushresult = optional_param('testresult', '', PARAM_RAW);
 
+// Provisioning-code handler — one paste configures the connection settings
+// and registers in a single step. Runs before output so we can redirect.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('do_provision', 0, PARAM_INT)) {
+    require_sesskey();
+    require_capability('moodle/site:config', context_system::instance());
+    $code = optional_param('provisioning_code', '', PARAM_RAW_TRIMMED);
+    $parsed = \local_sentinel\provisioning_code::parse($code);
+    if ($parsed === null) {
+        redirect(
+            new moodle_url('/local/sentinel/connect.php'),
+            get_string('registration_code_invalid', 'local_sentinel'),
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    set_config('dashboardbaseurl', $parsed['url'], 'local_sentinel');
+    set_config('enrollmentkey', $parsed['key'], 'local_sentinel');
+    set_config('registrationenabled', 1, 'local_sentinel');
+    [$provisionok, $provisionmessage] = \local_sentinel\register::run();
+    redirect(
+        new moodle_url('/local/sentinel/connect.php'),
+        $provisionmessage,
+        null,
+        $provisionok ? \core\output\notification::NOTIFY_SUCCESS : \core\output\notification::NOTIFY_ERROR
+    );
+}
+
 // Self-registration handler — runs before output so we can redirect cleanly.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('do_register', 0, PARAM_INT)) {
     require_sesskey();
@@ -176,6 +203,33 @@ echo html_writer::start_div('card mb-3');
 echo html_writer::start_div('card-body');
 echo html_writer::tag('h4', s(get_string('registration_heading', 'local_sentinel')), ['class' => 'h5']);
 echo html_writer::tag('p', s(get_string('registration_intro', 'local_sentinel')));
+
+// One-paste provisioning code: configures dashboard URL + enrollment key and
+// registers in a single step. Shown first — it's the fast path.
+echo html_writer::tag('p', s(get_string('registration_code_desc', 'local_sentinel')), ['class' => 'mb-2']);
+echo html_writer::start_tag('form', [
+    'method' => 'post',
+    'action' => (new moodle_url('/local/sentinel/connect.php'))->out(false),
+    'class' => 'mb-3',
+]);
+echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
+echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'do_provision', 'value' => 1]);
+echo html_writer::start_div('d-flex gap-2 align-items-start', ['style' => 'max-width: 640px;']);
+echo html_writer::empty_tag('input', [
+    'type' => 'text',
+    'name' => 'provisioning_code',
+    'class' => 'form-control',
+    'placeholder' => s(get_string('registration_code_label', 'local_sentinel')),
+    'autocomplete' => 'off',
+    'spellcheck' => 'false',
+    'aria-label' => s(get_string('registration_code_label', 'local_sentinel')),
+]);
+echo html_writer::tag('button', s(get_string('registration_code_button', 'local_sentinel')), [
+    'type' => 'submit', 'class' => 'btn btn-primary text-nowrap',
+]);
+echo html_writer::end_div();
+echo html_writer::end_tag('form');
+echo html_writer::tag('hr', '');
 
 if ($regstate['last_status'] === \local_sentinel\registration_state::STATUS_FAILED && $regstate['last_error'] !== '') {
     $regstatustext = get_string('registration_failed', 'local_sentinel', $regstate['last_error']);
