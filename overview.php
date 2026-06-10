@@ -152,15 +152,24 @@ echo html_writer::tag(
     ['class' => 'text-muted mb-3 small']
 );
 
-// Hover styles for the clickable metric cards. Inlined so the page is
-// self-contained (no project-wide stylesheet in this plugin).
+// Hover styles for the clickable metric cards + quiet styling for healthy
+// (zero-value) ones. Inlined so the page is self-contained (no project-wide
+// stylesheet in this plugin).
 echo '<style>
     a.sentinel-metric-card { color: inherit; text-decoration: none; display: block; height: 100%;
         transition: transform 0.1s, box-shadow 0.1s; }
     a.sentinel-metric-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
     a.sentinel-metric-card .metric-link-hint { opacity: 0.4; }
     a.sentinel-metric-card:hover .metric-link-hint { opacity: 0.9; }
+    a.sentinel-metric-card .card.sentinel-quiet { opacity: 0.65; }
+    a.sentinel-metric-card:hover .card.sentinel-quiet { opacity: 1; }
 </style>';
+
+// Section: Action needed. The page leads with what to DO — a severity-ordered
+// list of concrete actions derived from the snapshot, each linking to the
+// page where it gets fixed. Point-in-time by design; continuous watching is
+// the dashboard's job.
+echo local_sentinel_overview_action_panel(\local_sentinel\actions::from_snapshot($snapshot));
 
 // Four cards. Each is a link to the native Moodle page where the operator
 // can investigate the underlying data.
@@ -174,28 +183,28 @@ echo local_sentinel_overview_metric_card(
     get_string('overview_metric_critical', 'local_sentinel'),
     $critical,
     get_string('overview_metric_critical_subtext', 'local_sentinel'),
-    $critical > 0 ? 'border-danger' : 'border-success',
+    $critical > 0 ? 'border-danger' : 'sentinel-quiet',
     $reportstaburl
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_errors', 'local_sentinel'),
     $errors,
     get_string('overview_metric_errors_subtext', 'local_sentinel'),
-    $errors > 0 ? 'border-danger' : 'border-success',
+    $errors > 0 ? 'border-danger' : 'sentinel-quiet',
     $reportstaburl
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_plugin_updates', 'local_sentinel'),
     $pluginupdates,
     get_string('overview_metric_plugin_updates_subtext', 'local_sentinel'),
-    $pluginupdates > 0 ? 'border-warning' : 'border-success',
+    $pluginupdates > 0 ? 'border-warning' : 'sentinel-quiet',
     new moodle_url('/admin/plugins.php', null, 'additional')
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_core_update', 'local_sentinel'),
     $coreupdate,
     get_string('overview_metric_core_update_subtext', 'local_sentinel'),
-    $coreupdate > 0 ? 'border-warning' : 'border-success',
+    $coreupdate > 0 ? 'border-warning' : 'sentinel-quiet',
     new moodle_url('/admin/index.php')
 );
 echo html_writer::end_div();
@@ -259,6 +268,65 @@ function local_sentinel_overview_metric_card(
             ['class' => 'sentinel-metric-card']
         ),
         'col-md-3'
+    );
+}
+
+/**
+ * Render the "Action needed" panel from the derived action list.
+ *
+ * Severity-ordered rows, each with a badge, the message, and a link to the
+ * page where the admin acts. Empty list renders the green all-clear state.
+ *
+ * @param array $actions Items from \local_sentinel\actions::from_snapshot().
+ * @return string
+ */
+function local_sentinel_overview_action_panel(array $actions): string {
+    $heading = html_writer::tag(
+        'h4',
+        s(get_string('overview_action_heading', 'local_sentinel'))
+            . ' ' . html_writer::tag('span', (string) count($actions), [
+                'class' => 'badge ms-1 ' . (count($actions) ? 'text-bg-secondary' : 'text-bg-success'),
+            ]),
+        ['class' => 'h5 mb-2']
+    );
+
+    if (empty($actions)) {
+        $body = html_writer::div(
+            html_writer::tag('span', '✓ ', ['class' => 'text-success fw-bold'])
+            . html_writer::tag('strong', s(get_string('overview_action_none', 'local_sentinel')))
+            . ' ' . html_writer::tag(
+                'span',
+                s(get_string('overview_action_none_detail', 'local_sentinel')),
+                ['class' => 'text-muted small']
+            ),
+            'alert alert-success mb-0'
+        );
+        return html_writer::div($heading . $body, 'mb-4');
+    }
+
+    $badges = [
+        'danger' => 'text-bg-danger',
+        'warning' => 'text-bg-warning',
+        'info' => 'text-bg-info',
+    ];
+    $rows = '';
+    foreach ($actions as $action) {
+        $left = html_writer::tag('span', s($action['severity']), [
+            'class' => 'badge me-2 ' . ($badges[$action['severity']] ?? 'text-bg-secondary'),
+        ]) . s($action['message']);
+        $right = $action['url'] instanceof moodle_url
+            ? html_writer::link($action['url'], s(get_string('overview_action_go', 'local_sentinel')) . ' →', [
+                'class' => 'btn btn-sm btn-outline-secondary text-nowrap',
+            ])
+            : '';
+        $rows .= html_writer::div(
+            html_writer::div($left, 'me-3') . $right,
+            'list-group-item d-flex justify-content-between align-items-center'
+        );
+    }
+    return html_writer::div(
+        $heading . html_writer::div($rows, 'list-group'),
+        'mb-4'
     );
 }
 

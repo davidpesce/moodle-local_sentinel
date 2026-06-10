@@ -13,6 +13,25 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.20.0] — schema_version 3 — 2026-06-10
+
+UI only; no envelope shape change (`schema_version` unchanged).
+
+- **Overview now leads with "Action needed"**: a severity-ordered list of
+  concrete actions derived from the snapshot (critical checks, stalled cron,
+  failing/overdue tasks, unready cache stores, expiring/expired TLS cert, low
+  disk, branch security-EOL countdown, core/plugin updates, backup errors,
+  locked accounts, expiring tokens, token hygiene, debugging enabled, pending
+  OS security updates) — each linking to the page where it gets fixed. Green
+  all-clear state when nothing matches. (`\local_sentinel\actions`, fully
+  unit-tested.)
+- **Progressive disclosure**: the Reports tab shows non-OK checks expanded
+  with passing checks collapsed behind an expander; the Plugins tab leads
+  with missing/updatable plugins and collapses the up-to-date bulk. Nothing
+  removed — attention is earned, not demanded.
+- **Quiet healthy state**: zero-value metric cards render muted; only
+  problems get color.
+
 ## [2.19.0] — schema_version 3 — 2026-06-10
 
 No envelope shape change (`schema_version` unchanged).

@@ -256,6 +256,12 @@ class renderer extends plugin_renderer_base {
             get_string('overview_plugin_update', 'local_sentinel'),
         ];
 
+        // Exceptions first (missing from disk / update available), the
+        // up-to-date bulk collapsed behind an expander — nothing is removed,
+        // attention is just earned.
+        $headrow = $table->head;
+        $attention = [];
+        $fine = [];
         foreach ($all as $row) {
             $version = (string) ($row['release'] ?? '') . ' (' . ((int) ($row['version_disk'] ?? 0)) . ')';
             if (!empty($row['missing_from_disk'])) {
@@ -268,10 +274,29 @@ class renderer extends plugin_renderer_base {
             }
             $name = html_writer::tag('code', s((string) ($row['component'] ?? '')))
                 . html_writer::tag('div', s((string) ($row['name'] ?? '')), ['class' => 'small text-muted']);
-            $table->data[] = [$name, s($version), $update];
+            $cells = [$name, s($version), $update];
+            if (!empty($row['missing_from_disk']) || !empty($row['update_available'])) {
+                $attention[] = $cells;
+            } else {
+                $fine[] = $cells;
+            }
         }
 
-        return $out . html_writer::table($table);
+        if (!empty($attention)) {
+            $table->data = $attention;
+            $out .= html_writer::table($table);
+        }
+        if (!empty($fine)) {
+            $finetable = new \html_table();
+            $finetable->attributes['class'] = 'admintable generaltable';
+            $finetable->head = $headrow;
+            $finetable->data = $fine;
+            $out .= $this->collapsed_section(
+                get_string('overview_collapsed_plugins', 'local_sentinel', count($fine)),
+                html_writer::table($finetable)
+            );
+        }
+        return $out;
     }
 
     /**
@@ -401,31 +426,78 @@ class renderer extends plugin_renderer_base {
             // Mirror the native /report/status/ table: status badge first
             // (right-aligned), then check name, then summary. Use admintable
             // CSS classes so theming matches site-wide check reports.
-            $table = new \html_table();
-            $table->attributes['class'] = 'admintable generaltable';
-            $table->head = [
-                get_string('status'),
-                get_string('check'),
-                get_string('summary'),
-            ];
-            $table->colclasses = [
-                'rightalign status',
-                'leftalign check',
-                'leftalign summary',
-            ];
+            // Non-OK checks render expanded; the passing bulk is collapsed
+            // behind an expander so exceptions get the attention.
+            $attention = [];
+            $fine = [];
             foreach ($checks as $c) {
                 $status = (string) ($c['status'] ?? '');
                 $summary = (string) ($c['summary'] ?? '');
                 $badge = $this->check_result(new result($status, $summary));
-                $table->data[] = [
+                $cells = [
                     $badge,
                     s((string) ($c['name'] ?? '')),
                     s($summary),
                 ];
+                if (in_array($status, ['warning', 'error', 'critical'], true)) {
+                    $attention[] = $cells;
+                } else {
+                    $fine[] = $cells;
+                }
             }
-            $out .= html_writer::table($table);
+            if (!empty($attention)) {
+                $out .= html_writer::table($this->checks_table($attention));
+            }
+            if (!empty($fine)) {
+                $out .= $this->collapsed_section(
+                    get_string('overview_collapsed_checks', 'local_sentinel', count($fine)),
+                    html_writer::table($this->checks_table($fine))
+                );
+            }
         }
         return $out;
+    }
+
+    /**
+     * Build the shared checks table shell (status / check / summary columns).
+     *
+     * @param array $data Table rows.
+     * @return \html_table
+     */
+    protected function checks_table(array $data): \html_table {
+        $table = new \html_table();
+        $table->attributes['class'] = 'admintable generaltable';
+        $table->head = [
+            get_string('status'),
+            get_string('check'),
+            get_string('summary'),
+        ];
+        $table->colclasses = [
+            'rightalign status',
+            'leftalign check',
+            'leftalign summary',
+        ];
+        $table->data = $data;
+        return $table;
+    }
+
+    /**
+     * Wrap content in a collapsed <details> expander with a summary line.
+     *
+     * The progressive-disclosure primitive for the Overview tabs: bulk data
+     * stays one click away rather than dominating the page.
+     *
+     * @param string $summary Plain-text summary line.
+     * @param string $content Pre-rendered HTML body.
+     * @return string
+     */
+    protected function collapsed_section(string $summary, string $content): string {
+        return html_writer::tag(
+            'details',
+            html_writer::tag('summary', s($summary), ['class' => 'text-muted small mb-2'])
+            . $content,
+            ['class' => 'mb-3']
+        );
     }
 
     /**
