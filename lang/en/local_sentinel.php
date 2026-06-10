@@ -225,7 +225,7 @@ $string['registration_intro'] = 'Register this site with the dashboard in one st
     . 'no secrets to copy by hand. Configure the dashboard base URL and enrollment key in Settings first.';
 $string['registration_misconfigured'] = 'Set the dashboard base URL and enrollment key in Settings first.';
 $string['registration_never'] = 'Not yet registered.';
-$string['registration_pending'] = 'Registered. Awaiting operator approval on the dashboard.';
+$string['registration_pending'] = 'Registered. Awaiting operator approval on the dashboard — sending is enabled and will start automatically once approved.';
 $string['registration_register_button'] = 'Register with dashboard';
 $string['registration_rejected'] = 'This site\'s registration was rejected by the dashboard operator.';
 $string['registration_status_label'] = 'Status';

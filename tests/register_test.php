@@ -116,4 +116,47 @@ final class register_test extends \advanced_testcase {
         $this->assertEmpty(get_config('local_sentinel', 'pushsecret'));
         $this->assertEmpty(get_config('local_sentinel', 'pushendpoint'));
     }
+
+    public function test_enable_push_pipeline_enables_setting_and_task(): void {
+        $this->resetAfterTest();
+
+        // Fresh-install state: setting off, task shipped disabled, not customised.
+        $task = \core\task\manager::get_scheduled_task(\local_sentinel\task\push_snapshot::class);
+        $this->assertTrue($task->get_disabled());
+        $this->assertEmpty(get_config('local_sentinel', 'pushenabled'));
+
+        register::enable_push_pipeline();
+
+        $this->assertEquals(1, get_config('local_sentinel', 'pushenabled'));
+        $task = \core\task\manager::get_scheduled_task(\local_sentinel\task\push_snapshot::class);
+        $this->assertFalse($task->get_disabled());
+    }
+
+    public function test_enable_push_pipeline_respects_admin_customisation(): void {
+        $this->resetAfterTest();
+
+        // Admin explicitly customised the task and kept it disabled.
+        $task = \core\task\manager::get_scheduled_task(\local_sentinel\task\push_snapshot::class);
+        $task->set_disabled(true);
+        $task->set_customised(true);
+        \core\task\manager::configure_scheduled_task($task);
+
+        register::enable_push_pipeline();
+
+        // Setting flips on, but the hand-configured task state is left alone.
+        $this->assertEquals(1, get_config('local_sentinel', 'pushenabled'));
+        $task = \core\task\manager::get_scheduled_task(\local_sentinel\task\push_snapshot::class);
+        $this->assertTrue($task->get_disabled());
+    }
+
+    public function test_enable_push_pipeline_is_idempotent(): void {
+        $this->resetAfterTest();
+
+        register::enable_push_pipeline();
+        register::enable_push_pipeline();
+
+        $task = \core\task\manager::get_scheduled_task(\local_sentinel\task\push_snapshot::class);
+        $this->assertFalse($task->get_disabled());
+        $this->assertEquals(1, get_config('local_sentinel', 'pushenabled'));
+    }
 }

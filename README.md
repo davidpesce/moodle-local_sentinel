@@ -9,7 +9,7 @@ the data source; the central dashboard is a separate concern.
 
 ## Requirements
 
-- Moodle 4.5 LTS or later (supported through 5.1)
+- Moodle 4.5 LTS or later (supported through 5.2)
 - Web services enabled with the REST protocol
 
 ## Install

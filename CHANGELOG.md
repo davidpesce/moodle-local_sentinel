@@ -13,6 +13,22 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.18.0] — schema_version 3 — 2026-06-10
+
+No envelope shape change (`schema_version` unchanged).
+
+- **Fix: registration now enables the push pipeline.** Previously a successful
+  registration set `pushenabled` only on immediate (allowlisted) activation,
+  and the `push_snapshot` scheduled task — which ships disabled — was never
+  enabled at all, so a "connected" site silently never pushed. Registration
+  (both *activated* and *pending* outcomes) now enables the setting **and**
+  the scheduled task; a pending site starts sending automatically the moment
+  the operator approves. An admin's explicit task customisation is respected
+  (a hand-configured task's disabled state is left alone).
+- **Moodle 5.2 support**: `$plugin->supported` extended to `[405, 502]`,
+  branch 502 added to the security-EOL map (2027-10-04), CI matrix extended
+  to `MOODLE_502_STABLE` (PHP 8.3/8.4).
+
 ## [2.17.0] — schema_version 3 — 2026-06-10
 
 Additive; no envelope shape change (`schema_version` unchanged).

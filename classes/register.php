@@ -85,6 +85,34 @@ class register {
     }
 
     /**
+     * Make the push pipeline actually run: enable the pushenabled setting AND
+     * the push_snapshot scheduled task (which ships disabled by default).
+     *
+     * Without the task half, a "connected" site silently never pushes. Called
+     * on every successful registration submission — including PENDING, so that
+     * once the operator approves on the dashboard the very next task run goes
+     * through with no further action on this site. (While pending, pushes get
+     * a distinct 409 the dashboard sends for unapproved sites; that state is
+     * visible on the Connect page.)
+     *
+     * An admin's explicit task customisation is respected: if the task record
+     * was hand-configured (customised flag), its disabled state is left alone.
+     */
+    public static function enable_push_pipeline(): void {
+        set_config('pushenabled', 1, 'local_sentinel');
+        try {
+            $task = \core\task\manager::get_scheduled_task(\local_sentinel\task\push_snapshot::class);
+            if ($task && $task->get_disabled() && !$task->is_customised()) {
+                $task->set_disabled(false);
+                \core\task\manager::configure_scheduled_task($task);
+            }
+        } catch (\Throwable $e) {
+            debugging('local_sentinel: could not enable the push_snapshot task: '
+                . $e->getMessage(), DEBUG_DEVELOPER);
+        }
+    }
+
+    /**
      * Attempt to register this site with the configured dashboard.
      *
      * @return array [bool $ok, string $message, string $status] — $status is one
@@ -155,10 +183,10 @@ class register {
         if ($httpcode === 200 && ($status === 'activated' || $status === 'pending')) {
             $mapped = $status === 'activated' ? registration_state::STATUS_ACTIVATED : registration_state::STATUS_PENDING;
             registration_state::record_result($mapped, $httpcode, $identity['siteidentifier']);
-            if ($mapped === registration_state::STATUS_ACTIVATED) {
-                // Approved immediately (allowlisted) — start sending now.
-                set_config('pushenabled', 1, 'local_sentinel');
-            }
+            // Start the pipeline for BOTH outcomes: an activated site sends
+            // immediately; a pending site starts sending the moment the
+            // operator approves, with no further action needed here.
+            self::enable_push_pipeline();
             return [true, get_string('registration_' . $mapped, 'local_sentinel'), $mapped];
         }
 
