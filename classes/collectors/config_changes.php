@@ -31,6 +31,9 @@ class config_changes {
     /** @var int Default number of rows to return. */
     public const DEFAULT_LIMIT = 50;
 
+    /** @var string Placeholder shipped in place of a secret setting's value. */
+    public const REDACTED = '__sentinel_redacted__';
+
     /**
      * Collect.
      *
@@ -56,6 +59,12 @@ class config_changes {
 
         $entries = [];
         foreach ($rows as $row) {
+            // Moodle records the literal value in {config_log}, so a change to
+            // an SMTP password, OAuth secret, API key, cronremotepassword, etc.
+            // would otherwise ship off-site verbatim. Redact the value (keeping
+            // the name for audit value) when the setting name looks secret-
+            // bearing — same best-effort detection config_drift uses.
+            $sensitive = config_drift::name_is_sensitive((string) $row->name);
             $entries[] = [
                 'id' => (int) $row->id,
                 'time' => (int) $row->timemodified,
@@ -63,8 +72,8 @@ class config_changes {
                 'username' => $row->username,
                 'plugin' => $row->plugin,
                 'name' => $row->name,
-                'oldvalue' => $row->oldvalue,
-                'newvalue' => $row->value,
+                'oldvalue' => $sensitive ? self::REDACTED : $row->oldvalue,
+                'newvalue' => $sensitive ? self::REDACTED : $row->value,
             ];
         }
         return [

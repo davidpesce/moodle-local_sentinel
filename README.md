@@ -49,8 +49,8 @@ Available functions:
 | `local_sentinel_get_health` | Cron, tasks, sessions, disk, backups, mail |
 | `local_sentinel_get_auth` | Enabled auth methods + user counts per method |
 | `local_sentinel_get_reports` | Performance / Security / System status checks + MFA stats |
-| `local_sentinel_get_config_changes` | Recent `mdl_config_log` entries |
-| `local_sentinel_get_config_drift` | Settings whose current value differs from default (secrets excluded) |
+| `local_sentinel_get_config_changes` | Recent `mdl_config_log` entries (values of secret-named settings redacted, best-effort) |
+| `local_sentinel_get_config_drift` | Settings whose current value differs from default (best-effort secret exclusion by class + name pattern) |
 
 Each function returns a versioned envelope. The structure is validated
 server-side via Moodle's `clean_returnvalue()`; auto-generated docs are
@@ -87,8 +87,8 @@ plus `site`. Snapshot slices and their high-level contents:
 | `health` | Cron, scheduled + adhoc tasks, sessions, disk, mail, admins (with last-changed), backup, upgrade log, foot-gun flags |
 | `auth` | Enabled auth methods, per-method user counts, failed-login signals (locked accounts, top targets) |
 | `reports` | Performance / Security / System status checks (via `\core\check\manager`) + MFA factor enrolment stats |
-| `config_changes` | Tail of `mdl_config_log` (default last 50, configurable) |
-| `config_drift` | Settings whose current value differs from declared default (secrets excluded by class + name pattern) |
+| `config_changes` | Tail of `mdl_config_log` (default last 50, configurable). Values of secret-named settings (`smtppass`, `*secret`, `*token`, …) are redacted — best-effort, name-pattern based. |
+| `config_drift` | Settings whose current value differs from declared default (best-effort secret exclusion by class + name pattern) |
 
 See `CHANGELOG.md` for `schema_version` history. Versioning rule:
 `schema_version` bumps only on breaking shape changes; additive fields do

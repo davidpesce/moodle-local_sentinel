@@ -193,6 +193,7 @@ $string['privacy:metadata:sentinel_registration:siteidentifier'] = 'Stable per-s
 $string['privacy:metadata:sentinel_registration:sitename'] = 'The site full name, shown on the dashboard to identify the site.';
 $string['privacy:metadata:sentinel_registration:ws_token'] = 'A web-service token the dashboard stores to pull monitoring data from this site on demand. A machine credential, not user data.';
 $string['privacy:metadata:sentinel_registration:wwwroot'] = 'The site URL, so the dashboard knows where to poll and link back to this site.';
+$string['push_https_required'] = 'Refusing to push: the dashboard ingest URL must use HTTPS, otherwise the shared secret and snapshot would be sent in plaintext.';
 $string['pushenabled'] = 'Enable sending';
 $string['pushenabled_desc'] = 'When enabled, this Moodle sends a full snapshot to the configured '
     . 'dashboard endpoint on a schedule (every 15 minutes by default).';

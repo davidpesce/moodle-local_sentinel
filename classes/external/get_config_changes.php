@@ -63,7 +63,15 @@ class get_config_changes extends base {
         ] = self::validate_parameters(self::execute_parameters(), ['limit' => $limit]);
 
         $snapshot = collector::get_slice_for_egress('config_changes');
-        $snapshot['config_changes'] = config_changes::collect($limit);
+        // If the admin excluded the config_changes slice, get_slice_for_egress
+        // returns an envelope WITHOUT the key — respect that and do not re-add
+        // it. Only honour the caller's custom row limit when the slice is
+        // present, then re-apply the field-level egress filter so excluded
+        // sub-paths stay stripped from the freshly collected rows.
+        if (array_key_exists('config_changes', $snapshot)) {
+            $snapshot['config_changes'] = config_changes::collect($limit);
+            $snapshot = collector::apply_egress_filter($snapshot);
+        }
         return $snapshot;
     }
 

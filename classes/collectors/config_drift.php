@@ -34,8 +34,9 @@ namespace local_sentinel\collectors;
  *
  * Secrets (password-class settings and anything matching common secret
  * name patterns) are excluded entirely — name and value are both withheld
- * rather than redacted, so the data is safe to send through the push
- * pipeline to a central collector.
+ * rather than redacted. This is best-effort: detection is by setting class
+ * and name pattern, so a secret stored in a plain text setting under an
+ * unrecognised name could still be included. See SENSITIVE_NAME_PATTERNS.
  */
 class config_drift {
     /** Setting classes that always hold secrets. */
@@ -51,9 +52,19 @@ class config_drift {
         'admin_setting_button',
     ];
 
-    /** Substring patterns in the setting name that indicate a secret. */
+    /**
+     * Substring patterns in the setting name that indicate a secret.
+     *
+     * Best-effort: a secret stored under a name matching none of these will
+     * not be detected. Kept deliberately specific to avoid over-matching
+     * benign settings (e.g. 'key'/'auth' alone would catch many non-secrets).
+     */
     private const SENSITIVE_NAME_PATTERNS = [
-        'password',
+        // Deliberately matches "pass" so it covers password, passphrase, and
+        // Moodle's own smtppass / *hostpass secrets (which do NOT contain the
+        // full word "password"). May over-match a few benign names — that's the
+        // safe direction: a withheld/redacted non-secret beats a leaked secret.
+        'pass',
         'secret',
         'token',
         'apikey',
@@ -61,9 +72,10 @@ class config_drift {
         'privatekey',
         'private_key',
         'salt',
-        'passphrase',
         'clientkey',
         'client_secret',
+        'credential',
+        'webhook',
     ];
 
     /**
@@ -228,7 +240,21 @@ class config_drift {
                 return true;
             }
         }
-        $name = strtolower((string) $setting->name);
+        return self::name_is_sensitive((string) $setting->name);
+    }
+
+    /**
+     * True if a setting name matches a known secret-bearing pattern.
+     *
+     * Name-only check (no admin_setting object required), so collectors that
+     * only have the setting name — e.g. config_changes reading the
+     * {config_log} table — can apply the same best-effort secret detection.
+     *
+     * @param string $name
+     * @return bool
+     */
+    public static function name_is_sensitive(string $name): bool {
+        $name = strtolower($name);
         foreach (self::SENSITIVE_NAME_PATTERNS as $needle) {
             if (str_contains($name, $needle)) {
                 return true;

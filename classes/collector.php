@@ -213,10 +213,13 @@ class collector {
      *
      * Robust to missing keys at any level — operates in-place on a copy.
      *
+     * Public so granular WS endpoints that rebuild a slice (e.g. with a custom
+     * row limit) can re-apply the same filtering instead of returning raw data.
+     *
      * @param array $envelope
      * @return array
      */
-    protected static function apply_egress_filter(array $envelope): array {
+    public static function apply_egress_filter(array $envelope): array {
         foreach (self::excluded_slices() as $slice) {
             unset($envelope[$slice]);
         }

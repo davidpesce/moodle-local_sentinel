@@ -304,6 +304,43 @@ final class collector_test extends \advanced_testcase {
         $this->assertCount($result['count'], $result['entries']);
     }
 
+    public function test_config_changes_redacts_sensitive_values(): void {
+        global $DB, $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $now = time();
+        // Note: smtppass is the canonical Moodle email password, and it does
+        // NOT contain the word "password" — the matcher must catch it on "pass".
+        $DB->insert_record('config_log', (object) [
+            'userid' => $USER->id, 'timemodified' => $now + 1,
+            'plugin' => 'core', 'name' => 'smtppass',
+            'value' => 'supersecretpw', 'oldvalue' => 'previouspw',
+        ]);
+        // A non-secret setting must pass through unredacted.
+        $DB->insert_record('config_log', (object) [
+            'userid' => $USER->id, 'timemodified' => $now + 2,
+            'plugin' => 'core', 'name' => 'theme',
+            'value' => 'boost', 'oldvalue' => 'classic',
+        ]);
+
+        $result = collectors\config_changes::collect(50);
+        $byname = [];
+        foreach ($result['entries'] as $entry) {
+            $byname[$entry['name']] = $entry;
+        }
+
+        $this->assertArrayHasKey('smtppass', $byname);
+        $this->assertSame(collectors\config_changes::REDACTED, $byname['smtppass']['newvalue']);
+        $this->assertSame(collectors\config_changes::REDACTED, $byname['smtppass']['oldvalue']);
+        $this->assertStringNotContainsString('supersecretpw', json_encode($result));
+        $this->assertStringNotContainsString('previouspw', json_encode($result));
+
+        $this->assertArrayHasKey('theme', $byname);
+        $this->assertSame('boost', $byname['theme']['newvalue']);
+        $this->assertSame('classic', $byname['theme']['oldvalue']);
+    }
+
     public function test_get_slice_returns_only_requested_section(): void {
         $this->resetAfterTest();
 

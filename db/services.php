@@ -75,7 +75,7 @@ $functions = [
     ],
     'local_sentinel_get_config_drift' => [
         'classname' => 'local_sentinel\\external\\get_config_drift',
-        'description' => 'Settings whose current value differs from default (secrets excluded).',
+        'description' => 'Settings differing from default (best-effort secret exclusion by class + name pattern).',
         'type' => 'read',
         'capabilities' => 'local/sentinel:view',
     ],

@@ -65,6 +65,18 @@ class push_snapshot extends scheduled_task {
             mtrace('local_sentinel: pushsecret not configured, refusing to push.');
             return;
         }
+        // Never send the shared secret (or the snapshot) over cleartext. The
+        // registration flow already hard-requires HTTPS; mirror that here so a
+        // mistyped http:// endpoint can't leak credentials on every 15-min tick.
+        // Recorded as a failed attempt so the misconfiguration surfaces in the
+        // push pipeline status rather than failing silently.
+        if (strtolower((string) parse_url($endpoint, PHP_URL_SCHEME)) !== 'https') {
+            $msg = get_string('push_https_required', 'local_sentinel');
+            push_state::record_attempt();
+            push_state::record_failure($msg, 0);
+            mtrace('local_sentinel: ' . $msg);
+            return;
+        }
 
         // Only after the gating checks pass do we count this as an attempt —
         // we don't want skipped-when-disabled runs to inflate the counter.

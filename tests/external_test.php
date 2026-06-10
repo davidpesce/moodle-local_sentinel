@@ -99,6 +99,26 @@ final class external_test extends \advanced_testcase {
         }
     }
 
+    public function test_get_config_changes_honours_egress_exclusion(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        // Baseline: with no exclusion the slice is present.
+        $present = external\get_config_changes::execute();
+        $this->assertArrayHasKey('config_changes', $present);
+
+        // When the admin excludes the slice, the granular endpoint must NOT
+        // re-add it (regression test: it previously overwrote the filtered
+        // envelope with a fresh unfiltered collect, leaking the config log).
+        set_config('egress_excluded_slices', json_encode(['config_changes']), 'local_sentinel');
+
+        $result = external\get_config_changes::execute();
+        $cleaned = external_api::clean_returnvalue(external\get_config_changes::execute_returns(), $result);
+
+        $this->assertArrayHasKey('site', $cleaned);
+        $this->assertArrayNotHasKey('config_changes', $cleaned);
+    }
+
     public function test_authorisation_required(): void {
         $this->resetAfterTest();
         $this->setUser($this->getDataGenerator()->create_user());
