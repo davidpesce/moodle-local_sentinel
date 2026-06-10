@@ -8,7 +8,8 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15
+        # Moodle 5.2 requires PostgreSQL >= 16 (4.5 needs >= 13, so 16 covers the whole matrix).
+        image: postgres:16
         env:
           POSTGRES_USER: 'postgres'
           POSTGRES_HOST_AUTH_METHOD: 'trust'
