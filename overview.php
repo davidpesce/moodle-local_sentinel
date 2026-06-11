@@ -198,7 +198,7 @@ echo local_sentinel_overview_metric_card(
     $pluginupdates,
     get_string('overview_metric_plugin_updates_subtext', 'local_sentinel'),
     $pluginupdates > 0 ? 'border-warning' : 'sentinel-quiet',
-    new moodle_url('/admin/plugins.php', null, 'additional')
+    new moodle_url('/admin/plugins.php', null, 'updatable')
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_core_update', 'local_sentinel'),

@@ -13,6 +13,14 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.20.1] — schema_version 3 — 2026-06-10
+
+Bug fix; no envelope shape change.
+
+- Plugin-update links (Action panel + metric card) now jump to the
+  **Available updates** section of /admin/plugins.php (`#updatable`); they
+  previously anchored to the additional-plugins list (`#additional`).
+
 ## [2.20.0] — schema_version 3 — 2026-06-10
 
 UI only; no envelope shape change (`schema_version` unchanged).

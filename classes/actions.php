@@ -177,7 +177,7 @@ class actions {
             $add(
                 'warning',
                 get_string('overview_action_plugin_updates', 'local_sentinel', $pluginupdates),
-                new \moodle_url('/admin/plugins.php', null, 'additional')
+                new \moodle_url('/admin/plugins.php', null, 'updatable')
             );
         }
 
