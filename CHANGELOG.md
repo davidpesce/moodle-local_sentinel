@@ -13,6 +13,15 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [Unreleased]
+
+Navigation only; no envelope shape change.
+
+- **Overview moved to Site administration → Reports → Sentinel** (was
+  Plugins → Local plugins → Sentinel → Overview), where admins look for
+  site status. The config pages (Alerts, Connect, Settings) stay under
+  Local plugins → Sentinel. Same URL and page key; bookmarks keep working.
+
 ## [2.20.1] — schema_version 3 — 2026-06-10
 
 Bug fix; no envelope shape change.

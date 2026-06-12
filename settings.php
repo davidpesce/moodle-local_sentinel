@@ -25,29 +25,31 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    // Parent category so the sub-pages nest under one "Sentinel" heading
-    // (same pattern as Logstore xAPI / other plugin categories under Local plugins).
+    // Overview — live admin digest of this Moodle's health. Registered under
+    // Site administration → Reports, where admins look for site status (any
+    // plugin may add pages to the reports branch; no report_* plugin needed).
+    $ADMIN->add('reports', new admin_externalpage(
+        'local_sentinel_overview',
+        get_string('pluginname', 'local_sentinel'),
+        new moodle_url('/local/sentinel/overview.php')
+    ));
+
+    // Parent category so the config sub-pages nest under one "Sentinel"
+    // heading (same pattern as Logstore xAPI / other plugin categories
+    // under Local plugins).
     $ADMIN->add('localplugins', new admin_category(
         'local_sentinel_category',
         get_string('pluginname', 'local_sentinel')
     ));
 
-    // Sub-page 1: Overview — live admin digest of this Moodle's health.
-    // First in the nav, the operator's natural return-visit page.
-    $ADMIN->add('local_sentinel_category', new admin_externalpage(
-        'local_sentinel_overview',
-        get_string('overview_label', 'local_sentinel'),
-        new moodle_url('/local/sentinel/overview.php')
-    ));
-
-    // Sub-page 2: Settings — alert recipients + connection-status summary.
+    // Sub-page 1: Settings — alert recipients + connection-status summary.
     $ADMIN->add('local_sentinel_category', new admin_externalpage(
         'local_sentinel_alerts',
         get_string('alerts_label', 'local_sentinel'),
         new moodle_url('/local/sentinel/alerts.php')
     ));
 
-    // Sub-page 3: Connect to dashboard — single entry point for the
+    // Sub-page 2: Connect to dashboard — single entry point for the
     // connection-explanation cards. Links into the two hidden config
     // routes below.
     $ADMIN->add('local_sentinel_category', new admin_externalpage(
