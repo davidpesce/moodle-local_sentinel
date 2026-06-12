@@ -113,7 +113,7 @@ class helper {
         $result->roleid = $roleid;
 
         $systemcontext = context_system::instance();
-        $requiredcaps = ['webservice/rest:use', 'local/sentinel:view'];
+        $requiredcaps = ['webservice/rest:use', 'local/sentinel:view', 'local/sentinel:manage'];
         foreach ($requiredcaps as $cap) {
             assign_capability($cap, CAP_ALLOW, $roleid, $systemcontext->id, true);
         }

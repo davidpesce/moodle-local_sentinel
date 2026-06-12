@@ -43,6 +43,7 @@ use core_external\external_api;
  * @covers \local_sentinel\external\get_reports
  * @covers \local_sentinel\external\get_config_changes
  * @covers \local_sentinel\external\get_config_drift
+ * @covers \local_sentinel\external\get_integrity
  */
 final class external_test extends \advanced_testcase {
     /**
@@ -61,6 +62,7 @@ final class external_test extends \advanced_testcase {
             'get_reports' => [external\get_reports::class],
             'get_config_changes' => [external\get_config_changes::class],
             'get_config_drift' => [external\get_config_drift::class],
+            'get_integrity' => [external\get_integrity::class],
         ];
     }
 
@@ -92,7 +94,7 @@ final class external_test extends \advanced_testcase {
 
         $expected = [
             'status', 'environment', 'plugins', 'health',
-            'auth', 'reports', 'config_changes', 'config_drift',
+            'auth', 'reports', 'config_changes', 'config_drift', 'integrity',
         ];
         foreach ($expected as $slice) {
             $this->assertArrayHasKey($slice, $cleaned, "Snapshot missing slice: $slice");

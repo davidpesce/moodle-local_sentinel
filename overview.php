@@ -36,7 +36,7 @@ require_once($CFG->libdir . '/adminlib.php');
 admin_externalpage_setup('local_sentinel_overview');
 
 // Tab dispatch.
-$allowedtabs = ['health', 'environment', 'plugins', 'auth', 'reports', 'configdrift'];
+$allowedtabs = ['health', 'environment', 'plugins', 'auth', 'reports', 'integrity', 'configdrift'];
 $tab = optional_param('tab', 'health', PARAM_ALPHA);
 if (!in_array($tab, $allowedtabs, true)) {
     $tab = 'health';

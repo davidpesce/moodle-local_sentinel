@@ -459,6 +459,142 @@ class renderer extends plugin_renderer_base {
     }
 
     /**
+     * Render the Integrity tab.
+     *
+     * Verdict + deviation tables from the most recent core-file scan. The
+     * comparison needs a reference manifest, which a connected dashboard
+     * provisions — unconnected sites see an explainer instead.
+     *
+     * @param array $snapshot
+     * @return string
+     */
+    public function render_integrity_tab(array $snapshot): string {
+        $integrity = $snapshot['integrity'] ?? [];
+        $out = $this->refresh_button('integrity');
+
+        if (empty($integrity['enabled'])) {
+            return $out . html_writer::div(
+                s(get_string('integrity_disabled_note', 'local_sentinel')),
+                'alert alert-secondary'
+            );
+        }
+        if (empty($integrity['manifest'])) {
+            return $out . html_writer::div(
+                s(get_string('integrity_no_manifest_note', 'local_sentinel')),
+                'alert alert-info'
+            );
+        }
+
+        $scan = $integrity['last_scan'] ?? [];
+        $status = (string) ($scan['status'] ?? 'never');
+        if ($status === 'never') {
+            return $out . html_writer::div(
+                s(get_string('integrity_no_scan_note', 'local_sentinel')),
+                'alert alert-info'
+            );
+        }
+        if ($status === 'error') {
+            $out .= html_writer::div(
+                s(get_string('integrity_scan_error', 'local_sentinel', (string) ($scan['error'] ?? ''))),
+                'alert alert-danger'
+            );
+        }
+
+        $modified = (int) ($integrity['modified_count'] ?? 0);
+        $missing = (int) ($integrity['missing_count'] ?? 0);
+        $unexpected = (int) ($integrity['unexpected_count'] ?? 0);
+        if ($status === 'ok') {
+            if ($modified + $missing + $unexpected === 0) {
+                $out .= html_writer::div(
+                    s(get_string('integrity_clean', 'local_sentinel')),
+                    'alert alert-success'
+                );
+            } else {
+                $out .= html_writer::div(
+                    s(get_string('integrity_deviations_found', 'local_sentinel', (object) [
+                        'modified' => $modified,
+                        'missing' => $missing,
+                        'unexpected' => $unexpected,
+                    ])),
+                    'alert ' . ($modified + $missing > 0 ? 'alert-danger' : 'alert-warning')
+                );
+            }
+        }
+
+        // Scan metadata.
+        $rows = $this->kv_row(
+            get_string('integrity_last_scan', 'local_sentinel'),
+            empty($scan['scanned_at'])
+                ? s(get_string('integrity_never', 'local_sentinel'))
+                : userdate((int) $scan['scanned_at'], '%Y-%m-%d %H:%M:%S')
+                    . ' ' . html_writer::tag(
+                        'span',
+                        '(' . (int) ($scan['files_scanned'] ?? 0) . ' files, '
+                        . (int) ($scan['duration_seconds'] ?? 0) . 's)',
+                        ['class' => 'text-muted small']
+                    )
+        );
+        $manifestlabel = s((string) ($integrity['manifest']['version'] ?? ''));
+        if (!empty($scan['manifest_version_mismatch'])) {
+            $manifestlabel .= ' ' . html_writer::tag(
+                'span',
+                s(get_string('integrity_manifest_stale', 'local_sentinel', (string) ($integrity['core_version_full'] ?? ''))),
+                ['class' => 'badge text-bg-warning']
+            );
+        }
+        $rows .= $this->kv_row(get_string('integrity_manifest', 'local_sentinel'), $manifestlabel);
+        $out .= $this->kv_table($rows);
+
+        // Deviation lists, each behind an expander.
+        $out .= $this->integrity_path_section(
+            get_string('integrity_modified_heading', 'local_sentinel', $modified),
+            array_map(
+                fn($entry) => s((string) ($entry['path'] ?? '')) . ' '
+                    . html_writer::tag('code', s(substr((string) ($entry['actual_sha1'] ?? ''), 0, 12)), [
+                        'class' => 'small text-muted',
+                    ]),
+                $integrity['modified'] ?? []
+            ),
+            (int) ($integrity['modified_overflow'] ?? 0)
+        );
+        $out .= $this->integrity_path_section(
+            get_string('integrity_missing_heading', 'local_sentinel', $missing),
+            array_map(fn($path) => s((string) $path), $integrity['missing'] ?? []),
+            (int) ($integrity['missing_overflow'] ?? 0)
+        );
+        $out .= $this->integrity_path_section(
+            get_string('integrity_unexpected_heading', 'local_sentinel', $unexpected),
+            array_map(fn($path) => s((string) $path), $integrity['unexpected'] ?? []),
+            (int) ($integrity['unexpected_overflow'] ?? 0)
+        );
+
+        return $out;
+    }
+
+    /**
+     * One collapsed deviation list for the Integrity tab.
+     *
+     * @param string   $heading  Summary line (includes the count).
+     * @param string[] $items    Pre-escaped HTML lines.
+     * @param int      $overflow Entries beyond the reported cap.
+     * @return string Empty string when there is nothing to show.
+     */
+    protected function integrity_path_section(string $heading, array $items, int $overflow): string {
+        if (empty($items)) {
+            return '';
+        }
+        $list = html_writer::alist($items, ['class' => 'small mb-1']);
+        if ($overflow > 0) {
+            $list .= html_writer::tag(
+                'p',
+                s(get_string('integrity_overflow_note', 'local_sentinel', $overflow)),
+                ['class' => 'text-muted small']
+            );
+        }
+        return $this->collapsed_section($heading, $list);
+    }
+
+    /**
      * Build the shared checks table shell (status / check / summary columns).
      *
      * @param array $data Table rows.

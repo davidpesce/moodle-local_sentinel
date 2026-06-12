@@ -135,4 +135,17 @@ if ($hassiteconfig) {
         get_string('enrollmentkey_desc', 'local_sentinel'),
         ''
     ));
+
+    $settings->add(new admin_setting_heading(
+        'local_sentinel/settingsheading_integrity',
+        get_string('settingsheading_integrity', 'local_sentinel'),
+        get_string('settingsheading_integrity_desc', 'local_sentinel')
+    ));
+
+    $settings->add(new admin_setting_configcheckbox(
+        'local_sentinel/integrityenabled',
+        get_string('integrityenabled', 'local_sentinel'),
+        get_string('integrityenabled_desc', 'local_sentinel'),
+        0
+    ));
 }

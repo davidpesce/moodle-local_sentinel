@@ -33,4 +33,15 @@ $capabilities = [
             'manager' => CAP_ALLOW,
         ],
     ],
+    // Write-side dashboard operations: storing the integrity manifest and
+    // queueing on-demand scans. Granted to the provisioned service role by
+    // setup (and by db/upgrade.php for roles that already held :view).
+    'local/sentinel:manage' => [
+        'riskbitmask' => RISK_CONFIG | RISK_DATALOSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+        ],
+    ],
 ];

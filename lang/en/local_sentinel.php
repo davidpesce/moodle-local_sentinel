@@ -88,6 +88,7 @@ $string['egress_slice_label_config_changes'] = 'Config changes — recent admin-
 $string['egress_slice_label_config_drift'] = 'Config drift — settings that differ from default';
 $string['egress_slice_label_environment'] = 'Environment — PHP, OS, DB, OPcache, extensions, SSL';
 $string['egress_slice_label_health'] = 'Health — cron, tasks, users, disk, backup';
+$string['egress_slice_label_integrity'] = 'Integrity — core file scan results (deviations only)';
 $string['egress_slice_label_plugins'] = 'Plugins — installed plugins, available updates';
 $string['egress_slice_label_reports'] = 'Reports — performance, security, system status';
 $string['egress_slice_label_status'] = 'Status — release, branch, EOL, core update';
@@ -95,6 +96,31 @@ $string['egress_slices_heading'] = 'Snapshot slices';
 $string['enrollmentkey'] = 'Enrollment key';
 $string['enrollmentkey_desc'] = 'The shared enrollment key issued by the dashboard operator. '
     . 'Sent as the X-Sentinel-Enrollment-Key header when registering. Stored encrypted by Moodle.';
+$string['integrity_clean'] = 'No deviations — every scanned file matches the pristine tree for this build.';
+$string['integrity_deviations_found'] = '{$a->modified} modified, {$a->missing} missing, '
+    . '{$a->unexpected} unexpected file(s) compared with the pristine tree.';
+$string['integrity_disabled_note'] = 'Core file integrity scanning is disabled. Enable it in the plugin '
+    . 'settings to allow a connected dashboard to provision integrity audits.';
+$string['integrity_last_scan'] = 'Last scan';
+$string['integrity_manifest'] = 'Reference manifest';
+$string['integrity_manifest_stale'] = 'stale — site now runs {$a}';
+$string['integrity_missing_heading'] = 'Missing files ({$a}) — click to expand';
+$string['integrity_modified_heading'] = 'Modified files ({$a}) — click to expand';
+$string['integrity_never'] = 'never';
+$string['integrity_no_manifest_note'] = 'No reference manifest stored yet. Integrity audits are provisioned '
+    . 'by a connected Sentinel dashboard, which supplies the pristine-tree manifest matching this exact '
+    . 'Moodle build. The plugin never fetches anything from the internet itself.';
+$string['integrity_no_scan_note'] = 'A reference manifest is stored but no scan has completed yet. '
+    . 'The weekly scheduled task will run one, or the dashboard can request a scan on demand.';
+$string['integrity_overflow_note'] = '… and {$a} more not shown (the reported list is capped).';
+$string['integrity_scan_error'] = 'The most recent integrity scan failed: {$a}';
+$string['integrity_unexpected_heading'] = 'Unexpected files ({$a}) — click to expand';
+$string['integrityenabled'] = 'Enable core integrity scanning';
+$string['integrityenabled_desc'] = 'Compares the on-disk Moodle code against a pristine manifest for this '
+    . 'exact build to detect modified, missing, or unexpected files. The manifest is supplied by a connected '
+    . 'dashboard; a weekly scheduled task performs the comparison locally and only the deviations '
+    . '(file paths, plus hashes for modified core files) are shared. Unexpected files are reported by '
+    . 'path only — never hashed.';
 $string['overview_action_backups'] = '{$a} course backup(s) ending in error';
 $string['overview_action_branch_eol'] = 'Moodle {$a->release} security support ends in {$a->days} day(s)';
 $string['overview_action_branch_eol_past'] = 'Moodle {$a} is past its security-support end date — no security fixes are coming';
@@ -185,6 +211,7 @@ $string['overview_tab_auth'] = 'Authentication';
 $string['overview_tab_configdrift'] = 'Config drift';
 $string['overview_tab_environment'] = 'Environment';
 $string['overview_tab_health'] = 'Health';
+$string['overview_tab_integrity'] = 'Integrity';
 $string['overview_tab_plugins'] = 'Plugins';
 $string['overview_tab_reports'] = 'Reports';
 $string['overview_view_native'] = 'view native page';
@@ -263,11 +290,16 @@ $string['registrationenabled'] = 'Enable self-registration';
 $string['registrationenabled_desc'] = 'Allows this site to register itself with a Sentinel dashboard using the base URL '
     . 'and enrollment key below. Off by default; registration happens only when you click Register on the '
     . 'Connect to dashboard page — nothing is contacted automatically.';
+$string['sentinel:manage'] = 'Manage Sentinel integrity audits (store manifests, queue scans)';
 $string['sentinel:view'] = 'View Sentinel snapshot data';
 $string['servicemissing'] = 'The Sentinel external service was not found. '
     . 'Visit Site administration → Notifications to finish plugin installation, then retry.';
 $string['servicename'] = 'Sentinel';
 $string['settings_label'] = 'Send data to remote dashboard';
+$string['settingsheading_integrity'] = 'Core file integrity';
+$string['settingsheading_integrity_desc'] = 'Detects modified, missing, or unexpected files in the Moodle '
+    . 'code tree by comparing it against a pristine manifest for this exact build. The manifest is provided '
+    . 'by a connected dashboard; scans run via the weekly scheduled task or on dashboard request.';
 $string['settingsheading_push'] = 'Outbound configuration';
 $string['settingsheading_push_desc'] = 'Configures the scheduled task that posts snapshots to the '
     . 'remote dashboard. See the Connect to dashboard page for when to use this and how it differs '
@@ -307,5 +339,7 @@ $string['setup_username'] = 'Webservice username';
 $string['setup_username_help'] = 'The Moodle user that will own the permanent web service token. '
     . 'A new user is created if one with this username does not already exist. '
     . 'Defaults to "sentinel".';
+$string['task_integrity_scan'] = 'Core file integrity scan';
+$string['task_integrity_scan_adhoc'] = 'Core file integrity scan (on demand)';
 $string['task_push_snapshot'] = 'Send Sentinel snapshot to remote dashboard';
 $string['task_refresh_updates'] = 'Refresh available-updates cache (no admin email)';

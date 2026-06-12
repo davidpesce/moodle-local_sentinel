@@ -58,6 +58,17 @@ abstract class base extends external_api {
     }
 
     /**
+     * Validates the system context and requires the write-side capability.
+     *
+     * Used by the write functions (set_manifest, request_integrity_scan).
+     */
+    protected static function authorise_manage(): void {
+        $context = context_system::instance();
+        self::validate_context($context);
+        require_capability('local/sentinel:manage', $context);
+    }
+
+    /**
      * Build the envelope structure declaration for a set of slice names.
      *
      * @param string[] $slicekeys
@@ -92,6 +103,7 @@ abstract class base extends external_api {
             'config_changes' => 'config_changes_structure',
             'config_drift' => 'config_drift_structure',
             'reporting' => 'reporting_structure',
+            'integrity' => 'integrity_structure',
         ];
         foreach ($slicekeys as $key) {
             $method = $builders[$key];
@@ -698,6 +710,65 @@ abstract class base extends external_api {
                 new external_value(PARAM_RAW_TRIMMED, 'Recipient email address.')
             ),
             'count' => new external_value(PARAM_INT, 'Number of recipients.'),
+        ]);
+    }
+
+    /**
+     * Integrity slice: latest scan outcome + deviations vs the stored manifest.
+     *
+     * @return external_single_structure
+     */
+    protected static function integrity_structure(): external_single_structure {
+        return new external_single_structure([
+            'enabled' => new external_value(PARAM_BOOL, 'Integrity scanning enabled in plugin settings.'),
+            'core_version_full' => new external_value(
+                PARAM_RAW,
+                'Literal $version decimal string (e.g. 2024100711.04) — weekly builds bump only the '
+                . 'decimals, so this (not the int in status) selects the matching manifest.'
+            ),
+            'manifest' => new external_single_structure([
+                'version' => new external_value(PARAM_RAW, 'Version string the stored manifest targets.'),
+                'digest' => new external_value(PARAM_RAW, 'SHA-256 hex of the stored manifest text.'),
+                'received_at' => new external_value(PARAM_INT, 'When the manifest was received (unix ts).'),
+            ], 'Stored reference manifest; null until the dashboard provisions one.', VALUE_REQUIRED, null, NULL_ALLOWED),
+            'last_scan' => new external_single_structure([
+                'status' => new external_value(PARAM_RAW, 'never / ok / error.'),
+                'scanned_at' => new external_value(PARAM_INT, 'Unix ts of the most recent scan (0 = never).'),
+                'duration_seconds' => new external_value(PARAM_INT, 'Wall-clock duration of the scan.'),
+                'manifest_version' => new external_value(PARAM_RAW, 'Manifest version the scan compared against.'),
+                'manifest_version_mismatch' => new external_value(
+                    PARAM_BOOL,
+                    'True when the stored manifest targets a different build than the site runs (stale manifest).'
+                ),
+                'files_scanned' => new external_value(PARAM_INT, 'Files visited during the walk.'),
+                'error' => new external_value(PARAM_RAW, 'Error message when status is error.'),
+            ]),
+            'modified_count' => new external_value(PARAM_INT, 'Files whose hash differs from the manifest.'),
+            'missing_count' => new external_value(PARAM_INT, 'Manifest files absent on disk.'),
+            'unexpected_count' => new external_value(PARAM_INT, 'On-disk files not in the manifest.'),
+            'modified' => new external_multiple_structure(
+                new external_single_structure([
+                    'path' => new external_value(PARAM_RAW, 'Repository-root-relative path.'),
+                    'expected_sha1' => new external_value(PARAM_ALPHANUM, 'Pristine git blob sha1.'),
+                    'actual_sha1' => new external_value(PARAM_ALPHANUM, 'On-disk git blob sha1.'),
+                ]),
+                'Modified files (capped; see modified_overflow).'
+            ),
+            'missing' => new external_multiple_structure(
+                new external_value(PARAM_RAW, 'Repository-root-relative path.'),
+                'Missing files (capped; see missing_overflow).'
+            ),
+            'unexpected' => new external_multiple_structure(
+                new external_value(PARAM_RAW, 'Repository-root-relative path. Deliberately path-only — never hashed.'),
+                'Unexpected files (capped; see unexpected_overflow).'
+            ),
+            'modified_overflow' => new external_value(PARAM_INT, 'Modified entries beyond the list cap.'),
+            'missing_overflow' => new external_value(PARAM_INT, 'Missing entries beyond the list cap.'),
+            'unexpected_overflow' => new external_value(PARAM_INT, 'Unexpected entries beyond the list cap.'),
+            'scan_errors' => new external_multiple_structure(
+                new external_value(PARAM_RAW, 'Per-file read error recorded during the scan.'),
+                'Read errors encountered during the walk (capped).'
+            ),
         ]);
     }
 }

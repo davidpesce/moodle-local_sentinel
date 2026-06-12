@@ -13,10 +13,33 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
-## [Unreleased]
+## [2.21.0] — schema_version 3 — 2026-06-12
 
-Navigation only; no envelope shape change.
+Core file integrity scanning (additive envelope change; no schema bump).
 
+- **New `integrity` slice**: detects modified, missing, and unexpected files
+  in the Moodle code tree by comparing on-disk git-blob hashes against a
+  pristine manifest for the site's **exact build** (weekly `+` builds
+  included, keyed by the literal `$version` decimal string). Manifests are
+  derived from the public
+  [moodle-core-manifests](https://github.com/davidpesce/moodle-core-manifests)
+  dataset, but the plugin **never fetches anything itself** — a connected
+  dashboard pushes the matching manifest down over WS. Only deviations leave
+  the site: unexpected files are reported by **path only, never hashed**, so
+  a stray secret-bearing file cannot be fingerprinted off-site. The slice is
+  egress-filterable like any other.
+- **New WS functions**: `local_sentinel_set_manifest` and
+  `local_sentinel_request_integrity_scan` (both `type: write`, gated by the
+  new `local/sentinel:manage` capability) and `local_sentinel_get_integrity`
+  (read). `db/upgrade.php` grants `:manage` to roles already holding `:view`
+  at system context, so existing dashboard tokens keep working without
+  re-running setup. The manifest POST is ~1.3 MB — the site's web server
+  must accept request bodies of a few MB (nginx: `client_max_body_size 4m;`).
+- **New scheduled task** `integrity_scan` (weekly, randomized; self-gating on
+  the new `integrityenabled` setting + manifest presence, both off/absent by
+  default) plus an adhoc variant powering the dashboard's "Run audit now".
+- **Overview → Integrity tab** shows the latest verdict and deviation lists
+  locally.
 - **Overview moved to Site administration → Reports → Sentinel** (was
   Plugins → Local plugins → Sentinel → Overview), where admins look for
   site status. The config pages (Alerts, Connect, Settings) stay under

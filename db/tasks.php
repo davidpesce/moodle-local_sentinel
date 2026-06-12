@@ -45,4 +45,17 @@ $tasks = [
         'dayofweek' => '*',
         'disabled' => 0,
     ],
+    // Weekly core integrity scan. Enabled, but execute() self-gates on the
+    // integrityenabled setting + manifest presence, so it no-ops until the
+    // feature is provisioned (same pattern as push_snapshot's setting gate).
+    [
+        'classname' => 'local_sentinel\\task\\integrity_scan',
+        'blocking' => 0,
+        'minute' => 'R',
+        'hour' => 'R',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => 'R',
+        'disabled' => 0,
+    ],
 ];

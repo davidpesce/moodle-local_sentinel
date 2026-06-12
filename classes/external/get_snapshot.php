@@ -56,6 +56,7 @@ class get_snapshot extends base {
             'reports',
             'config_changes',
             'config_drift',
+            'integrity',
         ]);
     }
 }

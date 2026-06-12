@@ -79,6 +79,24 @@ $functions = [
         'type' => 'read',
         'capabilities' => 'local/sentinel:view',
     ],
+    'local_sentinel_get_integrity' => [
+        'classname' => 'local_sentinel\\external\\get_integrity',
+        'description' => 'Core file integrity: latest scan outcome and deviations vs the stored manifest.',
+        'type' => 'read',
+        'capabilities' => 'local/sentinel:view',
+    ],
+    'local_sentinel_set_manifest' => [
+        'classname' => 'local_sentinel\\external\\set_manifest',
+        'description' => 'Store the pristine-tree manifest for this site\'s exact build (dashboard-provided).',
+        'type' => 'write',
+        'capabilities' => 'local/sentinel:manage',
+    ],
+    'local_sentinel_request_integrity_scan' => [
+        'classname' => 'local_sentinel\\external\\request_integrity_scan',
+        'description' => 'Queue an on-demand integrity scan (runs as an adhoc task on cron).',
+        'type' => 'write',
+        'capabilities' => 'local/sentinel:manage',
+    ],
 ];
 
 $services = [
@@ -93,6 +111,9 @@ $services = [
             'local_sentinel_get_reports',
             'local_sentinel_get_config_changes',
             'local_sentinel_get_config_drift',
+            'local_sentinel_get_integrity',
+            'local_sentinel_set_manifest',
+            'local_sentinel_request_integrity_scan',
         ],
         'restrictedusers' => 1,
         'enabled' => 1,

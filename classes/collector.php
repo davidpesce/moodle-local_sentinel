@@ -51,6 +51,7 @@ class collector {
             'config_changes' => collectors\config_changes::collect(),
             'config_drift' => collectors\config_drift::collect(),
             'reporting' => collectors\reporting::collect(),
+            'integrity' => collectors\integrity::collect(),
         ]);
     }
 
@@ -140,6 +141,7 @@ class collector {
     public const ALL_SLICES = [
         'status', 'environment', 'plugins', 'health',
         'auth', 'reports', 'config_changes', 'config_drift', 'reporting',
+        'integrity',
     ];
 
     /** Sub-field dotted paths that admins can opt out of independently. */

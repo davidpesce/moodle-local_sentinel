@@ -15,18 +15,39 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Scheduled task: weekly core file integrity scan.
  *
  * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_sentinel\task;
 
-$plugin->version   = 2026061200;
-$plugin->release   = '2.21.0';
-$plugin->requires  = 2024100700;
-$plugin->component = 'local_sentinel';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->supported = [405, 502];
+use core\task\scheduled_task;
+use local_sentinel\integrity_scanner;
+
+/**
+ * Weekly scan of the code tree against the dashboard-provided manifest.
+ *
+ * Enabled by default in db/tasks.php but self-gating: it no-ops unless the
+ * integrityenabled setting is on AND a manifest has been provisioned, so
+ * flipping the feature on never requires task administration.
+ */
+class integrity_scan extends scheduled_task {
+    /**
+     * Get name.
+     *
+     * @return string
+     */
+    public function get_name(): string {
+        return get_string('task_integrity_scan', 'local_sentinel');
+    }
+
+    /**
+     * Run the scan via the shared orchestrator.
+     */
+    public function execute(): void {
+        integrity_scanner::run();
+    }
+}

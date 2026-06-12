@@ -121,6 +121,48 @@ Excluded data is removed from the payload, and the envelope's **`egress` block**
 lists exactly what was withheld. This lets a central dashboard show "withheld by
 the site administrator" rather than mistaking the gap for missing or broken data.
 
+## Core file integrity
+
+The `integrity` slice reports whether the Moodle code tree has been modified,
+by comparing on-disk files against a pristine manifest for the site's **exact
+build** — weekly `+` builds included. Manifests are derived from the public
+[moodle-core-manifests](https://github.com/davidpesce/moodle-core-manifests)
+dataset (reproducible from moodle.git by anyone), and are keyed by the literal
+`$version` decimal string (`integrity.core_version_full`), since weekly builds
+bump only the decimals.
+
+How it works:
+
+1. Enable **Core integrity scanning** in the plugin settings (off by default).
+2. A connected dashboard pushes the matching manifest via
+   `local_sentinel_set_manifest`. **The plugin never fetches anything from the
+   internet itself** — no manifest, no scan.
+3. The weekly `integrity_scan` task (or an on-demand scan queued via
+   `local_sentinel_request_integrity_scan`) hashes the tree the way git does
+   (`sha1("blob <size>\0" + content)`) and diffs it against the manifest.
+4. Deviations ride the snapshot's `integrity` slice and the
+   `local_sentinel_get_integrity` endpoint: **modified** (path + expected/actual
+   hash), **missing** (path), **unexpected** (path **only** — unexpected files
+   are deliberately never hashed, so a stray secret-bearing file cannot be
+   fingerprinted off-site). Lists are capped at 500 entries with overflow
+   counts. A clean site reports zero counts — a few hundred bytes.
+
+Excluded from the walk: `config.php`, `.git`, `vendor`, `node_modules`, a
+nested dataroot, and the directories of installed **non-standard** plugins
+(those are covered by the `plugins` slice).
+
+Operational notes:
+
+- The manifest POST is ~1.3 MB; the site's web server must accept request
+  bodies of a few MB (nginx: `client_max_body_size 4m;` — the default 1 MB
+  returns HTTP 413).
+- The write functions require the new `local/sentinel:manage` capability.
+  Setup (CLI or GUI) grants it to the service role; upgrading from ≤2.20 also
+  grants it to roles that already held `local/sentinel:view`. Manually
+  provisioned roles need it added by hand.
+- The latest verdict is also shown locally at Overview → Integrity.
+- The whole slice can be withheld via the egress filter like any other slice.
+
 ## Available-updates freshness
 
 The `plugins.updates_available` and `plugins.update_check` fields reflect

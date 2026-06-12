@@ -15,18 +15,38 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * External function: get_integrity.
  *
  * @package    local_sentinel
  * @copyright  2026 David Pesce - Exputo Inc.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_sentinel\external;
 
-$plugin->version   = 2026061200;
-$plugin->release   = '2.21.0';
-$plugin->requires  = 2024100700;
-$plugin->component = 'local_sentinel';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->supported = [405, 502];
+use core_external\external_single_structure;
+use local_sentinel\collector;
+
+/**
+ * Returns just the integrity slice.
+ */
+class get_integrity extends base {
+    /**
+     * Return the integrity slice.
+     *
+     * @return array
+     */
+    public static function execute(): array {
+        self::authorise();
+        return collector::get_slice_for_egress('integrity');
+    }
+
+    /**
+     * Declare the return shape.
+     *
+     * @return external_single_structure
+     */
+    public static function execute_returns(): external_single_structure {
+        return self::envelope_with_slices(['integrity']);
+    }
+}
