@@ -13,6 +13,19 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.21.1] — schema_version 3 — 2026-06-13
+
+Bug fix; no envelope shape change.
+
+- **`integrity.core_version_full` now reads the literal `$version` string
+  from the on-disk version.php** instead of `$CFG->version`. Moodle stores
+  `$version` as a float and PHP's float→string drops trailing zeros, so any
+  tagged `.00` build (e.g. 4.5.12 = `2024100712.00`) reported `2024100712` —
+  which failed the dashboard's manifest lookup and stalled delivery at
+  "Awaiting manifest". The disk file also describes the tree actually being
+  scanned, even when a DB upgrade is pending. (Dashboard ≥0.14.4 also
+  normalises the reported value, so either side's fix unblocks delivery.)
+
 ## [2.21.0] — schema_version 3 — 2026-06-12
 
 Core file integrity scanning (additive envelope change; no schema bump).

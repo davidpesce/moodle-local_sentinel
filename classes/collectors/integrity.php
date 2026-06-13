@@ -47,7 +47,6 @@ class integrity {
      * @return array
      */
     public static function collect(): array {
-        global $CFG;
         $state = integrity_state::get();
         $result = manifest_store::load_scan_result() ?? [];
 
@@ -62,7 +61,7 @@ class integrity {
 
         return [
             'enabled' => (bool) get_config('local_sentinel', 'integrityenabled'),
-            'core_version_full' => (string) $CFG->version,
+            'core_version_full' => integrity_scanner::core_version_full(),
             'manifest' => $manifest,
             'last_scan' => [
                 'status' => (string) $state['last_scan_status'],

@@ -59,6 +59,25 @@ final class integrity_scanner_test extends \advanced_testcase {
     }
 
     /**
+     * core_version_full must report the literal version.php string, decimals
+     * intact — $CFG->version goes through PHP float→string, which drops
+     * trailing zeros on .00 builds and breaks the manifest lookup.
+     */
+    public function test_core_version_full_reads_disk_literal(): void {
+        $this->resetAfterTest();
+        $version = integrity_scanner::core_version_full();
+
+        // Literal version.php shape: 10-digit date+increment, dot, TWO decimals.
+        $this->assertMatchesRegularExpression('/^\d{10}\.\d{2}$/', $version);
+
+        // And it matches the raw text of the version.php actually on disk.
+        $base = rtrim(integrity_scanner::base_dir(), '/');
+        $file = is_readable($base . '/version.php') ? $base . '/version.php' : $base . '/public/version.php';
+        preg_match('/^\s*\$version\s*=\s*([0-9.]+)\s*;/m', file_get_contents($file), $m);
+        $this->assertSame($m[1], $version);
+    }
+
+    /**
      * The exclusion list must cover VCS metadata, config.php and this plugin itself.
      */
     public function test_excluded_prefixes(): void {
@@ -110,7 +129,6 @@ final class integrity_scanner_test extends \advanced_testcase {
      */
     public function test_scan_classifies_deviations(): void {
         $this->resetAfterTest();
-        global $CFG;
         manifest_store::reset();
 
         $base = rtrim(integrity_scanner::base_dir(), '/');
@@ -128,7 +146,7 @@ final class integrity_scanner_test extends \advanced_testcase {
         $text = "{$realhash}\t{$realrel}\n"
             . str_repeat('0', 40) . "\t{$modrel}\n"
             . str_repeat('1', 40) . "\tno/such/file.php\n";
-        manifest_store::save_manifest((string) $CFG->version, hash('sha256', $text), $text);
+        manifest_store::save_manifest(integrity_scanner::core_version_full(), hash('sha256', $text), $text);
 
         $result = integrity_scanner::scan();
 
