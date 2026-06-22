@@ -156,6 +156,10 @@ final class collector_test extends \advanced_testcase {
         $this->assertArrayHasKey('webserver', $env);
         $this->assertArrayHasKey('database', $env);
         $this->assertArrayHasKey('opcache', $env);
+        // OPcache is per-SAPI; PHPUnit runs under CLI, where it is not measurable.
+        $this->assertArrayHasKey('measurable', $env['opcache']);
+        $this->assertFalse($env['opcache']['measurable']);
+        $this->assertFalse($env['opcache']['enabled']);
         $this->assertArrayHasKey('extensions', $env);
         $this->assertSame(PHP_VERSION, $env['php']['version']);
         $this->assertSame(PHP_SAPI, $env['php']['sapi']);

@@ -268,6 +268,7 @@ abstract class base extends external_api {
             ]),
             'opcache' => new external_single_structure([
                 'enabled' => new external_value(PARAM_BOOL, 'OPcache enabled.'),
+                'measurable' => new external_value(PARAM_BOOL, 'OPcache measurable here (false under CLI/cron).', VALUE_OPTIONAL),
                 'reason' => new external_value(PARAM_RAW, 'Reason when disabled.', VALUE_OPTIONAL),
                 'used_memory' => new external_value(PARAM_INT, 'Used memory bytes.', VALUE_OPTIONAL),
                 'free_memory' => new external_value(PARAM_INT, 'Free memory bytes.', VALUE_OPTIONAL),

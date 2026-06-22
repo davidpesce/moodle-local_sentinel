@@ -13,6 +13,24 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.21.2] — schema_version 3 — 2026-06-22
+
+Honest OPcache reporting under CLI (additive envelope change; no schema bump).
+
+- **OPcache is no longer reported as "disabled" when collected under CLI.**
+  OPcache is per-SAPI: the `push_snapshot` scheduled task runs under cron/CLI,
+  which cannot see the web workers' (php-fpm/apache) OPcache, so
+  `opcache_get_status()` returns false there. The collector now reports
+  `enabled: false, measurable: false` with a clear reason in that context
+  instead of falsely asserting OPcache is off. A web-context read (a WS pull,
+  which executes under the site's web SAPI) carries the real reading.
+- **New additive `environment.opcache.measurable` field** (`VALUE_OPTIONAL`) —
+  false under CLI/cron, true for a web-collected snapshot. No `schema_version`
+  bump (additive). The dashboard reads the authoritative value from the most
+  recent pull regardless of this flag.
+- Overview page: shows "not measurable in this context" rather than "disabled"
+  for an unmeasurable reading (only relevant if viewed outside a web SAPI).
+
 ## [2.21.1] — schema_version 3 — 2026-06-13
 
 Bug fix; no envelope shape change.

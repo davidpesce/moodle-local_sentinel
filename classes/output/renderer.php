@@ -178,6 +178,13 @@ class renderer extends plugin_renderer_base {
                     . ' (free: ' . display_size((int) ($oc['free_memory'] ?? 0)) . ', wasted: '
                     . display_size((int) ($oc['wasted_memory'] ?? 0)) . ')')
                 . $this->kv_row('Hit rate', s($hitrate));
+        } else if (isset($oc['measurable']) && !$oc['measurable']) {
+            // Collected under CLI/cron, where OPcache is per-SAPI and not visible.
+            $rows = $this->kv_row('Status', html_writer::tag(
+                'span',
+                'not measurable in this context (' . s((string) ($oc['reason'] ?? '')) . ')',
+                ['class' => 'text-muted']
+            ));
         } else {
             $rows = $this->kv_row('Status', html_writer::tag(
                 'span',

@@ -310,17 +310,30 @@ class environment {
      * @return array
      */
     protected static function collect_opcache(): array {
+        // OPcache is per-SAPI: each process pool (php-fpm/apache web workers, CLI)
+        // has its own cache, and there is no API to read one SAPI's OPcache from
+        // another. Under CLI (cron — e.g. the push_snapshot task) we cannot see the
+        // web workers' OPcache, so report "not measurable" rather than asserting it
+        // is disabled. A web-context read (a WS pull) carries the real reading.
+        if (PHP_SAPI === 'cli') {
+            return [
+                'enabled' => false,
+                'measurable' => false,
+                'reason' => 'Not measurable from CLI/cron — OPcache is per-SAPI; read on a web request.',
+            ];
+        }
         if (!function_exists('opcache_get_status')) {
-            return ['enabled' => false, 'reason' => 'opcache_get_status() not available'];
+            return ['enabled' => false, 'measurable' => true, 'reason' => 'opcache_get_status() not available'];
         }
         $status = @opcache_get_status(false);
         if ($status === false) {
-            return ['enabled' => false, 'reason' => 'OPcache disabled'];
+            return ['enabled' => false, 'measurable' => true, 'reason' => 'OPcache disabled'];
         }
         $memory = $status['memory_usage'] ?? [];
         $stats = $status['opcache_statistics'] ?? [];
         return [
             'enabled' => !empty($status['opcache_enabled']),
+            'measurable' => true,
             'used_memory' => (int) ($memory['used_memory'] ?? 0),
             'free_memory' => (int) ($memory['free_memory'] ?? 0),
             'wasted_memory' => (int) ($memory['wasted_memory'] ?? 0),
