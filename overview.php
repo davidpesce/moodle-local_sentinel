@@ -169,27 +169,33 @@ echo '<style>
     .sentinel-sev-badge { display: inline-block; margin-right: 0.5rem; padding: 0.15em 0.5em;
         border-radius: 0.25rem; font-size: 0.72em; font-weight: 700; text-transform: uppercase;
         letter-spacing: 0.02em; line-height: 1.4; vertical-align: middle; }
-    .sentinel-sev-danger    { background: #dc3545; color: #fff; }
-    .sentinel-sev-error     { background: #fd7e14; color: #fff; }
-    .sentinel-sev-warning   { background: #f0ad4e; color: #212529; }
+    /* All severity badges use dark text: white is unreadable on the yellow/cyan
+       backgrounds, and dark text clears WCAG AA contrast on all four. */
+    .sentinel-sev-danger    { background: #dc3545; color: #212529; }
+    .sentinel-sev-error     { background: #fd7e14; color: #212529; }
+    .sentinel-sev-warning   { background: #ffc107; color: #212529; }
     .sentinel-sev-info      { background: #0dcaf0; color: #212529; }
     .sentinel-sev-secondary { background: #6c757d; color: #fff; }
     .sentinel-sev-success   { background: #198754; color: #fff; }
 
-    /* Action rows: left accent + faint tint per severity. */
+    /* Action rows: left accent + faint tint per severity. Hues kept well apart
+       (red / orange / yellow / cyan) so the tints are easy to tell apart. */
     .sentinel-action-danger  { border-left: 4px solid #dc3545; background: #fdecee; }
-    .sentinel-action-error   { border-left: 4px solid #fd7e14; background: #fdf1e7; }
-    .sentinel-action-warning { border-left: 4px solid #f0ad4e; background: #fef8ec; }
+    .sentinel-action-error   { border-left: 4px solid #fd7e14; background: #fde6d3; }
+    .sentinel-action-warning { border-left: 4px solid #ffc107; background: #fff8d6; }
     .sentinel-action-info    { border-left: 4px solid #0dcaf0; background: #eaf8fc; }
+
+    /* Offset the scroll anchor so the fixed navbar doesn\'t cover the tab strip. */
+    #sentinel-tab { scroll-margin-top: 70px; }
 
     /* Metric cards: coloured border + faint tint + coloured big number. */
     .sentinel-metric { border: 2px solid #dee2e6; }
     .sentinel-metric-num { font-size: 2.6rem; font-weight: 700; }
     .sentinel-metric.sev-critical { border-color: #dc3545; background: #fdecee; }
     .sentinel-metric.sev-critical .sentinel-metric-num { color: #dc3545; }
-    .sentinel-metric.sev-error    { border-color: #fd7e14; background: #fdf1e7; }
+    .sentinel-metric.sev-error    { border-color: #fd7e14; background: #fde6d3; }
     .sentinel-metric.sev-error .sentinel-metric-num { color: #d9480f; }
-    .sentinel-metric.sev-warning  { border-color: #f0ad4e; background: #fef8ec; }
+    .sentinel-metric.sev-warning  { border-color: #ffc107; background: #fff8d6; }
     .sentinel-metric.sev-warning .sentinel-metric-num { color: #9a6700; }
     .sentinel-metric.sev-ok       { border-color: #c7e6d4; }
     .sentinel-metric.sev-ok .sentinel-metric-num { color: #198754; }
@@ -210,7 +216,7 @@ echo html_writer::start_div('row g-3 mb-4');
 // errors = perf + security + status). Linking to the in-plugin Reports tab —
 // which shows all three side-by-side — avoids dropping the user onto only one
 // of the contributing native pages.
-$reportstaburl = new moodle_url('/local/sentinel/overview.php', ['tab' => 'reports']);
+$reportstaburl = new moodle_url('/local/sentinel/overview.php', ['tab' => 'reports'], 'sentinel-tab');
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_critical', 'local_sentinel'),
     $critical,
@@ -250,11 +256,16 @@ foreach ($allowedtabs as $name) {
         get_string('overview_tab_' . $name, 'local_sentinel')
     );
 }
+// Wrapped in an anchor target so the action/card links that switch tabs
+// (e.g. "Review →" on the errors row) scroll down to the tab content on load
+// rather than landing at the top of the page.
+echo html_writer::start_div('', ['id' => 'sentinel-tab']);
 echo $OUTPUT->tabtree($tabs, $tab);
 
 $renderer = $PAGE->get_renderer('local_sentinel');
 $method = 'render_' . ($tab === 'configdrift' ? 'config_drift' : $tab) . '_tab';
 echo $renderer->$method($snapshot);
+echo html_writer::end_div();
 
 echo $OUTPUT->footer();
 

@@ -126,7 +126,7 @@ class actions {
                 $add(
                     $pct < self::DISK_DANGER_PCT ? 'danger' : 'warning',
                     get_string('overview_action_disk', 'local_sentinel', display_size((int) $free)),
-                    new \moodle_url('/local/sentinel/overview.php', ['tab' => 'health'])
+                    new \moodle_url('/local/sentinel/overview.php', ['tab' => 'health'], 'sentinel-tab')
                 );
             }
         }
@@ -149,7 +149,7 @@ class actions {
             $add(
                 'error',
                 get_string('overview_action_errors', 'local_sentinel', $errors),
-                new \moodle_url('/local/sentinel/overview.php', ['tab' => 'reports'])
+                new \moodle_url('/local/sentinel/overview.php', ['tab' => 'reports'], 'sentinel-tab')
             );
         }
 

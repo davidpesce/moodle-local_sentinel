@@ -13,6 +13,20 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.21.5] — schema_version 3 — 2026-06-23
+
+UI polish on the 2.21.4 Overview colours.
+
+- **Tab-switching action/card links now scroll to the tab content.** The tab
+  area has an `id="sentinel-tab"` anchor and the "Review →" links (errors → Reports,
+  low disk → Health) plus the CRITICAL/ERRORS cards target it, so the page jumps
+  to the tab instead of landing at the top.
+- **Error and warning are now visually distinct** — warning shifted to a clear
+  yellow (#ffc107) and the error/warning row + card tints pulled apart (peach vs
+  pale yellow).
+- **Severity badges use a consistent dark text** on all four tiers (white is
+  unreadable on the yellow/cyan; dark text clears WCAG AA contrast on all of them).
+
 ## [2.21.4] — schema_version 3 — 2026-06-23
 
 UI only; no envelope shape change.
