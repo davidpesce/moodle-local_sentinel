@@ -68,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('do_provision', 0, P
     }
     set_config('dashboardbaseurl', $parsed['url'], 'local_sentinel');
     set_config('enrollmentkey', $parsed['key'], 'local_sentinel');
+    set_config('transport', $parsed['transport'], 'local_sentinel');
     set_config('registrationenabled', 1, 'local_sentinel');
     [$provisionok, $provisionmessage] = \local_sentinel\register::run();
     redirect(

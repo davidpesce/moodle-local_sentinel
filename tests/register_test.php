@@ -159,4 +159,18 @@ final class register_test extends \advanced_testcase {
         $this->assertFalse($task->get_disabled());
         $this->assertEquals(1, get_config('local_sentinel', 'pushenabled'));
     }
+
+    public function test_transport_defaults_to_both_and_validates(): void {
+        $this->resetAfterTest();
+
+        // Unset / unknown values fall back to 'both'.
+        $this->assertSame('both', register::transport());
+        set_config('transport', 'sideways', 'local_sentinel');
+        $this->assertSame('both', register::transport());
+
+        foreach (['push', 'pull', 'both'] as $t) {
+            set_config('transport', $t, 'local_sentinel');
+            $this->assertSame($t, register::transport());
+        }
+    }
 }

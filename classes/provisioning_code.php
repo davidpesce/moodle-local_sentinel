@@ -31,7 +31,13 @@ namespace local_sentinel;
  * the site admin, replacing the separate "type the dashboard URL, then the
  * enrollment key" steps with one paste. Format:
  *
- *     SNTL1.<base64url(JSON {"k": "<enrollment key>", "u": "<https base URL>"})>
+ *     SNTL1.<base64url(JSON {"k": "<enrollment key>", "u": "<https base URL>",
+ *                           "t": "<push|pull|both, optional>"})>
+ *
+ * The optional "t" lets the issuing dashboard pick which transport(s) this site
+ * provisions — push-only (firewalled sites), pull-only (no standing push), or
+ * both (the default when "t" is absent). The decision lives with the operator
+ * who issues the code, keeping the site admin's job to one paste.
  *
  * The code is vendor-neutral — any Sentinel dashboard can issue one; nothing
  * is hardcoded here. Parsing is strict and offline (no network); registration
@@ -44,12 +50,16 @@ class provisioning_code {
     /** @var int Sanity cap well above any real URL+key pair. */
     public const MAX_LENGTH = 2048;
 
+    /** @var string[] Valid transport directives; anything else falls back to 'both'. */
+    public const TRANSPORTS = ['push', 'pull', 'both'];
+
     /**
      * Parse a provisioning code.
      *
      * @param string $code The pasted code.
      * @return array|null ['url' => https base URL (no trailing slash),
-     *                     'key' => enrollment key] or null when invalid.
+     *                     'key' => enrollment key,
+     *                     'transport' => push|pull|both] or null when invalid.
      */
     public static function parse(string $code): ?array {
         $code = trim($code);
@@ -78,6 +88,13 @@ class provisioning_code {
             return null;
         }
 
+        // Optional transport directive; unknown/absent means "both" so older
+        // codes (and future values) stay backward-compatible.
+        $transport = isset($data['t']) && is_string($data['t']) ? strtolower(trim($data['t'])) : 'both';
+        if (!in_array($transport, self::TRANSPORTS, true)) {
+            $transport = 'both';
+        }
+
         // Same HTTPS-only stance as register::run(): identity + a secret never
         // travel over plaintext, so refuse codes pointing at http endpoints.
         if (
@@ -87,6 +104,6 @@ class provisioning_code {
             return null;
         }
 
-        return ['url' => rtrim($url, '/'), 'key' => $key];
+        return ['url' => rtrim($url, '/'), 'key' => $key, 'transport' => $transport];
     }
 }

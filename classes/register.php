@@ -44,6 +44,18 @@ class register {
     }
 
     /**
+     * The transport the dashboard asked this site to provision: push, pull, or
+     * both. Set from the provisioning code at paste time (the operator's call);
+     * defaults to 'both' for manual/legacy registration.
+     *
+     * @return string One of 'push', 'pull', 'both'.
+     */
+    public static function transport(): string {
+        $t = strtolower((string) get_config('local_sentinel', 'transport'));
+        return in_array($t, provisioning_code::TRANSPORTS, true) ? $t : 'both';
+    }
+
+    /**
      * Build the registration request body.
      *
      * Deliberately carries only site identity + generated machine credentials
@@ -138,21 +150,30 @@ class register {
 
         $base = rtrim($baseurl, '/');
 
-        // Reuse an existing push secret if one is already set (so re-registering
-        // an already-onboarded site doesn't rotate the secret the dashboard
-        // holds); otherwise generate one. Persist secret + endpoint BEFORE the
-        // POST so an approved site can push even if the response is lost.
-        $secret = (string) get_config('local_sentinel', 'pushsecret');
-        if ($secret === '') {
-            $secret = self::generate_secret();
-            set_config('pushsecret', $secret, 'local_sentinel');
-        }
-        set_config('pushendpoint', $base . '/ingest/snapshot/', 'local_sentinel');
+        // The operator-chosen transport decides which credentials we provision.
+        $transport = self::transport();
+        $wantpush = $transport !== 'pull';
+        $wantpull = $transport !== 'push';
 
-        // Provision a pull token too, so the dashboard can fetch on demand (e.g.
-        // a fresh "who's active right now" read before a maintenance window).
-        // Best-effort: registration proceeds push-only if minting fails.
-        $wstoken = self::ensure_ws_token();
+        // Push: reuse an existing secret if set (so re-registering doesn't rotate
+        // the secret the dashboard holds); otherwise generate one. Persist secret
+        // + endpoint BEFORE the POST so an approved site can push even if the
+        // response is lost. Pull-only sends no secret/endpoint.
+        $secret = '';
+        if ($wantpush) {
+            $secret = (string) get_config('local_sentinel', 'pushsecret');
+            if ($secret === '') {
+                $secret = self::generate_secret();
+                set_config('pushsecret', $secret, 'local_sentinel');
+            }
+            set_config('pushendpoint', $base . '/ingest/snapshot/', 'local_sentinel');
+        }
+
+        // Pull: mint a web service token so the dashboard can fetch on demand
+        // (e.g. a fresh "who's active right now" read before a maintenance
+        // window). Best-effort: registration proceeds push-only if minting
+        // fails. Push-only sends no token.
+        $wstoken = $wantpull ? self::ensure_ws_token() : '';
 
         $payload = self::build_payload($secret, $wstoken);
         $identity = $payload['site'];
@@ -183,10 +204,15 @@ class register {
         if ($httpcode === 200 && ($status === 'activated' || $status === 'pending')) {
             $mapped = $status === 'activated' ? registration_state::STATUS_ACTIVATED : registration_state::STATUS_PENDING;
             registration_state::record_result($mapped, $httpcode, $identity['siteidentifier']);
-            // Start the pipeline for BOTH outcomes: an activated site sends
-            // immediately; a pending site starts sending the moment the
-            // operator approves, with no further action needed here.
-            self::enable_push_pipeline();
+            if ($wantpush) {
+                // Start the pipeline for BOTH outcomes: an activated site sends
+                // immediately; a pending site starts sending the moment the
+                // operator approves, with no further action needed here.
+                self::enable_push_pipeline();
+            } else {
+                // Pull-only: make sure the heartbeat task stays off.
+                set_config('pushenabled', 0, 'local_sentinel');
+            }
             return [true, get_string('registration_' . $mapped, 'local_sentinel'), $mapped];
         }
 

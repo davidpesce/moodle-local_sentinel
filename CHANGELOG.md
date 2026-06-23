@@ -13,6 +13,19 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.22.1] — schema_version 3 — 2026-06-23
+
+Operator-selectable transport in the provisioning code (additive; no schema change).
+
+- **A provisioning code can now specify which transport(s) to provision** via an
+  optional `"t"` field — `push` (firewalled sites, no standing pull token),
+  `pull` (no outbound heartbeat), or `both` (default when absent, and for legacy
+  codes). The issuing dashboard makes the call per customer; the site admin's job
+  stays a single paste.
+- `register::run()` honours it: push-only mints no WS token and enables the push
+  pipeline; pull-only mints a token and leaves push off; both does both. Stored
+  as the `transport` setting so retries and the CLI register honour it too.
+
 ## [2.22.0] — schema_version 3 — 2026-06-23
 
 Streamlined "Connect to dashboard" (UI/IA only; no envelope change).

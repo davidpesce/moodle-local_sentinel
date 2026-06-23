@@ -40,6 +40,22 @@ final class provisioning_code_test extends \basic_testcase {
         $this->assertNotNull($parsed);
         $this->assertSame('https://dash.example.com', $parsed['url']);
         $this->assertSame('enroll-secret', $parsed['key']);
+        // No "t" in the code → defaults to both transports.
+        $this->assertSame('both', $parsed['transport']);
+    }
+
+    public function test_parses_transport_directive(): void {
+        foreach (['push', 'pull', 'both'] as $t) {
+            $payload = base64_encode(json_encode(['k' => 'k1', 'u' => 'https://dash.example.com', 't' => $t]));
+            $parsed = provisioning_code::parse('SNTL1.' . rtrim(strtr($payload, '+/', '-_'), '='));
+            $this->assertSame($t, $parsed['transport']);
+        }
+    }
+
+    public function test_unknown_transport_falls_back_to_both(): void {
+        $payload = base64_encode(json_encode(['k' => 'k1', 'u' => 'https://dash.example.com', 't' => 'sideways']));
+        $parsed = provisioning_code::parse('SNTL1.' . rtrim(strtr($payload, '+/', '-_'), '='));
+        $this->assertSame('both', $parsed['transport']);
     }
 
     public function test_tolerates_surrounding_whitespace(): void {
