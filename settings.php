@@ -49,103 +49,16 @@ if ($hassiteconfig) {
         new moodle_url('/local/sentinel/alerts.php')
     ));
 
-    // Sub-page 2: Connect to dashboard — single entry point for the
-    // connection-explanation cards. Links into the two hidden config
-    // routes below.
+    // Sub-page 2: Connect to dashboard — the single place to connect this site
+    // (managed Service code-paste, or self-hosted manual mint-token / push
+    // config). The old hidden setup + settings pages were folded into it; their
+    // config keys are now managed by custom forms on connect.php / alerts.php
+    // and read with sane fallbacks via get_config (no admin_setting defaults
+    // needed). Core file integrity (integrityenabled) lives on the Settings
+    // page (alerts.php) as a data/feature preference.
     $ADMIN->add('local_sentinel_category', new admin_externalpage(
         'local_sentinel_connect',
         get_string('connect_label', 'local_sentinel'),
         new moodle_url('/local/sentinel/connect.php')
-    ));
-
-    // Hidden in the nav, but still routable URLs that the Connect page
-    // links into. Constructor's 4th-arg ($req_capability) keeps the
-    // default 'moodle/site:config'; 5th-arg ($hidden) hides from the
-    // tree. admin_settingpage takes ($name, $visiblename, $req_capability,
-    // $hidden); admin_externalpage takes ($name, $visiblename, $url,
-    // $req_capability, $hidden, $context).
-    $settings = new admin_settingpage(
-        'local_sentinel',
-        get_string('settings_label', 'local_sentinel'),
-        'moodle/site:config',
-        true
-    );
-    $ADMIN->add('local_sentinel_category', $settings);
-
-    $ADMIN->add('local_sentinel_category', new admin_externalpage(
-        'local_sentinel_setup',
-        get_string('setup_label', 'local_sentinel'),
-        new moodle_url('/local/sentinel/setup.php'),
-        'moodle/site:config',
-        true
-    ));
-
-    $settings->add(new admin_setting_heading(
-        'local_sentinel/settingsheading_push',
-        get_string('settingsheading_push', 'local_sentinel'),
-        get_string('settingsheading_push_desc', 'local_sentinel')
-    ));
-
-    $settings->add(new admin_setting_configcheckbox(
-        'local_sentinel/pushenabled',
-        get_string('pushenabled', 'local_sentinel'),
-        get_string('pushenabled_desc', 'local_sentinel'),
-        0
-    ));
-
-    $settings->add(new admin_setting_configtext(
-        'local_sentinel/pushendpoint',
-        get_string('pushendpoint', 'local_sentinel'),
-        get_string('pushendpoint_desc', 'local_sentinel'),
-        '',
-        PARAM_URL
-    ));
-
-    $settings->add(new admin_setting_configpasswordunmask(
-        'local_sentinel/pushsecret',
-        get_string('pushsecret', 'local_sentinel'),
-        get_string('pushsecret_desc', 'local_sentinel'),
-        ''
-    ));
-
-    $settings->add(new admin_setting_heading(
-        'local_sentinel/settingsheading_registration',
-        get_string('settingsheading_registration', 'local_sentinel'),
-        get_string('settingsheading_registration_desc', 'local_sentinel')
-    ));
-
-    $settings->add(new admin_setting_configcheckbox(
-        'local_sentinel/registrationenabled',
-        get_string('registrationenabled', 'local_sentinel'),
-        get_string('registrationenabled_desc', 'local_sentinel'),
-        0
-    ));
-
-    $settings->add(new admin_setting_configtext(
-        'local_sentinel/dashboardbaseurl',
-        get_string('dashboardbaseurl', 'local_sentinel'),
-        get_string('dashboardbaseurl_desc', 'local_sentinel'),
-        '',
-        PARAM_URL
-    ));
-
-    $settings->add(new admin_setting_configpasswordunmask(
-        'local_sentinel/enrollmentkey',
-        get_string('enrollmentkey', 'local_sentinel'),
-        get_string('enrollmentkey_desc', 'local_sentinel'),
-        ''
-    ));
-
-    $settings->add(new admin_setting_heading(
-        'local_sentinel/settingsheading_integrity',
-        get_string('settingsheading_integrity', 'local_sentinel'),
-        get_string('settingsheading_integrity_desc', 'local_sentinel')
-    ));
-
-    $settings->add(new admin_setting_configcheckbox(
-        'local_sentinel/integrityenabled',
-        get_string('integrityenabled', 'local_sentinel'),
-        get_string('integrityenabled_desc', 'local_sentinel'),
-        0
     ));
 }

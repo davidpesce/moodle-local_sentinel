@@ -13,6 +13,23 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.22.0] — schema_version 3 — 2026-06-23
+
+Streamlined "Connect to dashboard" (UI/IA only; no envelope change).
+
+- **Connecting is now one page, organised by who hosts the dashboard.** The
+  Connect page leads with the managed **Sentinel Monitoring Service** (paste a
+  provisioning code + a "Get Sentinel monitoring" sign-up link), with a
+  collapsible **"your own dashboard" (self-hosted)** section for manual setup —
+  mint a pull token and configure push endpoint/secret inline.
+- **Retired the two hidden pages** (the separate token-mint page and the push/
+  registration admin settings page); their controls are embedded in Connect.
+  `setup.php` now redirects there; the CLI (`cli/setup.php`, `cli/register.php`)
+  is unchanged. Config keys are unchanged — managed via the new inline forms.
+- **Core file integrity moved to the Settings page** (with alert recipients and
+  the data-sharing/egress controls), since enabling scanning is a data/feature
+  preference, not a connection step.
+
 ## [2.21.6] — schema_version 3 — 2026-06-23
 
 UI consistency.

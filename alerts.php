@@ -47,6 +47,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('alertemails_submit'
     }
 }
 
+// Handle the core-file-integrity toggle save before any output.
+$integritysaved = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('integrity_submit', 0, PARAM_INT)) {
+    require_sesskey();
+    set_config('integrityenabled', optional_param('integrityenabled', 0, PARAM_INT) ? 1 : 0, 'local_sentinel');
+    $integritysaved = true;
+}
+
 // Handle the egress-policy save before any output.
 $egresssaved = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('egress_submit', 0, PARAM_INT)) {
@@ -278,6 +286,50 @@ if ($showpreview) {
     );
 }
 
+echo html_writer::end_div();
+echo html_writer::end_div();
+
+// Section: Core file integrity (a data/feature preference, not a connection step).
+echo html_writer::tag(
+    'h4',
+    s(get_string('settingsheading_integrity', 'local_sentinel')),
+    ['class' => 'h6 text-uppercase text-muted mt-4']
+);
+
+if ($integritysaved) {
+    echo $OUTPUT->notification(
+        get_string('integrity_saved', 'local_sentinel'),
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
+echo html_writer::start_div('card');
+echo html_writer::start_div('card-body');
+echo html_writer::tag(
+    'p',
+    s(get_string('integrityenabled_desc', 'local_sentinel')),
+    ['class' => 'small text-muted mb-3']
+);
+echo html_writer::start_tag('form', [
+    'method' => 'post',
+    'action' => (new moodle_url('/local/sentinel/alerts.php'))->out(false),
+]);
+echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
+echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'integrity_submit', 'value' => 1]);
+echo html_writer::start_div('form-check mb-3');
+echo html_writer::empty_tag('input', array_merge(
+    ['type' => 'checkbox', 'class' => 'form-check-input', 'name' => 'integrityenabled',
+     'value' => 1, 'id' => 'sentinel-integrityenabled'],
+    get_config('local_sentinel', 'integrityenabled') ? ['checked' => 'checked'] : []
+));
+echo html_writer::tag('label', s(get_string('integrityenabled', 'local_sentinel')), [
+    'class' => 'form-check-label', 'for' => 'sentinel-integrityenabled',
+]);
+echo html_writer::end_div();
+echo html_writer::tag('button', s(get_string('egress_save', 'local_sentinel')), [
+    'type' => 'submit', 'class' => 'btn btn-primary btn-sm',
+]);
+echo html_writer::end_tag('form');
 echo html_writer::end_div();
 echo html_writer::end_div();
 

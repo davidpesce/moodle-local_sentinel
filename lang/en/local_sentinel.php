@@ -40,6 +40,8 @@ $string['connect_intro'] = 'Sentinel collects operational metrics about this Moo
     . 'to a central dashboard. Two mechanisms move the data between this site and the dashboard. '
     . 'Choose the one that fits your network setup — or use both.';
 $string['connect_label'] = 'Connect to dashboard';
+$string['connect_mint_button'] = 'Mint token';
+$string['connect_mint_regen'] = 'Regenerate token';
 $string['connect_not_configured'] = 'Not configured';
 $string['connect_note_both'] = 'Either or both mechanisms can be enabled. The dashboard de-duplicates '
     . 'incoming snapshots by siteidentifier.';
@@ -56,6 +58,12 @@ $string['connect_pull_requires'] = 'Requires: nothing from the dashboard. This s
 $string['connect_pull_title'] = 'Allow remote dashboard to retrieve data';
 $string['connect_pull_when'] = 'Use when the dashboard can reach this site\'s URL inbound — the simpler '
     . 'default for most production setups.';
+$string['connect_push_https'] = 'The dashboard ingest URL must use HTTPS.';
+$string['connect_push_save'] = 'Save sending settings';
+$string['connect_push_saved'] = 'Sending settings saved.';
+$string['connect_selfhosted_intro'] = 'Running the open-source Sentinel dashboard yourself? Paste its '
+    . 'provisioning code in the box above, or set the connection up manually below.';
+$string['connect_selfhosted_title'] = 'Connect to your own dashboard (self-hosted)';
 $string['connect_send_cta'] = 'Configure sending →';
 $string['connect_send_desc'] = 'This Moodle posts a full snapshot to a configured dashboard URL on a '
     . 'schedule.';
@@ -65,6 +73,11 @@ $string['connect_send_title'] = 'Send data to remote dashboard';
 $string['connect_send_when'] = 'Use when the dashboard cannot reach this site\'s URL — for example '
     . 'instances behind a firewall, on a private network, or being evaluated before network access '
     . 'has been opened up.';
+$string['connect_service_intro'] = 'The managed service watches this site for you — alerting, uptime '
+    . 'history, and scheduled reports, with nothing to host. Paste the provisioning code from your '
+    . 'welcome email to connect.';
+$string['connect_service_signup'] = 'Don\'t have a provisioning code? Get Sentinel monitoring';
+$string['connect_service_title'] = 'Sentinel Monitoring Service';
 $string['dashboardbaseurl'] = 'Dashboard base URL';
 $string['dashboardbaseurl_desc'] = 'Base URL of the Sentinel dashboard (e.g. https://dash.example.com), '
     . 'with no path. The registration and ingest endpoints are derived from it. Must use HTTPS.';
@@ -114,6 +127,7 @@ $string['integrity_no_manifest_note'] = 'No reference manifest stored yet. Integ
 $string['integrity_no_scan_note'] = 'A reference manifest is stored but no scan has completed yet. '
     . 'The weekly scheduled task will run one, or the dashboard can request a scan on demand.';
 $string['integrity_overflow_note'] = '… and {$a} more not shown (the reported list is capped).';
+$string['integrity_saved'] = 'Core file integrity setting saved.';
 $string['integrity_scan_error'] = 'The most recent integrity scan failed: {$a}';
 $string['integrity_unexpected_heading'] = 'Unexpected files ({$a}) — click to expand';
 $string['integrityenabled'] = 'Enable core integrity scanning';
