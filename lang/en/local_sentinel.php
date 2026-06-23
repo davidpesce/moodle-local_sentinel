@@ -90,6 +90,7 @@ $string['egress_slice_label_environment'] = 'Environment — PHP, OS, DB, OPcach
 $string['egress_slice_label_health'] = 'Health — cron, tasks, users, disk, backup';
 $string['egress_slice_label_integrity'] = 'Integrity — core file scan results (deviations only)';
 $string['egress_slice_label_plugins'] = 'Plugins — installed plugins, available updates';
+$string['egress_slice_label_reporting'] = 'Reporting — report recipient email addresses';
 $string['egress_slice_label_reports'] = 'Reports — performance, security, system status';
 $string['egress_slice_label_status'] = 'Status — release, branch, EOL, core update';
 $string['egress_slices_heading'] = 'Snapshot slices';

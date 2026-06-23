@@ -13,6 +13,17 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.21.3] — schema_version 3 — 2026-06-23
+
+Bug fix; no envelope shape change.
+
+- **Add the missing `egress_slice_label_reporting` language string.** The egress
+  settings page iterates `collector::ALL_SLICES` (which includes `reporting`)
+  and renders each checkbox label via `get_string('egress_slice_label_' .
+  $slice)`. The `reporting` slice had no label, so its checkbox rendered as the
+  raw `[[egress_slice_label_reporting]]` placeholder. Pre-existing since the
+  `reporting` slice was added.
+
 ## [2.21.2] — schema_version 3 — 2026-06-22
 
 Honest OPcache reporting under CLI (additive envelope change; no schema bump).
