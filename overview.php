@@ -155,14 +155,46 @@ echo html_writer::tag(
 // Hover styles for the clickable metric cards + quiet styling for healthy
 // (zero-value) ones. Inlined so the page is self-contained (no project-wide
 // stylesheet in this plugin).
+// Severity colours are defined explicitly here (not via Bootstrap utility
+// classes) so they render identically across Moodle 4.x (Bootstrap 4) and 5.x:
+// text-bg-*/display-6/fw-bold are Bootstrap 5 only and are no-ops under 4.x.
 echo '<style>
     a.sentinel-metric-card { color: inherit; text-decoration: none; display: block; height: 100%;
         transition: transform 0.1s, box-shadow 0.1s; }
     a.sentinel-metric-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
     a.sentinel-metric-card .metric-link-hint { opacity: 0.4; }
     a.sentinel-metric-card:hover .metric-link-hint { opacity: 0.9; }
-    a.sentinel-metric-card .card.sentinel-quiet { opacity: 0.65; }
-    a.sentinel-metric-card:hover .card.sentinel-quiet { opacity: 1; }
+
+    /* Severity badges (filled, uppercase) — used in the Action needed list. */
+    .sentinel-sev-badge { display: inline-block; margin-right: 0.5rem; padding: 0.15em 0.5em;
+        border-radius: 0.25rem; font-size: 0.72em; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.02em; line-height: 1.4; vertical-align: middle; }
+    .sentinel-sev-danger    { background: #dc3545; color: #fff; }
+    .sentinel-sev-error     { background: #fd7e14; color: #fff; }
+    .sentinel-sev-warning   { background: #f0ad4e; color: #212529; }
+    .sentinel-sev-info      { background: #0dcaf0; color: #212529; }
+    .sentinel-sev-secondary { background: #6c757d; color: #fff; }
+    .sentinel-sev-success   { background: #198754; color: #fff; }
+
+    /* Action rows: left accent + faint tint per severity. */
+    .sentinel-action-danger  { border-left: 4px solid #dc3545; background: #fdecee; }
+    .sentinel-action-error   { border-left: 4px solid #fd7e14; background: #fdf1e7; }
+    .sentinel-action-warning { border-left: 4px solid #f0ad4e; background: #fef8ec; }
+    .sentinel-action-info    { border-left: 4px solid #0dcaf0; background: #eaf8fc; }
+
+    /* Metric cards: coloured border + faint tint + coloured big number. */
+    .sentinel-metric { border: 2px solid #dee2e6; }
+    .sentinel-metric-num { font-size: 2.6rem; font-weight: 700; }
+    .sentinel-metric.sev-critical { border-color: #dc3545; background: #fdecee; }
+    .sentinel-metric.sev-critical .sentinel-metric-num { color: #dc3545; }
+    .sentinel-metric.sev-error    { border-color: #fd7e14; background: #fdf1e7; }
+    .sentinel-metric.sev-error .sentinel-metric-num { color: #d9480f; }
+    .sentinel-metric.sev-warning  { border-color: #f0ad4e; background: #fef8ec; }
+    .sentinel-metric.sev-warning .sentinel-metric-num { color: #9a6700; }
+    .sentinel-metric.sev-ok       { border-color: #c7e6d4; }
+    .sentinel-metric.sev-ok .sentinel-metric-num { color: #198754; }
+    a.sentinel-metric-card .card.sentinel-metric.sev-ok { opacity: 0.8; }
+    a.sentinel-metric-card:hover .card.sentinel-metric.sev-ok { opacity: 1; }
 </style>';
 
 // Section: Action needed. The page leads with what to DO — a severity-ordered
@@ -183,28 +215,28 @@ echo local_sentinel_overview_metric_card(
     get_string('overview_metric_critical', 'local_sentinel'),
     $critical,
     get_string('overview_metric_critical_subtext', 'local_sentinel'),
-    $critical > 0 ? 'border-danger' : 'sentinel-quiet',
+    $critical > 0 ? 'critical' : 'ok',
     $reportstaburl
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_errors', 'local_sentinel'),
     $errors,
     get_string('overview_metric_errors_subtext', 'local_sentinel'),
-    $errors > 0 ? 'border-danger' : 'sentinel-quiet',
+    $errors > 0 ? 'error' : 'ok',
     $reportstaburl
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_plugin_updates', 'local_sentinel'),
     $pluginupdates,
     get_string('overview_metric_plugin_updates_subtext', 'local_sentinel'),
-    $pluginupdates > 0 ? 'border-warning' : 'sentinel-quiet',
+    $pluginupdates > 0 ? 'warning' : 'ok',
     new moodle_url('/admin/plugins.php', null, 'updatable')
 );
 echo local_sentinel_overview_metric_card(
     get_string('overview_metric_core_update', 'local_sentinel'),
     $coreupdate,
     get_string('overview_metric_core_update_subtext', 'local_sentinel'),
-    $coreupdate > 0 ? 'border-warning' : 'sentinel-quiet',
+    $coreupdate > 0 ? 'warning' : 'ok',
     new moodle_url('/admin/index.php')
 );
 echo html_writer::end_div();
@@ -238,7 +270,9 @@ echo $OUTPUT->footer();
  * @param string     $label
  * @param int        $value
  * @param string     $subtext
- * @param string     $borderclass Bootstrap border-* utility, e.g. 'border-success'.
+ * @param string     $severity Severity tier: critical|error|warning|ok. Drives
+ *                             the border, tint, and number colour (see the inline
+ *                             <style> at the top of the page render).
  * @param moodle_url $href Destination the card links to.
  * @return string
  */
@@ -246,19 +280,19 @@ function local_sentinel_overview_metric_card(
     string $label,
     int $value,
     string $subtext,
-    string $borderclass,
+    string $severity,
     moodle_url $href
 ): string {
     $body = html_writer::start_div('d-flex justify-content-between align-items-start mb-1');
     $body .= html_writer::tag('div', s($label), ['class' => 'text-uppercase text-muted small']);
     $body .= html_writer::tag('span', '›', ['class' => 'metric-link-hint h5 mb-0']);
     $body .= html_writer::end_div();
-    $body .= html_writer::tag('div', (string) $value, ['class' => 'display-6 fw-bold lh-1 mb-1']);
+    $body .= html_writer::tag('div', (string) $value, ['class' => 'sentinel-metric-num lh-1 mb-1']);
     $body .= html_writer::tag('div', s($subtext), ['class' => 'small text-muted']);
 
     $card = html_writer::div(
         html_writer::div($body, 'card-body'),
-        "card border-2 {$borderclass} h-100"
+        "card sentinel-metric sev-{$severity} h-100"
     );
 
     return html_writer::div(
@@ -285,7 +319,7 @@ function local_sentinel_overview_action_panel(array $actions): string {
         'h4',
         s(get_string('overview_action_heading', 'local_sentinel'))
             . ' ' . html_writer::tag('span', (string) count($actions), [
-                'class' => 'badge ms-1 ' . (count($actions) ? 'text-bg-secondary' : 'text-bg-success'),
+                'class' => 'sentinel-sev-badge ' . (count($actions) ? 'sentinel-sev-secondary' : 'sentinel-sev-success'),
             ]),
         ['class' => 'h5 mb-2']
     );
@@ -305,14 +339,16 @@ function local_sentinel_overview_action_panel(array $actions): string {
     }
 
     $badges = [
-        'danger' => 'text-bg-danger',
-        'warning' => 'text-bg-warning',
-        'info' => 'text-bg-info',
+        'danger' => 'sentinel-sev-danger',
+        'error' => 'sentinel-sev-error',
+        'warning' => 'sentinel-sev-warning',
+        'info' => 'sentinel-sev-info',
     ];
     $rows = '';
     foreach ($actions as $action) {
-        $left = html_writer::tag('span', s($action['severity']), [
-            'class' => 'badge me-2 ' . ($badges[$action['severity']] ?? 'text-bg-secondary'),
+        $sev = $action['severity'];
+        $left = html_writer::tag('span', s($sev), [
+            'class' => 'sentinel-sev-badge ' . ($badges[$sev] ?? 'sentinel-sev-secondary'),
         ]) . s($action['message']);
         $right = $action['url'] instanceof moodle_url
             ? html_writer::link($action['url'], s(get_string('overview_action_go', 'local_sentinel')) . ' →', [
@@ -322,6 +358,7 @@ function local_sentinel_overview_action_panel(array $actions): string {
         $rows .= html_writer::div(
             html_writer::div($left, 'me-3') . $right,
             'list-group-item d-flex justify-content-between align-items-center'
+            . (isset($badges[$sev]) ? ' sentinel-action-' . $sev : '')
         );
     }
     return html_writer::div(

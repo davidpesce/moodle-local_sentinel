@@ -182,16 +182,26 @@ final class actions_test extends \advanced_testcase {
         $this->assertStringContainsString('reboot', $messages);
     }
 
-    public function test_severity_ordering_danger_warning_info(): void {
+    public function test_report_errors_are_error_tier(): void {
+        $snapshot = $this->healthy_snapshot();
+        $snapshot['reports']['security']['counts_by_status']['error'] = 2;
+        $items = actions::from_snapshot($snapshot);
+        $this->assertCount(1, $items);
+        $this->assertSame('error', $items[0]['severity']);
+        $this->assertStringContainsString('error', $items[0]['message']);
+    }
+
+    public function test_severity_ordering_danger_error_warning_info(): void {
         $snapshot = $this->healthy_snapshot();
         $snapshot['health']['flags']['debug'] = 1;                                    // Info.
         $snapshot['status']['core_update'] = [
             'update_available' => true,
             'latest_on_branch' => ['release' => '4.5.12+'],
         ];                                                                            // Warning.
+        $snapshot['reports']['performance']['counts_by_status']['error'] = 1;         // Error.
         $snapshot['health']['cache_stores']['not_ready_count'] = 1;                   // Danger.
 
         $severities = array_map(fn($i) => $i['severity'], actions::from_snapshot($snapshot));
-        $this->assertSame(['danger', 'warning', 'info'], $severities);
+        $this->assertSame(['danger', 'error', 'warning', 'info'], $severities);
     }
 }

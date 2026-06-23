@@ -13,6 +13,21 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.21.4] — schema_version 3 — 2026-06-23
+
+UI only; no envelope shape change.
+
+- **Overview page now colour-prioritises severity.** The Action needed list shows
+  filled, uppercase severity badges with a coloured left accent and faint row
+  tint; the headline metric cards colour the big number (and border/tint) by
+  severity — CRITICAL red, ERRORS orange, updates amber, healthy green. Colours
+  are defined in the plugin's own inline CSS rather than Bootstrap utility classes
+  (`text-bg-*`/`display-6`/`fw-bold` are Bootstrap 5 only and render as no-ops on
+  Moodle 4.x's Bootstrap 4), so they look the same across Moodle 4.5–5.2.
+- **New `error` action severity tier** (danger > error > warning > info): the
+  "checks reporting errors" action now stands out from generic warnings, matching
+  the separate ERRORS metric card.
+
 ## [2.21.3] — schema_version 3 — 2026-06-23
 
 Bug fix; no envelope shape change.

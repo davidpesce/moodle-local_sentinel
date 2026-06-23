@@ -49,7 +49,7 @@ class actions {
      * Build the ordered action list for a snapshot.
      *
      * @param array $snapshot Full snapshot from the collector.
-     * @return array[] Each: ['severity' => danger|warning|info,
+     * @return array[] Each: ['severity' => danger|error|warning|info,
      *                        'message' => string, 'url' => \moodle_url|null]
      */
     public static function from_snapshot(array $snapshot): array {
@@ -147,7 +147,7 @@ class actions {
             + (int) ($reports['system_status']['counts_by_status']['error'] ?? 0);
         if ($errors > 0) {
             $add(
-                'warning',
+                'error',
                 get_string('overview_action_errors', 'local_sentinel', $errors),
                 new \moodle_url('/local/sentinel/overview.php', ['tab' => 'reports'])
             );
@@ -246,8 +246,8 @@ class actions {
             $add('info', get_string('overview_action_os_reboot', 'local_sentinel'), null);
         }
 
-        // Stable severity ordering: danger, warning, info.
-        $rank = ['danger' => 0, 'warning' => 1, 'info' => 2];
+        // Stable severity ordering: danger, error, warning, info.
+        $rank = ['danger' => 0, 'error' => 1, 'warning' => 2, 'info' => 3];
         usort($items, fn($a, $b) => $rank[$a['severity']] <=> $rank[$b['severity']]);
         return $items;
     }
