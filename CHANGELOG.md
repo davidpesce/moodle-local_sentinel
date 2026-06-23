@@ -13,6 +13,16 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.21.6] — schema_version 3 — 2026-06-23
+
+UI consistency.
+
+- **The critical "Review →" action now opens the in-plugin Reports tab** (and
+  scrolls to it) like the CRITICAL/ERRORS cards and the errors action, instead of
+  the native `/report/status/` page. The Reports tab shows performance / security
+  / system_status side-by-side, matching the cards' rationale of not dropping the
+  operator onto a single contributing native page.
+
 ## [2.21.5] — schema_version 3 — 2026-06-23
 
 UI polish on the 2.21.4 Overview colours.

@@ -72,7 +72,7 @@ class actions {
             $add(
                 'danger',
                 get_string('overview_action_critical', 'local_sentinel', $critical),
-                new \moodle_url('/report/status/index.php')
+                new \moodle_url('/local/sentinel/overview.php', ['tab' => 'reports'], 'sentinel-tab')
             );
         }
 
