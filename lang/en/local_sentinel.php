@@ -40,6 +40,13 @@ $string['connect_intro'] = 'Sentinel collects operational metrics about this Moo
     . 'to a central dashboard. Two mechanisms move the data between this site and the dashboard. '
     . 'Choose the one that fits your network setup — or use both.';
 $string['connect_label'] = 'Connect to dashboard';
+$string['connect_method_apply'] = 'Apply';
+$string['connect_method_both'] = 'Push + pull (recommended)';
+$string['connect_method_heading'] = 'Connection method';
+$string['connect_method_narrow_note'] = 'Switching to fewer methods provisions the new ones immediately; '
+    . 'fully removing a method may still need the dashboard operator to revoke the old credential.';
+$string['connect_method_pull'] = 'Pull only (dashboard fetches; no outbound heartbeat)';
+$string['connect_method_push'] = 'Push only (this site sends; for firewalled sites)';
 $string['connect_mint_button'] = 'Mint token';
 $string['connect_mint_regen'] = 'Regenerate token';
 $string['connect_not_configured'] = 'Not configured';

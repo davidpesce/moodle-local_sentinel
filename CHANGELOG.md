@@ -13,6 +13,18 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.22.2] — schema_version 3 — 2026-06-23
+
+Site-selectable connection method (UI only; no schema change).
+
+- **The site admin can now choose push / pull / both** on the Connect page once
+  connected — a "Connection method" selector. Applying re-registers, so the
+  dashboard receives whatever credential is newly provisioned (it fills a blank
+  ws_token / push_secret; never rotates an existing one — needs dashboard
+  ≥0.14.10). The provisioning code's transport is now just the default the
+  selector starts on. Fully *removing* a method may still need the operator to
+  revoke the old credential (a noted limitation).
+
 ## [2.22.1] — schema_version 3 — 2026-06-23
 
 Operator-selectable transport in the provisioning code (additive; no schema change).

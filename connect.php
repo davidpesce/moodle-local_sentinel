@@ -92,6 +92,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('do_register', 0, PA
     );
 }
 
+// Connection-method handler — the site picks push/pull/both, then we re-register
+// so the dashboard receives whatever credential is newly provisioned (it fills a
+// blank ws_token / push_secret; it never rotates an existing one).
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('do_transport', 0, PARAM_INT)) {
+    require_sesskey();
+    require_capability('moodle/site:config', context_system::instance());
+    $t = optional_param('transport', '', PARAM_ALPHA);
+    if (in_array($t, \local_sentinel\provisioning_code::TRANSPORTS, true)) {
+        set_config('transport', $t, 'local_sentinel');
+        [$ok, $message] = \local_sentinel\register::run();
+        redirect(
+            $connecturl,
+            $message,
+            null,
+            $ok ? \core\output\notification::NOTIFY_SUCCESS : \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    redirect($connecturl);
+}
+
 // Mint-token handler (pull) — embeds what the old setup.php page did.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('do_setup', 0, PARAM_INT)) {
     require_sesskey();
@@ -199,8 +219,13 @@ if ($regstate['last_status'] !== \local_sentinel\registration_state::STATUS_NEVE
         'p',
         html_writer::tag('strong', s(get_string('registration_status_label', 'local_sentinel')) . ': ')
             . html_writer::tag('span', s($regstatustext), ['class' => $regstatusclass]),
-        ['class' => 'mt-3 mb-0']
+        ['class' => 'mt-3 mb-1']
     );
+    // Connection method: the site chooses push/pull/both; applying re-registers
+    // so the dashboard receives the newly provisioned credential.
+    if ($regconfigured) {
+        echo local_sentinel_connect_method_form($connecturl, \local_sentinel\register::transport());
+    }
     // Offer a retry when configured but not yet activated.
     if ($regconfigured && $regstate['last_status'] !== \local_sentinel\registration_state::STATUS_ACTIVATED) {
         echo html_writer::start_tag('form', [
@@ -380,6 +405,48 @@ function local_sentinel_connect_code_form(moodle_url $action): string {
     ]);
     $out .= html_writer::end_div();
     $out .= html_writer::end_tag('form');
+    return $out;
+}
+
+/**
+ * Render the "Connection method" selector (push / pull / both) + Apply button.
+ *
+ * Applying re-registers with the chosen transport so the dashboard receives any
+ * newly provisioned credential (it fills a blank token/secret, never rotates).
+ *
+ * @param moodle_url $action Form action URL.
+ * @param string $current The currently selected transport (push|pull|both).
+ * @return string
+ */
+function local_sentinel_connect_method_form(moodle_url $action, string $current): string {
+    $options = '';
+    foreach (['both', 'push', 'pull'] as $opt) {
+        $options .= html_writer::tag('option', s(get_string('connect_method_' . $opt, 'local_sentinel')), array_merge(
+            ['value' => $opt],
+            $opt === $current ? ['selected' => 'selected'] : []
+        ));
+    }
+    $out = html_writer::tag(
+        'label',
+        s(get_string('connect_method_heading', 'local_sentinel')),
+        ['for' => 'sentinel-transport', 'class' => 'form-label small text-muted mb-1']
+    );
+    $out .= html_writer::start_tag('form', [
+        'method' => 'post', 'action' => $action->out(false), 'class' => 'd-flex gap-2 align-items-center mb-1',
+    ]);
+    $out .= html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
+    $out .= html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'do_transport', 'value' => 1]);
+    $out .= html_writer::tag('select', $options, [
+        'name' => 'transport', 'id' => 'sentinel-transport',
+        'class' => 'form-select form-select-sm', 'style' => 'width: auto;',
+    ]);
+    $out .= html_writer::tag('button', s(get_string('connect_method_apply', 'local_sentinel')), [
+        'type' => 'submit', 'class' => 'btn btn-outline-secondary btn-sm',
+    ]);
+    $out .= html_writer::end_tag('form');
+    $out .= html_writer::tag('p', s(get_string('connect_method_narrow_note', 'local_sentinel')), [
+        'class' => 'form-text small mt-0 mb-0',
+    ]);
     return $out;
 }
 
