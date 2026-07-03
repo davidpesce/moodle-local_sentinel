@@ -189,7 +189,16 @@ class register {
             'Content-Type: application/json',
             'X-Sentinel-Enrollment-Key: ' . $enrollmentkey,
         ]);
-        $response = $curl->post($base . '/api/register/', json_encode($payload));
+        // This request carries the enrollment key and receives the freshly minted
+        // push secret / WS token in the body, so the transport MUST be verified —
+        // Moodle's curl wrapper defaults CURLOPT_SSL_VERIFYPEER to 0, which we
+        // override here. CURLOPT_TIMEOUT bounds a hung dashboard (the wrapper only
+        // sets CURLOPT_CONNECTTIMEOUT by default) so this can't wedge the caller.
+        $response = $curl->post($base . '/api/register/', json_encode($payload), [
+            'CURLOPT_SSL_VERIFYPEER' => true,
+            'CURLOPT_SSL_VERIFYHOST' => 2,
+            'CURLOPT_TIMEOUT' => 30,
+        ]);
         $httpcode = (int) ($curl->get_info()['http_code'] ?? 0);
 
         if ($curl->get_errno() !== 0) {

@@ -95,7 +95,15 @@ class push_snapshot extends scheduled_task {
             'X-Sentinel-Secret: ' . $secret,
             'X-Fleetmonitor-Site: ' . $snapshot['site']['siteidentifier'],
         ]);
-        $response = $curl->post($endpoint, $body);
+        // The push carries the shared secret and the full telemetry payload, so the
+        // transport MUST be verified — Moodle's curl wrapper defaults
+        // CURLOPT_SSL_VERIFYPEER to 0, which we override here. CURLOPT_TIMEOUT bounds
+        // a hung dashboard so a stuck POST can't wedge the cron worker every 15 min.
+        $response = $curl->post($endpoint, $body, [
+            'CURLOPT_SSL_VERIFYPEER' => true,
+            'CURLOPT_SSL_VERIFYHOST' => 2,
+            'CURLOPT_TIMEOUT' => 30,
+        ]);
         $httpcode = (int) ($curl->get_info()['http_code'] ?? 0);
 
         if ($curl->get_errno() !== 0) {

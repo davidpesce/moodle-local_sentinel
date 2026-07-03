@@ -65,6 +65,11 @@ class config_drift {
         // full word "password"). May over-match a few benign names — that's the
         // safe direction: a withheld/redacted non-secret beats a leaked secret.
         'pass',
+        // The "pw" pattern catches the LDAP/CAS/enrol bind-password settings
+        // (auth_ldap/bind_pw, auth_cas/bind_pw, enrol_ldap/bind_pw) — those are
+        // configpasswordunmask secrets whose bare {config_log} name matches
+        // neither "pass" nor any other pattern here.
+        'pw',
         'secret',
         'token',
         'apikey',
