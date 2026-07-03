@@ -151,9 +151,20 @@ class integrity_scanner {
         $base = rtrim(self::base_dir(), '/');
         $prefixes = ['.git', 'vendor', 'node_modules', 'config.php', 'public/config.php'];
 
+        // Exclude a dataroot nested under the code root. Match on BOTH the literal
+        // and the canonicalised (realpath) paths: a dataroot that sits under
+        // dirroot but is spelled non-canonically (a symlink alias, a `..` segment,
+        // a case difference on a case-insensitive FS) would slip past a raw
+        // str_starts_with, and the scan would then walk the entire dataroot —
+        // potentially millions of files → a guaranteed timeout plus bogus
+        // "unexpected" entries every week.
         $dataroot = rtrim((string) $CFG->dataroot, '/');
-        if ($dataroot !== '' && str_starts_with($dataroot, $base . '/')) {
-            $prefixes[] = substr($dataroot, strlen($base) + 1);
+        $realbase = realpath($base) ?: $base;
+        $realdataroot = $dataroot !== '' ? (realpath($dataroot) ?: $dataroot) : '';
+        foreach ([[$base, $dataroot], [$realbase, $realdataroot]] as [$b, $d]) {
+            if ($d !== '' && $b !== '' && str_starts_with($d, $b . '/')) {
+                $prefixes[] = substr($d, strlen($b) + 1);
+            }
         }
 
         // Plugin enumeration can echo stray output (e.g. whitespace after a
@@ -235,7 +246,17 @@ class integrity_scanner {
                 return !self::is_excluded($rel, $excluded);
             }
         );
-        $iterator = new \RecursiveIteratorIterator($filter);
+        // CATCH_GET_CHILD: if the walk descends into a directory the web/cron
+        // user can't read (a root-owned lost+found on a mountpoint, a chmod-700
+        // dir left by a deploy tool), getChildren() throws UnexpectedValueException.
+        // Without this flag it propagates out of the whole scan and permanently
+        // fails the weekly run; with it, the unreadable subtree is skipped and the
+        // rest of the tree still scans.
+        $iterator = new \RecursiveIteratorIterator(
+            $filter,
+            \RecursiveIteratorIterator::LEAVES_ONLY,
+            \RecursiveIteratorIterator::CATCH_GET_CHILD
+        );
 
         $scanned = 0;
         $timedout = false;
@@ -320,6 +341,18 @@ class integrity_scanner {
             $result = self::scan();
         } catch (\Throwable $e) {
             integrity_state::record_scan_error($e->getMessage());
+            // Also overwrite the stored result so its deviation lists don't go
+            // stale relative to the (now error) state — otherwise the collector
+            // would pair this scan's error status with the PREVIOUS scan's lists.
+            manifest_store::save_scan_result([
+                'status' => 'error',
+                'error' => $e->getMessage(),
+                'modified' => [], 'missing' => [], 'unexpected' => [],
+                'modified_count' => 0, 'missing_count' => 0, 'unexpected_count' => 0,
+                'modified_overflow' => 0, 'missing_overflow' => 0, 'unexpected_overflow' => 0,
+                'manifest_version_mismatch' => false,
+                'errors' => [],
+            ]);
             mtrace('local_sentinel: integrity scan failed: ' . $e->getMessage());
             return;
         }

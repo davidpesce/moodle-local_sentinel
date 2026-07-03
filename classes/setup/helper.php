@@ -42,6 +42,9 @@ use context_system;
  * this so behaviour is identical regardless of trigger.
  */
 class helper {
+    /** Description stamped on the role we create — also the marker that a role is ours. */
+    private const ROLE_DESCRIPTION = 'Sentinel webservice access role.';
+
     /**
      * Run the full setup.
      *
@@ -100,15 +103,21 @@ class helper {
             $roleid = create_role(
                 $opts['rolename'],
                 $opts['roleshortname'],
-                'Sentinel webservice access role.',
+                self::ROLE_DESCRIPTION,
                 ''
             );
             set_role_contextlevels($roleid, [CONTEXT_SYSTEM]);
             $result->createdrole = true;
             $result->steps[] = "Created role '{$opts['roleshortname']}'.";
-        } else {
+        } else if (trim((string) $role->description) === self::ROLE_DESCRIPTION) {
             $roleid = (int) $role->id;
             $result->steps[] = "Reusing existing role '{$opts['roleshortname']}'.";
+        } else {
+            // A role with this shortname exists but wasn't created by us. Refuse to
+            // repurpose it — the cap assignment below grants local/sentinel:manage
+            // (RISK_CONFIG|RISK_DATALOSS) + WS access, which would silently
+            // escalate every existing holder of that unrelated role.
+            throw new \moodle_exception('roleconflict', 'local_sentinel', '', $opts['roleshortname']);
         }
         $result->roleid = $roleid;
 

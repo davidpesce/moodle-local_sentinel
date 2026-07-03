@@ -87,10 +87,11 @@ cli_heading('Done');
 cli_writeln('Token:      ' . $result->token);
 cli_writeln('Endpoint:   ' . $result->endpoint);
 cli_writeln('');
-cli_writeln('Quick test:');
+cli_writeln('Quick test (POST — keeps the token out of shell history / server logs):');
 cli_writeln(
-    "  curl '" . $result->endpoint .
-    "?wstoken={$result->token}&wsfunction=local_sentinel_get_status&moodlewsrestformat=json'"
+    '  curl -X POST ' . $result->endpoint .
+    " -d wstoken={$result->token} -d wsfunction=local_sentinel_get_status" .
+    ' -d moodlewsrestformat=json'
 );
 
 exit(0);

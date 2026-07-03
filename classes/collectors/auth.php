@@ -87,12 +87,20 @@ class auth {
               ORDER BY t.id ASC";
         $rows = $DB->get_records_sql($sql);
 
+        // Cap the per-token detail list. A site with a mobile-app user base mints
+        // one permanent token per user, so an uncapped list could be tens of
+        // thousands of entries in memory and in every push/pull. The aggregate
+        // counters below are computed over ALL rows and stay accurate; only the
+        // verbose `entries` list is bounded (with an overflow count).
+        $entriescap = 200;
+
         $entries = [];
         $now = time();
         $expiringthreshold = $now + (30 * DAYSECS);
         $stalethreshold = $now - (90 * DAYSECS);
         $recentthreshold = $now - (7 * DAYSECS);
 
+        $totalcount = 0;
         $withoutip = 0;
         $neverused = 0;
         $activerecent = 0;
@@ -100,6 +108,7 @@ class auth {
         $expiringsoon = 0;
 
         foreach ($rows as $row) {
+            $totalcount++;
             $iprestriction = trim((string) ($row->iprestriction ?? ''));
             $hasip = $iprestriction !== '';
             $lastaccess = (int) $row->lastaccess;
@@ -115,33 +124,39 @@ class auth {
             } else if ($lastaccess < $stalethreshold) {
                 $stale++;
             }
-            if ($validuntil > 0 && $validuntil < $expiringthreshold) {
+            // Not-yet-expired but within the window. The lower bound ($validuntil
+            // >= $now) excludes already-expired tokens, which would otherwise be
+            // counted as "expiring soon" forever.
+            if ($validuntil >= $now && $validuntil < $expiringthreshold) {
                 $expiringsoon++;
             }
 
-            $entries[] = [
-                'id' => (int) $row->id,
-                'type' => self::token_type_label((int) $row->tokentype),
-                'user' => $row->username ?? '(deleted)',
-                'user_deleted' => (bool) ($row->userdeleted ?? false),
-                'service_shortname' => $row->serviceshortname,
-                'service_name' => $row->servicename,
-                'has_ip_restriction' => $hasip,
-                'ip_restriction' => $iprestriction,
-                'created' => (int) $row->timecreated,
-                'last_access' => $lastaccess,
-                'valid_until' => $validuntil,
-            ];
+            if (count($entries) < $entriescap) {
+                $entries[] = [
+                    'id' => (int) $row->id,
+                    'type' => self::token_type_label((int) $row->tokentype),
+                    'user' => $row->username ?? '(deleted)',
+                    'user_deleted' => (bool) ($row->userdeleted ?? false),
+                    'service_shortname' => $row->serviceshortname,
+                    'service_name' => $row->servicename,
+                    'has_ip_restriction' => $hasip,
+                    'ip_restriction' => $iprestriction,
+                    'created' => (int) $row->timecreated,
+                    'last_access' => $lastaccess,
+                    'valid_until' => $validuntil,
+                ];
+            }
         }
 
         return [
-            'total_count' => count($entries),
+            'total_count' => $totalcount,
             'without_ip_restriction' => $withoutip,
             'never_used' => $neverused,
             'active_last_7_days' => $activerecent,
             'stale_over_90_days' => $stale,
             'expiring_within_30_days' => $expiringsoon,
             'entries' => $entries,
+            'entries_omitted' => max(0, $totalcount - count($entries)),
         ];
     }
 

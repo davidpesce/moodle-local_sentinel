@@ -33,27 +33,29 @@ require_once($CFG->libdir . '/adminlib.php');
 admin_externalpage_setup('local_sentinel_alerts');
 
 // Handle the alert-recipients save before any output (so we can redirect).
-$alertsaved = false;
 $alertinvalid = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('alertemails_submit', 0, PARAM_INT)) {
     require_sesskey();
     $raw = optional_param('alertemails', '', PARAM_RAW_TRIMMED);
     [$valid, $invalid] = \local_sentinel\recipients::parse($raw);
     if ($invalid !== null) {
+        // Validation error: stay on the page to show it and keep the input.
         $alertinvalid = $invalid;
     } else {
         set_config('alertemails', implode("\n", $valid), 'local_sentinel');
-        $alertsaved = true;
+        // Post/redirect/get so a browser refresh can't re-submit stale values.
+        redirect(new moodle_url('/local/sentinel/alerts.php', ['alertsaved' => 1]));
     }
 }
+$alertsaved = (bool) optional_param('alertsaved', 0, PARAM_INT);
 
 // Handle the core-file-integrity toggle save before any output.
-$integritysaved = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('integrity_submit', 0, PARAM_INT)) {
     require_sesskey();
     set_config('integrityenabled', optional_param('integrityenabled', 0, PARAM_INT) ? 1 : 0, 'local_sentinel');
-    $integritysaved = true;
+    redirect(new moodle_url('/local/sentinel/alerts.php', ['integritysaved' => 1]));
 }
+$integritysaved = (bool) optional_param('integritysaved', 0, PARAM_INT);
 
 // Handle the egress-policy save before any output.
 $egresssaved = false;

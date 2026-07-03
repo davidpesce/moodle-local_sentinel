@@ -92,7 +92,19 @@ class integrity_state {
      * @param array $state
      */
     protected static function put(array $state): void {
-        set_config(self::KEY, json_encode($state), 'local_sentinel');
+        // JSON_INVALID_UTF8_SUBSTITUTE: a scan error message can carry a non-UTF-8
+        // file path (and record_scan_error may truncate mid-multibyte), which would
+        // make json_encode return false and silently reset the stored state to
+        // defaults. Substitute bad bytes so the state always persists.
+        $json = json_encode($state, JSON_INVALID_UTF8_SUBSTITUTE);
+        if ($json === false) {
+            debugging(
+                'local_sentinel: failed to encode integrity state: ' . json_last_error_msg(),
+                DEBUG_DEVELOPER
+            );
+            return;
+        }
+        set_config(self::KEY, $json, 'local_sentinel');
         // Snapshot cache may hold an older state; drop it so the next overview
         // render and the next pull-WS response carry the latest scan outcome.
         cache_helper::purge();

@@ -45,11 +45,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && optional_param('test_push', 0, PARA
         (new \local_sentinel\task\push_snapshot())->execute();
         $testpushresult = 'ok';
     } catch (\Throwable $e) {
-        $testpushresult = 'thrown:' . $e->getMessage();
+        // Only a fixed status token rides the redirect URL — never the exception
+        // text. Round-tripping the message through the URL was a reflected-content
+        // vector (it renders inside a trusted notification); the actual error is
+        // read back from push_state below, server-side and escaped.
+        $testpushresult = 'failed';
     }
     redirect(new moodle_url('/local/sentinel/connect.php', ['testresult' => $testpushresult]));
 }
-$testpushresult = optional_param('testresult', '', PARAM_RAW);
+$testpushresult = optional_param('testresult', '', PARAM_ALPHA);
 
 // Provisioning-code handler — one paste configures the connection settings
 // and registers in a single step. Runs before output so we can redirect.
@@ -249,9 +253,10 @@ if ($pushconfigured) {
             get_string('pushstate_test_success', 'local_sentinel'),
             \core\output\notification::NOTIFY_SUCCESS
         );
-    } else if (strpos((string) $testpushresult, 'thrown:') === 0) {
+    } else if ($testpushresult === 'failed') {
+        $lasterror = (string) (\local_sentinel\push_state::get()['last_error'] ?? '');
         echo $OUTPUT->notification(
-            get_string('pushstate_test_failed', 'local_sentinel', substr($testpushresult, 7)),
+            get_string('pushstate_test_failed', 'local_sentinel', s($lasterror)),
             \core\output\notification::NOTIFY_ERROR
         );
     }

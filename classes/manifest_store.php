@@ -124,7 +124,21 @@ class manifest_store {
      * @param array $result Output of {@see integrity_scanner::scan()}.
      */
     public static function save_scan_result(array $result): void {
-        file_put_contents(self::dir() . '/scan_result.json', json_encode($result));
+        // JSON_INVALID_UTF8_SUBSTITUTE: deviation paths come raw from disk, and a
+        // file with non-UTF-8 bytes in its name (latin-1/CP437 — exactly the sort
+        // of artefact a compromised site leaves) would otherwise make json_encode
+        // return false, and file_put_contents(false) writes an EMPTY file — the
+        // scan would report non-zero counts with empty deviation lists. Substitute
+        // bad bytes instead so the path still reaches the dashboard.
+        $json = json_encode($result, JSON_INVALID_UTF8_SUBSTITUTE);
+        if ($json === false) {
+            debugging(
+                'local_sentinel: failed to encode scan result: ' . json_last_error_msg(),
+                DEBUG_DEVELOPER
+            );
+            return;
+        }
+        file_put_contents(self::dir() . '/scan_result.json', $json);
         // The snapshot collector reads this file; drop the snapshot cache so
         // the next overview render / WS pull reflects the new scan.
         cache_helper::purge();

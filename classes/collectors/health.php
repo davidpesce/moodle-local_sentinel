@@ -519,10 +519,15 @@ class health {
     protected static function collect_admins_last_changed(): array {
         global $DB;
 
+        // Match both the "set main admin" path (logged with plugin = NULL) and
+        // the add/remove-admin paths (logged with plugin = 'core'). Filtering on
+        // plugin IS NULL alone misses the common add/remove case, leaving
+        // last_changed stale exactly when a new admin is granted — the signal
+        // this field exists to surface.
         $row = $DB->get_record_sql(
             "SELECT timemodified, userid, oldvalue, value
                FROM {config_log}
-              WHERE name = 'siteadmins' AND plugin IS NULL
+              WHERE name = 'siteadmins' AND (plugin IS NULL OR plugin = 'core')
               ORDER BY timemodified DESC, id DESC",
             null,
             IGNORE_MULTIPLE

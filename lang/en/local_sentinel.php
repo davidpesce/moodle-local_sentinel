@@ -312,6 +312,8 @@ $string['registrationenabled'] = 'Enable self-registration';
 $string['registrationenabled_desc'] = 'Allows this site to register itself with a Sentinel dashboard using the base URL '
     . 'and enrollment key below. Off by default; registration happens only when you click Register on the '
     . 'Connect to dashboard page — nothing is contacted automatically.';
+$string['roleconflict'] = 'A role with the shortname "{$a}" already exists but was not created by Sentinel. '
+    . 'Rename or remove that role, then re-run setup — Sentinel will not repurpose an unrelated role.';
 $string['sentinel:manage'] = 'Manage Sentinel integrity audits (store manifests, queue scans)';
 $string['sentinel:view'] = 'View Sentinel snapshot data';
 $string['servicemissing'] = 'The Sentinel external service was not found. '

@@ -268,7 +268,12 @@ class environment {
         global $CFG, $DB;
 
         $prefix = $CFG->prefix;
-        $like = str_replace(['\\', '_', '%'], ['\\\\', '\\_', '\\%'], $prefix) . '%';
+        // Escape LIKE wildcards with a pipe rather than a backslash: MySQL treats
+        // a backslash as a string-escape by default, so "ESCAPE '\'" makes the
+        // backslash escape the closing quote and the query 1064s (then gets
+        // swallowed, leaving largest_tables silently empty on every MySQL site).
+        // A pipe is not special in either DB's string literals.
+        $like = str_replace(['|', '_', '%'], ['||', '|_', '|%'], $prefix) . '%';
 
         try {
             if ($CFG->dbtype === 'pgsql') {
@@ -277,14 +282,14 @@ class environment {
                           JOIN pg_namespace n ON n.oid = c.relnamespace
                          WHERE c.relkind = \'r\'
                            AND n.nspname = current_schema()
-                           AND c.relname LIKE :like ESCAPE \'\\\'
+                           AND c.relname LIKE :like ESCAPE \'|\'
                       ORDER BY pg_total_relation_size(c.oid) DESC';
                 $rows = $DB->get_records_sql($sql, ['like' => $like], 0, $limit);
             } else if (in_array($CFG->dbtype, ['mysqli', 'mariadb', 'auroramysql'], true)) {
                 $sql = 'SELECT table_name AS name, (data_length + index_length) AS size_bytes
                           FROM information_schema.tables
                          WHERE table_schema = DATABASE()
-                           AND table_name LIKE :like ESCAPE \'\\\'
+                           AND table_name LIKE :like ESCAPE \'|\'
                       ORDER BY (data_length + index_length) DESC';
                 $rows = $DB->get_records_sql($sql, ['like' => $like], 0, $limit);
             } else {

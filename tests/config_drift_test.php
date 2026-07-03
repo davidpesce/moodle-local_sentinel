@@ -22,7 +22,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_sentinel\collectors;
+namespace local_sentinel;
+
+use local_sentinel\collectors\config_changes;
+use local_sentinel\collectors\config_drift;
 
 /**
  * Verifies secret-bearing setting names are detected and redacted.

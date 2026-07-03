@@ -72,9 +72,14 @@ class integrity {
                 'files_scanned' => (int) $state['files_scanned'],
                 'error' => (string) $state['last_error'],
             ],
-            'modified_count' => (int) $state['modified_count'],
-            'missing_count' => (int) $state['missing_count'],
-            'unexpected_count' => (int) $state['unexpected_count'],
+            // Counts come from the SAME scan as the lists below (the result file),
+            // not from integrity_state — state's counts are only refreshed on a
+            // successful scan, so a later timed-out/errored scan would pair its
+            // partial lists with the previous success's counts (or vice versa),
+            // producing an internally contradictory slice.
+            'modified_count' => (int) ($result['modified_count'] ?? 0),
+            'missing_count' => (int) ($result['missing_count'] ?? 0),
+            'unexpected_count' => (int) ($result['unexpected_count'] ?? 0),
             'modified' => array_slice($result['modified'] ?? [], 0, integrity_scanner::MAX_DEVIATIONS),
             'missing' => array_slice($result['missing'] ?? [], 0, integrity_scanner::MAX_DEVIATIONS),
             'unexpected' => array_slice($result['unexpected'] ?? [], 0, integrity_scanner::MAX_DEVIATIONS),

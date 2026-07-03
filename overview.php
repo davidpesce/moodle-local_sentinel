@@ -83,7 +83,7 @@ echo $PAGE->get_renderer('local_sentinel')->sentinel_subnav('overview');
 // push configured nor a registration activated). Dismissible per user, and
 // disappears on its own once the site connects.
 $overviewpushenabled = (bool) get_config('local_sentinel', 'pushenabled');
-$overviewregstatus = \local_sentinel\registration_state::get()['status'] ?? 'never';
+$overviewregstatus = \local_sentinel\registration_state::get()['last_status'] ?? 'never';
 if (
     !$overviewpushenabled && $overviewregstatus !== 'activated'
         && !get_user_preferences('local_sentinel_dashboard_note_dismissed', false)

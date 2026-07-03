@@ -13,6 +13,48 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.22.3] — schema_version 3 — 2026-07-03
+
+Security and correctness fixes from a full code review (no schema change).
+
+- **Security — TLS verification on outbound calls.** The registration POST and
+  the snapshot push now enable `CURLOPT_SSL_VERIFYPEER`/`VERIFYHOST` and a request
+  timeout. Moodle's curl wrapper defaults peer verification off, so the enrollment
+  key, freshly minted push secret / WS token, and every telemetry push were
+  exposed to a man-in-the-middle presenting any certificate.
+- **Security — bind-password redaction.** `config_changes` now redacts
+  LDAP/CAS/enrol `bind_pw` settings (they matched none of the previous
+  secret-name patterns, so their plaintext values could ship off-site on change).
+- **Security — reflected content on the Connect page.** The push-test result no
+  longer round-trips an error message through the URL (it only carries a fixed
+  `ok`/`failed` token; the detail is read from push state and escaped).
+- **Security — setup role safety.** Setup refuses to repurpose a pre-existing role
+  that merely shares the `sentinel` shortname (which would have silently granted
+  it web-service + manage capabilities); it only reuses a role it created.
+- **`largest_tables` fixed on MySQL/MariaDB.** The `ESCAPE '\'` clause was a
+  syntax error on MySQL (swallowed), leaving the table list permanently empty;
+  both DB branches now escape LIKE wildcards with a pipe.
+- **Admin-change detection.** `health.admins.last_changed` now matches the
+  add/remove-admin log rows (`plugin = 'core'`), not only "set main admin"
+  (`plugin IS NULL`).
+- **Token list bounded.** The `auth.tokens.entries` list is capped at 200 (with an
+  `entries_omitted` count); aggregate counters still cover every token. Prevents a
+  huge payload on mobile-app sites. `expiring_within_30_days` no longer counts
+  already-expired tokens, and `total_count` reflects the true total.
+- **Integrity scan robustness.** Scan results and state survive non-UTF-8 file
+  paths (`JSON_INVALID_UTF8_SUBSTITUTE`); an unreadable subdirectory no longer
+  aborts the whole scan (`CATCH_GET_CHILD`); a non-canonically-spelled nested
+  dataroot is still excluded (realpath match); and the integrity slice's counts
+  and deviation lists now always come from the same scan (no more mixing a
+  timed-out scan's lists with a previous success's counts).
+- **Push pipeline bookkeeping.** A snapshot-collection exception during a push is
+  now recorded as a failure instead of leaving the pipeline reading "success".
+- **Connect page pointer.** The "connect a dashboard" note now correctly hides on
+  activated pull-only sites (was reading the wrong state key).
+- **Alerts page** save handlers redirect (post/redirect/get) so a refresh can't
+  re-submit; the CLI setup "quick test" uses a POST example (keeps the token out
+  of shell history / access logs); and the Moodle 4.2 branch EOL date is corrected.
+
 ## [2.22.2] — schema_version 3 — 2026-06-23
 
 Site-selectable connection method (UI only; no schema change).

@@ -82,43 +82,54 @@ class push_snapshot extends scheduled_task {
         // we don't want skipped-when-disabled runs to inflate the counter.
         push_state::record_attempt();
 
-        $snapshot = collector::get_snapshot_for_egress();
-        $body = json_encode($snapshot);
+        // Snapshot collection can throw (a collector hitting a broken DB/config);
+        // wrap the whole attempt so an exception is recorded as a failure and not
+        // left with total_attempts incremented while last_status still reads
+        // "success" (a green pipeline that is actually failing every run). Rethrow
+        // so the task runner (and the Connect page's test-push) still see it.
+        try {
+            $snapshot = collector::get_snapshot_for_egress();
+            $body = json_encode($snapshot);
 
-        // The Moodle curl wrapper is defined in filelib.php; ensure it's loaded
-        // (a bare CLI bootstrap doesn't autoload it).
-        global $CFG;
-        require_once($CFG->libdir . '/filelib.php');
-        $curl = new \curl(['ignoresecurity' => false]);
-        $curl->setHeader([
-            'Content-Type: application/json',
-            'X-Sentinel-Secret: ' . $secret,
-            'X-Fleetmonitor-Site: ' . $snapshot['site']['siteidentifier'],
-        ]);
-        // The push carries the shared secret and the full telemetry payload, so the
-        // transport MUST be verified — Moodle's curl wrapper defaults
-        // CURLOPT_SSL_VERIFYPEER to 0, which we override here. CURLOPT_TIMEOUT bounds
-        // a hung dashboard so a stuck POST can't wedge the cron worker every 15 min.
-        $response = $curl->post($endpoint, $body, [
-            'CURLOPT_SSL_VERIFYPEER' => true,
-            'CURLOPT_SSL_VERIFYHOST' => 2,
-            'CURLOPT_TIMEOUT' => 30,
-        ]);
-        $httpcode = (int) ($curl->get_info()['http_code'] ?? 0);
+            // The Moodle curl wrapper is defined in filelib.php; ensure it's loaded
+            // (a bare CLI bootstrap doesn't autoload it).
+            global $CFG;
+            require_once($CFG->libdir . '/filelib.php');
+            $curl = new \curl(['ignoresecurity' => false]);
+            $curl->setHeader([
+                'Content-Type: application/json',
+                'X-Sentinel-Secret: ' . $secret,
+                'X-Fleetmonitor-Site: ' . $snapshot['site']['siteidentifier'],
+            ]);
+            // The push carries the shared secret and the full telemetry payload, so the
+            // transport MUST be verified — Moodle's curl wrapper defaults
+            // CURLOPT_SSL_VERIFYPEER to 0, which we override here. CURLOPT_TIMEOUT bounds
+            // a hung dashboard so a stuck POST can't wedge the cron worker every 15 min.
+            $response = $curl->post($endpoint, $body, [
+                'CURLOPT_SSL_VERIFYPEER' => true,
+                'CURLOPT_SSL_VERIFYHOST' => 2,
+                'CURLOPT_TIMEOUT' => 30,
+            ]);
+            $httpcode = (int) ($curl->get_info()['http_code'] ?? 0);
 
-        if ($curl->get_errno() !== 0) {
-            push_state::record_failure('curl: ' . $curl->error, 0);
-            mtrace('local_sentinel: push failed: ' . $curl->error);
-            return;
+            if ($curl->get_errno() !== 0) {
+                push_state::record_failure('curl: ' . $curl->error, 0);
+                mtrace('local_sentinel: push failed: ' . $curl->error);
+                return;
+            }
+            if ($httpcode < 200 || $httpcode >= 300) {
+                $snippet = substr((string) $response, 0, 200);
+                push_state::record_failure("HTTP $httpcode — $snippet", $httpcode);
+                mtrace("local_sentinel: push got HTTP $httpcode from $endpoint");
+                mtrace('local_sentinel: response body: ' . substr((string) $response, 0, 500));
+                return;
+            }
+            push_state::record_success($httpcode);
+            mtrace("local_sentinel: pushed snapshot to $endpoint (HTTP $httpcode, " . strlen($body) . ' bytes).');
+        } catch (\Throwable $e) {
+            push_state::record_failure('exception: ' . $e->getMessage(), 0);
+            mtrace('local_sentinel: push errored: ' . $e->getMessage());
+            throw $e;
         }
-        if ($httpcode < 200 || $httpcode >= 300) {
-            $snippet = substr((string) $response, 0, 200);
-            push_state::record_failure("HTTP $httpcode — $snippet", $httpcode);
-            mtrace("local_sentinel: push got HTTP $httpcode from $endpoint");
-            mtrace('local_sentinel: response body: ' . substr((string) $response, 0, 500));
-            return;
-        }
-        push_state::record_success($httpcode);
-        mtrace("local_sentinel: pushed snapshot to $endpoint (HTTP $httpcode, " . strlen($body) . ' bytes).');
     }
 }
