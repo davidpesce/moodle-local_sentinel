@@ -27,6 +27,16 @@ It enables web services + REST, creates a `local_sentinel` role with the
 required capabilities, creates a dedicated webservice user, and prints a token
 ready for the central poller to use.
 
+## Uninstall
+
+Uninstalling from Site administration → Plugins removes the plugin's settings,
+its web service (with tokens), scheduled tasks and capabilities as usual. The
+plugin's own uninstall hook additionally deletes the core-integrity artefacts
+under `$CFG->dataroot/local_sentinel/` and the `sentinel` role and service
+user created by the setup helper — but only while they still carry the
+helper's markers; a same-named role or user you created yourself is left
+alone. Web services and the REST protocol stay enabled.
+
 ## Usage
 
 ### Pull

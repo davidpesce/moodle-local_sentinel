@@ -13,6 +13,50 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.22.4] — schema_version 3 — 2026-09-14
+
+Housekeeping release closing out the MDL Shield security review of 2.21.1
+(grade B+, no critical or high findings) and adding CAMP registry publishing.
+No schema change. The review's one medium finding — TLS peer verification on
+outbound calls — was already fixed in 2.22.3; the remaining items are below.
+
+### Fixed
+- **Uninstall cleanup** (review finding 4). New `db/uninstall.php` removes the
+  core-integrity artefacts under `$CFG->dataroot/local_sentinel/` (manifest,
+  metadata, last scan result) and the `sentinel` role and service user the
+  setup helper provisioned. Only objects still carrying the helper's ownership
+  markers are touched — a same-named role or user an admin created or
+  repurposed is left in place. Core already drops the plugin's config, external
+  service, tokens, tasks and capabilities; web services and REST stay enabled.
+- **Stale help text** (finding 5). Removed fifteen lang strings orphaned when
+  the hidden setup/push/registration settings pages were retired in 2.22.0 —
+  among them the enrollment-key description claiming the key was "stored
+  encrypted by Moodle" (it is masked in the UI and the config log, not
+  encrypted at rest).
+
+### Changed
+- **Secret redaction patterns** (finding 2). `config_drift` / `config_changes`
+  now also treat `licensekey` / `licencekey`, `serialkey`, `sharedkey`,
+  `accesskey`, `authkey`, `signingkey`, `encryptionkey` (and their underscored
+  forms), `dsn`, `bearer` and `connectionstring` setting names as secrets.
+  Detection remains best-effort and name-based by design; the bare `key`,
+  `license` and `auth` substrings are deliberately not matched so drift on
+  benign settings such as `sitedefaultlicense` or the auth-method list stays
+  visible.
+- **Setup uses the core web-service API** (finding 3). The service-membership
+  row is written via `webservice::add_ws_authorised_user()` instead of a
+  direct insert into `external_services_users`.
+
+### Added
+- **CAMP registry publishing.** `.camp/listing.yml` (registry listing
+  content), `.github/workflows/camp-release.yml` (the unmodified camp release
+  template: on every `v*` tag it rebuilds the canonical ZIP and publishes the
+  release record via GitHub OIDC — no secrets), and `.gitattributes`
+  export-ignore rules that keep `tests/`, `.github/` and `.camp/` out of
+  distribution ZIPs.
+- **Tests** for service membership, teardown ownership gating, the uninstall
+  hook, and the new redaction patterns.
+
 ## [2.22.3] — schema_version 3 — 2026-07-03
 
 Security and correctness fixes from a full code review (no schema change).

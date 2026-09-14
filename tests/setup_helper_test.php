@@ -85,4 +85,88 @@ final class setup_helper_test extends \advanced_testcase {
 
         $this->assertSame([], $method->invoke(null, (int) $user->id));
     }
+
+    /**
+     * Setup authorises the service account on the Sentinel service (via the
+     * core webservice API) and mints a permanent token; re-running is idempotent.
+     */
+    public function test_run_authorises_user_on_service(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $result = setup\helper::run();
+
+        $service = $DB->get_record('external_services', ['shortname' => 'local_sentinel'], '*', MUST_EXIST);
+        $membership = ['externalserviceid' => $service->id, 'userid' => $result->userid];
+        $row = $DB->get_record('external_services_users', $membership, '*', MUST_EXIST);
+        $this->assertSame('', $row->iprestriction);
+        $this->assertSame(0, (int) $row->validuntil);
+        $this->assertGreaterThan(0, (int) $row->timecreated);
+        $this->assertNotSame('', $result->token);
+        $this->assertContains('Added user to the service.', $result->steps);
+
+        $again = setup\helper::run();
+        $this->assertSame(1, $DB->count_records('external_services_users', $membership));
+        $this->assertSame($result->token, $again->token);
+        $this->assertContains('User already on the service.', $again->steps);
+    }
+
+    /**
+     * Teardown removes the role and service user that setup created.
+     */
+    public function test_teardown_removes_provisioned_role_and_user(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $result = setup\helper::run();
+        $steps = setup\helper::teardown();
+
+        $this->assertFalse($DB->record_exists('role', ['id' => $result->roleid]));
+        $this->assertSame(1, (int) $DB->get_field('user', 'deleted', ['id' => $result->userid]));
+        $this->assertFalse($DB->record_exists('user', ['username' => 'sentinel', 'deleted' => 0]));
+        $this->assertContains("Deleted role 'sentinel'.", $steps);
+        $this->assertContains("Deleted user 'sentinel'.", $steps);
+    }
+
+    /**
+     * A same-named role or user that setup did not create is left untouched.
+     */
+    public function test_teardown_leaves_foreign_role_and_user(): void {
+        global $DB;
+        $this->resetAfterTest();
+
+        $roleid = create_role('Sentinel', 'sentinel', 'A role somebody else made.', '');
+        $user = $this->getDataGenerator()->create_user(['username' => 'sentinel']);
+
+        $steps = setup\helper::teardown();
+
+        $this->assertTrue($DB->record_exists('role', ['id' => $roleid]));
+        $this->assertSame(0, (int) $DB->get_field('user', 'deleted', ['id' => $user->id]));
+        $this->assertContains("Left role 'sentinel' in place (not created by Sentinel).", $steps);
+        $this->assertContains("Left user 'sentinel' in place (not created by Sentinel).", $steps);
+    }
+
+    /**
+     * The uninstall hook removes the dataroot artefacts and the provisioned account.
+     */
+    public function test_uninstall_hook_cleans_dataroot_and_account(): void {
+        global $CFG, $DB;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        require_once($CFG->dirroot . '/local/sentinel/db/uninstall.php');
+
+        setup\helper::run();
+        manifest_store::save_scan_result(['status' => 'clean']);
+        $dir = manifest_store::path();
+        $this->assertDirectoryExists($dir);
+        $this->assertFileExists($dir . '/scan_result.json');
+
+        $this->assertTrue(xmldb_local_sentinel_uninstall());
+
+        $this->assertDirectoryDoesNotExist($dir);
+        $this->assertFalse($DB->record_exists('user', ['username' => 'sentinel', 'deleted' => 0]));
+        $this->assertFalse($DB->record_exists('role', ['shortname' => 'sentinel']));
+    }
 }

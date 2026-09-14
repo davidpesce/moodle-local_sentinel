@@ -85,9 +85,6 @@ $string['connect_service_intro'] = 'The managed service watches this site for yo
     . 'welcome email to connect.';
 $string['connect_service_signup'] = 'Don\'t have a provisioning code? Get Sentinel monitoring';
 $string['connect_service_title'] = 'Sentinel Monitoring Service';
-$string['dashboardbaseurl'] = 'Dashboard base URL';
-$string['dashboardbaseurl_desc'] = 'Base URL of the Sentinel dashboard (e.g. https://dash.example.com), '
-    . 'with no path. The registration and ingest endpoints are derived from it. Must use HTTPS.';
 $string['egress_field_db_host'] = 'Database hostname';
 $string['egress_field_failed_logins'] = 'Top failed-login accounts';
 $string['egress_field_os_hostname'] = 'Server hostname';
@@ -114,9 +111,6 @@ $string['egress_slice_label_reporting'] = 'Reporting — report recipient email 
 $string['egress_slice_label_reports'] = 'Reports — performance, security, system status';
 $string['egress_slice_label_status'] = 'Status — release, branch, EOL, core update';
 $string['egress_slices_heading'] = 'Snapshot slices';
-$string['enrollmentkey'] = 'Enrollment key';
-$string['enrollmentkey_desc'] = 'The shared enrollment key issued by the dashboard operator. '
-    . 'Sent as the X-Sentinel-Enrollment-Key header when registering. Stored encrypted by Moodle.';
 $string['integrity_clean'] = 'No deviations — every scanned file matches the pristine tree for this build.';
 $string['integrity_deviations_found'] = '{$a->modified} modified, {$a->missing} missing, '
     . '{$a->unexpected} unexpected file(s) compared with the pristine tree.';
@@ -271,16 +265,8 @@ $string['privacy:metadata:sentinel_registration:ws_token'] = 'A web-service toke
 $string['privacy:metadata:sentinel_registration:wwwroot'] = 'The site URL, so the dashboard knows where to poll and link back to this site.';
 $string['push_https_required'] = 'Refusing to push: the dashboard ingest URL must use HTTPS, otherwise the shared secret and snapshot would be sent in plaintext.';
 $string['pushenabled'] = 'Enable sending';
-$string['pushenabled_desc'] = 'When enabled, this Moodle sends a full snapshot to the configured '
-    . 'dashboard endpoint on a schedule (every 15 minutes by default).';
 $string['pushendpoint'] = 'Dashboard ingest URL';
-$string['pushendpoint_desc'] = 'Full URL of the dashboard\'s ingest endpoint. '
-    . 'Snapshots are POSTed here by the scheduled task. '
-    . 'Use https:// in production — the shared secret and the full snapshot payload should not '
-    . 'travel over plaintext HTTP across an untrusted network.';
 $string['pushsecret'] = 'Shared secret';
-$string['pushsecret_desc'] = 'Sent as the X-Sentinel-Secret header on each request. '
-    . 'The dashboard must verify this value to accept the snapshot.';
 $string['pushstate_consecutive_failures'] = 'Consecutive failures';
 $string['pushstate_heading'] = 'Push pipeline';
 $string['pushstate_last_attempt'] = 'Last attempt';
@@ -292,7 +278,6 @@ $string['pushstate_test_failed'] = 'Test push failed: {$a}';
 $string['pushstate_test_success'] = 'Test push completed — see status below.';
 $string['registration_activated'] = 'Registered and activated — this site is now monitored. Sending is enabled.';
 $string['registration_code_button'] = 'Connect with code';
-$string['registration_code_desc'] = 'If your dashboard operator gave you a provisioning code, paste it here — it fills in the connection settings and registers this site in one step.';
 $string['registration_code_invalid'] = 'That provisioning code is not valid. Check that you copied the whole code, or configure the connection manually below.';
 $string['registration_code_label'] = 'Provisioning code';
 $string['registration_disabled'] = 'Self-registration is turned off. Enable it in Settings first.';
@@ -308,10 +293,6 @@ $string['registration_pending'] = 'Registered. Awaiting operator approval on the
 $string['registration_register_button'] = 'Register with dashboard';
 $string['registration_rejected'] = 'This site\'s registration was rejected by the dashboard operator.';
 $string['registration_status_label'] = 'Status';
-$string['registrationenabled'] = 'Enable self-registration';
-$string['registrationenabled_desc'] = 'Allows this site to register itself with a Sentinel dashboard using the base URL '
-    . 'and enrollment key below. Off by default; registration happens only when you click Register on the '
-    . 'Connect to dashboard page — nothing is contacted automatically.';
 $string['roleconflict'] = 'A role with the shortname "{$a}" already exists but was not created by Sentinel. '
     . 'Rename or remove that role, then re-run setup — Sentinel will not repurpose an unrelated role.';
 $string['sentinel:manage'] = 'Manage Sentinel integrity audits (store manifests, queue scans)';
@@ -321,17 +302,6 @@ $string['servicemissing'] = 'The Sentinel external service was not found. '
 $string['servicename'] = 'Sentinel';
 $string['settings_label'] = 'Send data to remote dashboard';
 $string['settingsheading_integrity'] = 'Core file integrity';
-$string['settingsheading_integrity_desc'] = 'Detects modified, missing, or unexpected files in the Moodle '
-    . 'code tree by comparing it against a pristine manifest for this exact build. The manifest is provided '
-    . 'by a connected dashboard; scans run via the weekly scheduled task or on dashboard request.';
-$string['settingsheading_push'] = 'Outbound configuration';
-$string['settingsheading_push_desc'] = 'Configures the scheduled task that posts snapshots to the '
-    . 'remote dashboard. See the Connect to dashboard page for when to use this and how it differs '
-    . 'from the retrieval mechanism.';
-$string['settingsheading_registration'] = 'Self-registration';
-$string['settingsheading_registration_desc'] = 'Lets this site register itself with a Sentinel dashboard '
-    . 'instead of the operator creating it by hand. Trigger registration from the Connect to dashboard page '
-    . 'after setting the base URL and enrollment key here.';
 $string['setup_back'] = '← Back to setup';
 $string['setup_copy'] = 'Copy token';
 $string['setup_dashboard_help'] = 'On the Sentinel Dashboard, register this site:';

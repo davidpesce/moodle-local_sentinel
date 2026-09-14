@@ -39,11 +39,15 @@ use context_system;
  *   7. Find or generate a permanent token.
  *
  * Both the CLI (`cli/setup.php`) and the admin web page (`setup.php`) call
- * this so behaviour is identical regardless of trigger.
+ * this so behaviour is identical regardless of trigger. {@see teardown()}
+ * reverses steps 3–5 for db/uninstall.php.
  */
 class helper {
     /** Description stamped on the role we create — also the marker that a role is ours. */
     private const ROLE_DESCRIPTION = 'Sentinel webservice access role.';
+
+    /** Email domain stamped on the service user we create — also the marker that a user is ours. */
+    private const USER_EMAIL_DOMAIN = 'example.invalid';
 
     /**
      * Run the full setup.
@@ -135,7 +139,7 @@ class helper {
                 'username' => $opts['username'],
                 'firstname' => 'Sentinel',
                 'lastname' => 'Service',
-                'email' => $opts['username'] . '@example.invalid',
+                'email' => $opts['username'] . '@' . self::USER_EMAIL_DOMAIN,
                 'auth' => 'webservice',
                 'confirmed' => 1,
                 'mnethostid' => $CFG->mnet_localhost_id,
@@ -184,18 +188,21 @@ class helper {
             $result->steps[] = 'Role already assigned at system context.';
         }
 
-        // 7. Add user to the service.
+        // 7. Add user to the service — through the core API so the row shape
+        // (and any bookkeeping core adds around service membership) stays
+        // core's concern rather than a direct write to a table we don't own.
         $inservice = $DB->record_exists('external_services_users', [
             'externalserviceid' => $service->id,
             'userid' => $user->id,
         ]);
         if (!$inservice) {
-            $DB->insert_record('external_services_users', (object) [
+            require_once($CFG->dirroot . '/webservice/lib.php');
+            $webservicemanager = new \webservice();
+            $webservicemanager->add_ws_authorised_user((object) [
                 'externalserviceid' => $service->id,
                 'userid' => $user->id,
                 'iprestriction' => '',
                 'validuntil' => 0,
-                'timecreated' => time(),
             ]);
             $result->steps[] = 'Added user to the service.';
         } else {
@@ -263,6 +270,64 @@ class helper {
             'tokentype' => EXTERNAL_TOKEN_PERMANENT,
         ]);
         return $token ? $token->token : null;
+    }
+
+    /**
+     * Undo what {@see run()} provisioned — called from db/uninstall.php.
+     *
+     * Only objects still carrying our ownership markers are removed: the role
+     * whose description is {@see ROLE_DESCRIPTION}, and the user created with
+     * the 'webservice' auth method and a <username> address at example.invalid.
+     * A same-named role or user an admin created or repurposed is left alone.
+     *
+     * Not touched here because core handles them when db/services.php is
+     * uninstalled: the external service, its tokens and service-user rows.
+     * Deliberately not reverted: $CFG->enablewebservices and the REST protocol —
+     * other consumers may depend on them.
+     *
+     * @param array $options Same keys as {@see run()}: 'username', 'roleshortname'.
+     * @return string[] Human-readable log of what was removed or left in place.
+     */
+    public static function teardown(array $options = []): array {
+        global $CFG, $DB;
+
+        require_once($CFG->libdir . '/accesslib.php');
+
+        $opts = array_merge([
+            'username' => 'sentinel',
+            'roleshortname' => 'sentinel',
+        ], $options);
+        $steps = [];
+
+        $role = $DB->get_record('role', ['shortname' => $opts['roleshortname']]);
+        if ($role && trim((string) $role->description) === self::ROLE_DESCRIPTION) {
+            delete_role((int) $role->id);
+            $steps[] = "Deleted role '{$opts['roleshortname']}'.";
+        } else if ($role) {
+            $steps[] = "Left role '{$opts['roleshortname']}' in place (not created by Sentinel).";
+        }
+
+        $user = $DB->get_record('user', ['username' => $opts['username'], 'deleted' => 0]);
+        if ($user && self::owns_user($user)) {
+            delete_user($user);
+            $steps[] = "Deleted user '{$opts['username']}'.";
+        } else if ($user) {
+            $steps[] = "Left user '{$opts['username']}' in place (not created by Sentinel).";
+        }
+
+        return $steps;
+    }
+
+    /**
+     * True if the user record carries the markers {@see run()} stamps on the
+     * service account it creates (webservice auth + a <username> address at example.invalid).
+     *
+     * @param \stdClass $user
+     * @return bool
+     */
+    protected static function owns_user(\stdClass $user): bool {
+        $expectedemail = strtolower($user->username . '@' . self::USER_EMAIL_DOMAIN);
+        return $user->auth === 'webservice' && strtolower((string) $user->email) === $expectedemail;
     }
 
     /** Placeholder stored in required profile fields for the service account. */

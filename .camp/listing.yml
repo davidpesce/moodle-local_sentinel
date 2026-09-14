@@ -1,0 +1,34 @@
+# camp listing manifest — descriptive content for the plugin's registry page.
+# Edit freely and commit; camp ingests this file at each tagged release.
+# Schema: https://camp-registry.org/schema/listing.schema.json
+name: Sentinel
+summary: Exposes a Moodle site's operational health, environment, plugin inventory, auth signals and core file integrity to a fleet-monitoring dashboard, by web-service pull or scheduled push.
+description: |
+  Sentinel turns a Moodle site into a data source for a central fleet-monitoring
+  dashboard. It collects operational facts — core version and branch support,
+  PHP / OS / database / web-server environment, plugin inventory and available
+  updates, cron and task health, disk, sessions, authentication signals, core
+  check-API results, recent configuration changes and drift from defaults, and
+  optionally core file integrity against a pristine manifest — and exposes them
+  as one versioned JSON snapshot.
+
+  - **Pull:** a dedicated web service behind a scoped role and token; the
+    dashboard polls at its own cadence, with a cheap liveness probe.
+  - **Push:** an optional scheduled task POSTs the snapshot to an endpoint you
+    configure, authenticated by a shared secret. HTTPS only, peer-verified.
+  - **Local overview:** a Site administration report page summarises the same
+    facts for admins, with or without a dashboard.
+  - **Egress control:** exclude whole slices or individual fields from what
+    leaves the site; the snapshot declares what was withheld.
+  - **Thin agent by design:** the plugin reports raw facts. It never sends
+    notifications, stores history, or fetches external data on its own.
+
+  Works with any dashboard that understands the documented snapshot schema,
+  including the Sentinel Monitoring Service and self-hosted deployments.
+labels:
+  - fully-free
+category: administration
+links:
+  docs: https://github.com/davidpesce/moodle-local_sentinel#readme
+  issues: https://github.com/davidpesce/moodle-local_sentinel/issues
+  changelog: https://github.com/davidpesce/moodle-local_sentinel/blob/main/CHANGELOG.md

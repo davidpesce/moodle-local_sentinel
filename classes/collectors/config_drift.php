@@ -81,6 +81,33 @@ class config_drift {
         'client_secret',
         'credential',
         'webhook',
+        // Narrow credential names seen in third-party plugins and cloud/SDK
+        // integrations (licence keys, AWS/Azure access keys, HMAC signing and
+        // encryption keys, Sentry DSNs, bearer values, connection strings).
+        // Deliberately NOT the bare 'key', 'license' or 'auth': those would
+        // hide drift on benign settings such as sitedefaultlicense,
+        // recaptchapublickey or the enabled auth-method list — exactly the
+        // drift an operator wants to see.
+        'licensekey',
+        'license_key',
+        'licencekey',
+        'licence_key',
+        'serialkey',
+        'serial_key',
+        'sharedkey',
+        'shared_key',
+        'accesskey',
+        'access_key',
+        'authkey',
+        'auth_key',
+        'signingkey',
+        'signing_key',
+        'encryptionkey',
+        'encryption_key',
+        'dsn',
+        'bearer',
+        'connectionstring',
+        'connection_string',
     ];
 
     /**

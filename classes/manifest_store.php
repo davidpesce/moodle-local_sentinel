@@ -38,13 +38,22 @@ class manifest_store {
     public const LINE_REGEX = '/^[0-9a-f]{40}\t.+/';
 
     /**
+     * Path of the directory holding the integrity artefacts (not created).
+     *
+     * @return string
+     */
+    public static function path(): string {
+        global $CFG;
+        return $CFG->dataroot . '/local_sentinel';
+    }
+
+    /**
      * Directory holding the integrity artefacts, created on demand.
      *
      * @return string
      */
     public static function dir(): string {
-        global $CFG;
-        $dir = $CFG->dataroot . '/local_sentinel';
+        $dir = self::path();
         make_writable_directory($dir);
         return $dir;
     }
@@ -168,5 +177,16 @@ class manifest_store {
                 unlink($path);
             }
         }
+    }
+
+    /**
+     * Delete the artefact directory outright — for db/uninstall.php.
+     *
+     * Unlike {@see reset()}, which empties the known files and leaves the
+     * directory usable, this removes the directory itself; nothing else
+     * lives under it.
+     */
+    public static function remove_all(): void {
+        remove_dir(self::path());
     }
 }

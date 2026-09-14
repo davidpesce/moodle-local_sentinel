@@ -58,9 +58,23 @@ final class config_drift_test extends \advanced_testcase {
             'password' => ['smtppass', true],
             'secret' => ['client_secret', true],
             'token' => ['pushtoken', true],
+            // Narrow credential names (MDL Shield 2026-09-14 finding 2).
+            'licence key' => ['licencekey', true],
+            'license_key' => ['plugin_license_key', true],
+            'aws access key' => ['s3_access_key', true],
+            'shared key' => ['sharedkey', true],
+            'signing key' => ['jwt_signing_key', true],
+            'sentry dsn' => ['sentrydsn', true],
+            'bearer' => ['bearer', true],
+            'azure connection string' => ['storage_connection_string', true],
             // Non-secret names stay visible.
             'benign timezone' => ['timezone', false],
             'benign theme' => ['theme', false],
+            // The bare 'key' / 'license' / 'auth' substrings are NOT patterns:
+            // these are real drift an operator wants to see.
+            'benign sitedefaultlicense' => ['sitedefaultlicense', false],
+            'benign recaptchapublickey' => ['recaptchapublickey', false],
+            'benign auth method list' => ['auth', false],
         ];
     }
 
