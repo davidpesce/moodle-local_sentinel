@@ -206,7 +206,7 @@ breaking fields; additive changes do not require a bump.
 
 ## Development
 
-This plugin lives in the `_MoodleDEV` workspace. Use the workspace `Makefile`:
+This plugin lives with its product; the dev harness is `exputo/moodle/dev`. Use its `Makefile`:
 
 ```bash
 make phpcs PLUGIN=moodle-local_sentinel
