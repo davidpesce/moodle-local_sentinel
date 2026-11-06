@@ -13,6 +13,19 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.23.1] — schema_version 3 — 2026-11-05
+
+Release-pipeline fix only; no plugin code change. Functionally identical to
+2.23.0 — see that entry for the database-load changes.
+
+### Fixed
+- **CAMP publishing.** The release workflow pinned camp-tools v0.2.61, whose
+  release record the registry's current schema rejects, so 2.23.0 did not
+  reach CAMP. `.github/workflows/camp-release.yml` is refreshed from the
+  current camp-index template (camp-tools v0.2.92; the ref name now reaches
+  the tag check as an environment variable rather than being spliced into the
+  script).
+
 ## [2.23.0] — schema_version 3 — 2026-11-05
 
 Cuts the database cost of a snapshot by ~95% and stops a fleet of sites from
