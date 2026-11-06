@@ -31,11 +31,37 @@ use local_sentinel\push_state;
 /**
  * Push the current snapshot to the configured central collector.
  *
- * Disabled by default — flip on in plugin settings after configuring
- * the endpoint URL and shared secret. Intended for new-client evaluation
- * and instances that cannot be polled inbound.
+ * Enabled as a task but gated on the pushenabled setting (plus endpoint and
+ * secret), which registration on the Connect page turns on. Intended for
+ * instances that cannot be polled inbound and as the dashboard's heartbeat.
  */
 class push_snapshot extends scheduled_task {
+    /** Push cadence in minutes; the dashboard's staleness thresholds assume it. */
+    public const INTERVAL_MINUTES = 15;
+
+    /**
+     * Default cron minute field: every 15 minutes, offset per site.
+     *
+     * A plain every-15-minutes schedule makes every site in a fleet push in the same second. When
+     * those sites share a database server, the synchronised collection bursts
+     * (and, on Aurora Serverless, scales the cluster up every quarter hour). The
+     * offset (0-14) is derived from $CFG->siteidentifier, so it is stable for
+     * the site across upgrades — core resets non-customised tasks to these
+     * defaults on every upgrade — and spread evenly across a fleet.
+     *
+     * @param string|null $siteidentifier Defaults to $CFG->siteidentifier.
+     * @return string e.g. "7,22,37,52"
+     */
+    public static function default_minute(?string $siteidentifier = null): string {
+        global $CFG;
+        $siteidentifier ??= (string) ($CFG->siteidentifier ?? '');
+        if ($siteidentifier === '') {
+            return '*/' . self::INTERVAL_MINUTES;
+        }
+        $offset = crc32($siteidentifier) % self::INTERVAL_MINUTES;
+        return implode(',', range($offset, 59, self::INTERVAL_MINUTES));
+    }
+
     /**
      * Get name.
      *

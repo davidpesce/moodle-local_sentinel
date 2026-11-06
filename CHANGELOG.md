@@ -13,6 +13,56 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.23.0] — schema_version 3 — 2026-11-05
+
+Cuts the database cost of a snapshot by ~95% and stops a fleet of sites from
+collecting in the same second. Found with Performance Insights on shared Aurora
+clusters (PostgreSQL and MySQL): every site pushed at minute `*/15`, and each
+snapshot read the catalog definition of every table, so the cluster scaled up
+for five minutes every quarter hour. No schema change; the payload shape and
+values are unchanged.
+
+### Changed
+- **Expensive core checks are cached daily.** Two checks in the `reports`
+  slice read every table's catalog definition on each run:
+  `core_dbschema` (`check_database_schema()`: ~2,300 queries on PostgreSQL,
+  ~2,100 on MariaDB, stock 4.5) and `core_environment` (~1,000
+  `information_schema` queries on MySQL/MariaDB). Their results only change at
+  upgrade time, so they are now cached in plugin config and reported from the
+  cache. The cache is refreshed daily by the new `refresh_checks` task (random
+  time per site), invalidated by any core or plugin upgrade
+  (`$CFG->allversionshash`), and recomputed inline when older than 26 hours.
+  A cached check is reported exactly like a live one, so its result can be up
+  to a day old between upgrades.
+- **Push runs at a per-site minute offset.** `push_snapshot` still runs every
+  15 minutes, but its default minute field is now offset by 0–14 minutes,
+  derived from `$CFG->siteidentifier` (for example `7,22,37,52`), so sites
+  sharing a database server no longer collect at the same moment. Existing
+  sites move to their offset on upgrade unless an admin customised the
+  schedule. The first push after upgrading may come up to 14 minutes later than
+  usual, well inside the dashboard's 40-minute staleness threshold.
+
+### Fixed
+- **Upgrades no longer switch push off.** The `push_snapshot` task shipped
+  disabled and registration enabled it without marking it customised, so
+  core's reset of non-customised tasks on every plugin upgrade disabled it
+  again, and a site stopped pushing until it re-registered. The task now ships
+  enabled; it does nothing until push is enabled and configured, as before.
+
+### Added
+- `refresh_checks` scheduled task (daily, random time per site). It does
+  nothing on a site that has never collected a snapshot.
+- Tests for the check cache (cold/warm query counts, upgrade and age
+  invalidation, the refresh task) and for the push schedule (offset spread,
+  survives the upgrade-time task reset).
+
+### Measured (stock 4.5 site, queries per snapshot)
+
+| Database | 2.22.4 | 2.23.0 (cache warm) | Daily refresh / after upgrade |
+|---|---|---|---|
+| PostgreSQL 15, 549 tables | ~2,390 (2,265 catalog) | ~122 (0 catalog) | ~2,660 once |
+| MariaDB 10.11, 494 tables | ~3,200 (3,091 catalog) | ~110 (2 catalog: the DB-size queries) | ~3,440 once |
+
 ## [2.22.4] — schema_version 3 — 2026-09-14
 
 Housekeeping release closing out the MDL Shield security review of 2.21.1

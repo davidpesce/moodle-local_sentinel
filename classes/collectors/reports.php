@@ -36,8 +36,40 @@ use core\check\result;
  *
  * MFA aggregates the tool_mfa table directly: count of users per active
  * factor, total users with any factor, and locked-out user count.
+ *
+ * A few checks are far too expensive to run on every snapshot (push runs every
+ * 15 minutes, pulls on demand) and only change at upgrade time. Those are listed
+ * in CACHED_CHECKS: their result is cached in plugin config, refreshed daily by
+ * the refresh_checks task, recomputed inline when the cache is older than
+ * CACHE_MAX_AGE, and invalidated whenever any plugin or core version changes
+ * ($CFG->allversionshash). The payload shape is unchanged — a cached entry is
+ * reported exactly as a live one.
  */
 class reports {
+    /**
+     * Check refs whose results are cached rather than computed per snapshot.
+     *
+     * - core_dbschema calls check_database_schema(), which reads the catalog
+     *   definition (columns + indexes) of every table: ~2,300 queries on a
+     *   stock 4.5 site on PostgreSQL, ~2,100 on MariaDB.
+     * - core_environment runs admin/environment.xml; on MySQL/MariaDB its
+     *   custom checks read every table's columns and row format from
+     *   information_schema (~1,000 queries). Cheap on PostgreSQL.
+     *
+     * Both only change at upgrade time or when the server itself changes.
+     */
+    public const CACHED_CHECKS = ['core_dbschema', 'core_environment'];
+
+    /** Plugin config key holding the cached check results (JSON). */
+    public const CACHE_CONFIG_KEY = 'checkcache';
+
+    /**
+     * Seconds after which a cached result is recomputed inline. Longer than the
+     * daily refresh_checks interval, so on a site with a healthy cron the inline
+     * path only runs after an upgrade (version-hash change) or a cache purge.
+     */
+    public const CACHE_MAX_AGE = 26 * HOURSECS;
+
     /**
      * Collect.
      *
@@ -86,28 +118,13 @@ class reports {
 
             $entries = [];
             foreach ($checks as $check) {
-                try {
-                    $checkresult = $check->get_result();
-                } catch (\Throwable $e) {
-                    $entries[] = [
-                        'ref' => $check->get_ref(),
-                        'component' => $check->get_component(),
-                        'name' => $check->get_name(),
-                        'status' => result::UNKNOWN,
-                        'summary' => 'Check threw: ' . $e->getMessage(),
-                    ];
-                    $countsbystatus[result::UNKNOWN]++;
-                    continue;
+                if (in_array($check->get_ref(), self::CACHED_CHECKS, true)) {
+                    $entry = self::cached_check_result($check);
+                } else {
+                    $entry = self::run_check($check);
                 }
-                $status = $checkresult->get_status();
-                $countsbystatus[$status] = ($countsbystatus[$status] ?? 0) + 1;
-                $entries[] = [
-                    'ref' => $check->get_ref(),
-                    'component' => $check->get_component(),
-                    'name' => $check->get_name(),
-                    'status' => $status,
-                    'summary' => trim(html_to_text($checkresult->get_summary(), 0, false)),
-                ];
+                $countsbystatus[$entry['status']] = ($countsbystatus[$entry['status']] ?? 0) + 1;
+                $entries[] = $entry;
             }
         } finally {
             ob_end_clean();
@@ -118,6 +135,145 @@ class reports {
             'counts_by_status' => $countsbystatus,
             'checks' => $entries,
         ];
+    }
+
+    /**
+     * Run one check live and normalise its result to a payload entry.
+     *
+     * @param \core\check\check $check
+     * @return array{ref: string, component: string, name: string, status: string, summary: string}
+     */
+    protected static function run_check(\core\check\check $check): array {
+        $entry = [
+            'ref' => $check->get_ref(),
+            'component' => $check->get_component(),
+            'name' => $check->get_name(),
+        ];
+        try {
+            $checkresult = $check->get_result();
+        } catch (\Throwable $e) {
+            return $entry + [
+                'status' => result::UNKNOWN,
+                'summary' => 'Check threw: ' . $e->getMessage(),
+            ];
+        }
+        return $entry + [
+            'status' => $checkresult->get_status(),
+            'summary' => trim(html_to_text($checkresult->get_summary(), 0, false)),
+        ];
+    }
+
+    /**
+     * Result of an expensive check, served from the cache while it is valid.
+     *
+     * Valid = computed under the current $CFG->allversionshash (so an upgrade,
+     * the only time the schema changes, always forces a fresh run) and less than
+     * CACHE_MAX_AGE old. Otherwise the check runs now and the cache is refreshed.
+     *
+     * @param \core\check\check $check
+     * @return array Payload entry, same shape as run_check().
+     */
+    protected static function cached_check_result(\core\check\check $check): array {
+        $ref = $check->get_ref();
+        $cache = self::read_cache();
+        $cached = $cache[$ref] ?? null;
+        if (
+            is_array($cached)
+            && ($cached['hash'] ?? null) === self::version_hash()
+            && (int) ($cached['checkedat'] ?? 0) > time() - self::CACHE_MAX_AGE
+            && isset($cached['status'], $cached['summary'])
+        ) {
+            return [
+                'ref' => $ref,
+                'component' => $check->get_component(),
+                'name' => $check->get_name(),
+                'status' => (string) $cached['status'],
+                'summary' => (string) $cached['summary'],
+            ];
+        }
+
+        return self::run_and_store($check);
+    }
+
+    /**
+     * Run a cached check live and store its result in the cache.
+     *
+     * @param \core\check\check $check
+     * @return array Payload entry, same shape as run_check().
+     */
+    protected static function run_and_store(\core\check\check $check): array {
+        $entry = self::run_check($check);
+        // Re-read: another cached check may have been stored meanwhile (both are
+        // computed within one snapshot on a cold cache).
+        $cache = self::read_cache();
+        $cache[$entry['ref']] = [
+            'status' => $entry['status'],
+            'summary' => $entry['summary'],
+            'checkedat' => time(),
+            'hash' => self::version_hash(),
+        ];
+        set_config(self::CACHE_CONFIG_KEY, json_encode($cache), 'local_sentinel');
+        return $entry;
+    }
+
+    /**
+     * Recompute every cached check now (daily refresh_checks task).
+     *
+     * Only acts once a snapshot has populated the cache, so a site that has
+     * installed the plugin but never connected a dashboard pays nothing.
+     *
+     * @return string[] Refs that were refreshed.
+     */
+    public static function refresh_cached_checks(): array {
+        if (get_config('local_sentinel', self::CACHE_CONFIG_KEY) === false) {
+            return [];
+        }
+        $refreshed = [];
+        ob_start();
+        try {
+            $checks = array_merge(
+                manager::get_performance_checks(),
+                manager::get_security_checks(),
+                manager::get_status_checks()
+            );
+            foreach ($checks as $check) {
+                if (in_array($check->get_ref(), self::CACHED_CHECKS, true)) {
+                    self::run_and_store($check);
+                    $refreshed[] = $check->get_ref();
+                }
+            }
+        } finally {
+            ob_end_clean();
+        }
+        return $refreshed;
+    }
+
+    /**
+     * Drop all cached check results; the next snapshot recomputes them.
+     */
+    public static function purge_cache(): void {
+        unset_config(self::CACHE_CONFIG_KEY, 'local_sentinel');
+    }
+
+    /**
+     * Decode the cached check results.
+     *
+     * @return array<string, array> Keyed by check ref.
+     */
+    protected static function read_cache(): array {
+        $raw = get_config('local_sentinel', self::CACHE_CONFIG_KEY);
+        $decoded = is_string($raw) && $raw !== '' ? json_decode($raw, true) : null;
+        return is_array($decoded) ? $decoded : [];
+    }
+
+    /**
+     * Fingerprint of every installed component version; changes on any upgrade.
+     *
+     * @return string
+     */
+    protected static function version_hash(): string {
+        global $CFG;
+        return (string) ($CFG->allversionshash ?? '');
     }
 
     /**

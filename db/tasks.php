@@ -25,15 +25,35 @@
 defined('MOODLE_INTERNAL') || die();
 
 $tasks = [
+    // Every 15 minutes at a per-site minute offset (see
+    // push_snapshot::default_minute()), so a fleet sharing a database server
+    // does not collect in the same second. Enabled, but execute() self-gates on
+    // the pushenabled setting + endpoint + secret, so it no-ops until a dashboard
+    // is connected. It must ship enabled: core resets non-customised tasks to
+    // these defaults on every upgrade, and a disabled default there switched
+    // push off again on sites that registration had enabled.
     [
         'classname' => 'local_sentinel\\task\\push_snapshot',
         'blocking' => 0,
-        'minute' => '*/15',
+        'minute' => \local_sentinel\task\push_snapshot::default_minute(),
         'hour' => '*',
         'day' => '*',
         'month' => '*',
         'dayofweek' => '*',
-        'disabled' => 1,
+        'disabled' => 0,
+    ],
+    // Daily, random time per site: refresh the report checks too expensive to
+    // run on every snapshot (core DB schema and environment checks). Self-gates
+    // until a snapshot has been collected.
+    [
+        'classname' => 'local_sentinel\\task\\refresh_checks',
+        'blocking' => 0,
+        'minute' => 'R',
+        'hour' => 'R',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+        'disabled' => 0,
     ],
     [
         'classname' => 'local_sentinel\\task\\refresh_updates',

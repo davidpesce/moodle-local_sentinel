@@ -96,7 +96,7 @@ plus `site`. Snapshot slices and their high-level contents:
 | `plugins` | Standard + third-party plugin lists with install status, available updates with `update_available` cross-reference |
 | `health` | Cron, scheduled + adhoc tasks, sessions, disk, mail, admins (with last-changed), backup, upgrade log, foot-gun flags |
 | `auth` | Enabled auth methods, per-method user counts, failed-login signals (locked accounts, top targets) |
-| `reports` | Performance / Security / System status checks (via `\core\check\manager`) + MFA factor enrolment stats |
+| `reports` | Performance / Security / System status checks (via `\core\check\manager`) + MFA factor enrolment stats. `core_dbschema` and `core_environment` are served from a daily cache — see [Database load](#database-load) |
 | `config_changes` | Tail of `mdl_config_log` (default last 50, configurable). Values of secret-named settings (`smtppass`, `*secret`, `*token`, …) are redacted — best-effort, name-pattern based. |
 | `config_drift` | Settings whose current value differs from declared default (best-effort secret exclusion by class + name pattern) |
 
@@ -113,9 +113,38 @@ snapshots outbound on a schedule. Configure under Site administration → Plugin
 
 - **Push endpoint URL** — where to POST
 - **Push shared secret** — sent as `X-Sentinel-Secret` header
-- **Enable push** — flip the scheduled task on
+- **Enable push** — turns the push on (the `push_snapshot` task itself is
+  enabled but does nothing until push is enabled and configured)
 
 The central collector must verify the secret header before accepting the body.
+
+The task runs every 15 minutes at a **per-site minute offset** (0–14, derived
+from `$CFG->siteidentifier`, e.g. `7,22,37,52`), so a fleet of sites sharing a
+database server does not collect snapshots in the same second. The offset is
+the task's default schedule, so it survives upgrades; an admin can still
+customise the schedule under Scheduled tasks.
+
+## Database load
+
+A snapshot is cheap (~120 queries on a stock 4.5 site) except for two core
+checks in the `reports` slice that read the catalog definition of every table:
+
+| Check | Cost per run (stock 4.5) | Why |
+|---|---|---|
+| `core_dbschema` | ~2,300 queries (PostgreSQL), ~2,100 (MariaDB) | `check_database_schema()` compares every table's columns and indexes with `install.xml` |
+| `core_environment` | ~1,000 queries on MySQL/MariaDB, ≤2 on PostgreSQL | environment.xml custom checks read every table's columns and row format |
+
+Their results only change at upgrade time, so the plugin caches them (plugin
+config `checkcache`) instead of running them per snapshot:
+
+- The **`refresh_checks`** task recomputes them once a day at a random time
+  per site (it does nothing until a snapshot has been collected).
+- Any core or plugin upgrade (a change of `$CFG->allversionshash`)
+  invalidates the cache, so the next snapshot after an upgrade runs them live.
+- A cached result older than 26 hours (cron not running) is recomputed inline.
+
+The payload is unchanged: a cached check is reported exactly like a live one,
+so its result can be up to a day old between upgrades.
 
 ## Data egress filter
 

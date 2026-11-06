@@ -120,9 +120,11 @@ final class register_test extends \advanced_testcase {
     public function test_enable_push_pipeline_enables_setting_and_task(): void {
         $this->resetAfterTest();
 
-        // Fresh-install state: setting off, task shipped disabled, not customised.
+        // State of a site installed before 2.23.0, when the task shipped
+        // disabled: setting off, task record disabled, not customised.
         $task = \core\task\manager::get_scheduled_task(\local_sentinel\task\push_snapshot::class);
-        $this->assertTrue($task->get_disabled());
+        $task->set_disabled(true);
+        \core\task\manager::configure_scheduled_task($task);
         $this->assertEmpty(get_config('local_sentinel', 'pushenabled'));
 
         register::enable_push_pipeline();

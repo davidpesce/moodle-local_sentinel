@@ -336,4 +336,5 @@ $string['setup_username_help'] = 'The Moodle user that will own the permanent we
 $string['task_integrity_scan'] = 'Core file integrity scan';
 $string['task_integrity_scan_adhoc'] = 'Core file integrity scan (on demand)';
 $string['task_push_snapshot'] = 'Send Sentinel snapshot to remote dashboard';
+$string['task_refresh_checks'] = 'Refresh cached Sentinel report checks (database schema, environment)';
 $string['task_refresh_updates'] = 'Refresh available-updates cache (no admin email)';
