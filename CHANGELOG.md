@@ -13,6 +13,18 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.23.2] — schema_version 3 — 2026-11-06
+
+### Fixed
+- **Debian point release.** `environment.os.distro_version` on Debian was the
+  bare major version (`13`), because Debian's `/etc/os-release` never carries
+  the point release, so the dashboard compared `13` with the cycle's latest
+  (`13.7`) and flagged every Debian host "update available". The point release
+  is now read from `/etc/debian_version` when it extends `VERSION_ID` (e.g.
+  `13.7`; testing/sid values such as `trixie/sid` are ignored). Ubuntu and
+  other distros are unchanged. No schema change; dashboard 0.14.19 is needed to
+  match the more precise Debian version to its endoflife.date cycle.
+
 ## [2.23.1] — schema_version 3 — 2026-11-05
 
 Release-pipeline fix only; no plugin code change. Functionally identical to

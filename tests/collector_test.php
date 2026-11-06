@@ -188,6 +188,35 @@ final class collector_test extends \advanced_testcase {
     }
 
     /**
+     * On Debian the point release comes from /etc/debian_version.
+     *
+     * @dataProvider debian_version_provider
+     * @param string|null $debianversion contents of /etc/debian_version
+     * @param string $expected resolved version
+     */
+    public function test_distro_version_debian(?string $debianversion, string $expected): void {
+        $method = new \ReflectionMethod(collectors\environment::class, 'distro_version');
+        $method->setAccessible(true);
+        $osrelease = ['ID' => 'debian', 'VERSION_ID' => '13', 'VERSION' => '13 (trixie)'];
+        $this->assertSame($expected, $method->invoke(null, $osrelease, $debianversion));
+    }
+
+    /**
+     * Data for test_distro_version_debian.
+     *
+     * @return array<string, array{0: ?string, 1: string}>
+     */
+    public static function debian_version_provider(): array {
+        return [
+            'point release' => ["13.7\n", '13.7'],
+            'unreadable file' => [null, '13'],
+            'testing/sid codename ignored' => ['trixie/sid', '13'],
+            'other major ignored' => ['12.13', '13'],
+            'prefix without dot ignored' => ['130.1', '13'],
+        ];
+    }
+
+    /**
      * Data for test_distro_version.
      *
      * @return array<string, array{0: array<string, string>, 1: string}>
@@ -202,7 +231,7 @@ final class collector_test extends \advanced_testcase {
                 ['VERSION_ID' => '24.04', 'VERSION' => '24.04 LTS (Noble Numbat)'],
                 '24.04',
             ],
-            'debian (no patch in os-release)' => [
+            'debian os-release alone has no patch' => [
                 ['VERSION_ID' => '12', 'VERSION' => '12 (bookworm)'],
                 '12',
             ],

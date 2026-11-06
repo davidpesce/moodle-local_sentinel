@@ -78,7 +78,7 @@ class environment {
             // Linux distribution from /etc/os-release (php_uname only gives the
             // kernel). Lets the dashboard check distro EOL (e.g. Ubuntu 22.04).
             'distro' => $osrelease['ID'] ?? '',
-            'distro_version' => self::distro_version($osrelease),
+            'distro_version' => self::distro_version($osrelease, self::debian_version($osrelease)),
             'distro_name' => $osrelease['PRETTY_NAME'] ?? '',
             'package_updates' => self::collect_package_updates(),
         ];
@@ -150,25 +150,48 @@ class environment {
     /**
      * Most precise installed distro version from /etc/os-release.
      *
-     * `VERSION_ID` carries only the cycle on some distros — notably Ubuntu, where
-     * `VERSION_ID="24.04"` omits the point release that `VERSION` includes
-     * (`VERSION="24.04.4 LTS (Noble Numbat)"`). Reporting only `VERSION_ID` makes
-     * the dashboard compare the cycle ("24.04") against endoflife's latest patch
-     * ("24.04.4") and wrongly flag an available update. Prefer the more precise
-     * `VERSION` token when it extends `VERSION_ID`; otherwise fall back to
-     * `VERSION_ID` (e.g. Debian "12", RHEL "9.4", which already carry the patch).
+     * `VERSION_ID` carries only the cycle on some distros, and reporting just the
+     * cycle makes the dashboard compare it ("24.04", "13") against endoflife's
+     * latest point release ("24.04.4", "13.7") and wrongly flag an update:
+     *  - Ubuntu: `VERSION="24.04.4 LTS (Noble Numbat)"` carries the point
+     *    release, so prefer the `VERSION` token when it extends `VERSION_ID`.
+     *  - Debian: os-release never carries it (`VERSION="13 (trixie)"`); it is in
+     *    /etc/debian_version ("13.7"), passed in as $debianversion and used when
+     *    it extends `VERSION_ID` (so testing/sid values like "trixie/sid" are
+     *    ignored).
+     * Otherwise fall back to `VERSION_ID` (e.g. RHEL "9.4", already precise).
      *
      * @param array $osrelease parsed /etc/os-release map (key => value)
+     * @param string|null $debianversion contents of /etc/debian_version, if any
      * @return string
      */
-    protected static function distro_version(array $osrelease): string {
+    protected static function distro_version(array $osrelease, ?string $debianversion = null): string {
         $versionid = $osrelease['VERSION_ID'] ?? '';
+        $debianversion = trim((string) $debianversion);
+        if ($versionid !== '' && preg_match('/^' . preg_quote($versionid, '/') . '\.\d+(\.\d+)*$/', $debianversion)) {
+            return $debianversion;
+        }
         $version = $osrelease['VERSION'] ?? '';
         $first = $version === '' ? '' : explode(' ', $version, 2)[0];
         if ($versionid !== '' && strpos($first, $versionid . '.') === 0) {
             return $first;
         }
         return $versionid;
+    }
+
+    /**
+     * Contents of /etc/debian_version on Debian (null elsewhere or unreadable).
+     *
+     * @param array $osrelease parsed /etc/os-release map (key => value)
+     * @return string|null
+     */
+    protected static function debian_version(array $osrelease): ?string {
+        $path = '/etc/debian_version';
+        if (($osrelease['ID'] ?? '') !== 'debian' || !is_readable($path)) {
+            return null;
+        }
+        $contents = file_get_contents($path);
+        return $contents === false ? null : trim($contents);
     }
 
     /**
