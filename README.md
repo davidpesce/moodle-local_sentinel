@@ -42,10 +42,23 @@ alone. Web services and the REST protocol stay enabled.
 ### Pull
 
 ```
-GET /webservice/rest/server.php
-    ?wstoken=<token>
-    &wsfunction=local_sentinel_get_snapshot
+POST /webservice/rest/server.php
+    ?wsfunction=local_sentinel_get_snapshot
     &moodlewsrestformat=json
+Content-Type: application/x-www-form-urlencoded
+
+wstoken=<token>
+```
+
+Send the token in the POST body, not the query string: web servers, WAFs
+and load balancers log request URLs but not bodies, so a token in the URL
+ends up in plain text in their access logs. Moodle reads GET and POST
+parameters together, so `wsfunction` can stay in the URL, where it keeps
+the logs useful. For example:
+
+```
+curl -X POST 'https://moodle.example.com/webservice/rest/server.php?wsfunction=local_sentinel_get_status&moodlewsrestformat=json' \
+     --data-urlencode "wstoken=$TOKEN"
 ```
 
 Available functions:
