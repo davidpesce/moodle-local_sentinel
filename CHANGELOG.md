@@ -13,6 +13,30 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.23.4] — schema_version 3 — 2026-11-12
+
+### Fixed
+- **Pull refused when a site adds a required profile field
+  (`usernotfullysetup`).** Moodle refuses a web service token whose user has an
+  empty required custom profile field. Setup filled those fields once, so a
+  field added or made required later locked the dashboard out until someone
+  edited the service account by hand. The plugin now repairs its own service
+  account at the start of each Sentinel web service call, before Moodle's check
+  runs. Accounts setup didn't create are never touched.
+- **Type-valid values for those fields.** Setup used to write `n/a` into every
+  field type, including dropdowns where it isn't one of the options. Fields now
+  get a value their type accepts: a dropdown's first option (core `menu`, or a
+  custom type using its public `$options` convention), a checkbox's default, the
+  current date for date fields, and `n/a` only for free-text types. An `n/a` an
+  earlier release wrote into a dropdown is replaced. Third-party types with no
+  safe value are left alone and reported.
+
+### Added
+- **`health.service_account`** — whether the account the dashboard pulls as is
+  fully set up, and the shortnames of any required profile fields still
+  blocking it, so the dashboard can name the field to fix. Additive; no schema
+  change.
+
 ## [2.23.3] — schema_version 3 — 2026-11-11
 
 ### Fixed

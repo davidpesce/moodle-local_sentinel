@@ -53,6 +53,7 @@ abstract class base extends external_api {
      */
     protected static function authorise(): void {
         $context = context_system::instance();
+        self::repair_service_account();
         self::validate_context($context);
         require_capability('local/sentinel:view', $context);
     }
@@ -64,8 +65,34 @@ abstract class base extends external_api {
      */
     protected static function authorise_manage(): void {
         $context = context_system::instance();
+        self::repair_service_account();
         self::validate_context($context);
         require_capability('local/sentinel:manage', $context);
+    }
+
+    /**
+     * Unblock Sentinel's own service account before validate_context() runs.
+     *
+     * validate_context() calls require_login(), which for WS requests rejects a
+     * user with an empty required custom profile field (usernotfullysetup). A
+     * site admin adding or tightening such a field after setup would otherwise
+     * lock the dashboard out until someone edited the service account by hand.
+     * Only the account setup created is touched; any failure here is swallowed
+     * so validate_context() reports the real error.
+     */
+    protected static function repair_service_account(): void {
+        global $CFG, $USER;
+        try {
+            if (empty($USER->id) || !\local_sentinel\setup\helper::is_service_account($USER)) {
+                return;
+            }
+            require_once($CFG->libdir . '/moodlelib.php');
+            if (user_not_fully_set_up($USER, true)) {
+                \local_sentinel\setup\helper::satisfy_required_profile_fields((int) $USER->id);
+            }
+        } catch (\Throwable $e) {
+            debugging('local_sentinel: service account repair failed: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
     }
 
     /**
@@ -521,6 +548,15 @@ abstract class base extends external_api {
                 'total_attempts' => new external_value(PARAM_INT, 'Lifetime count of push attempts.'),
                 'total_successes' => new external_value(PARAM_INT, 'Lifetime count of successful pushes.'),
             ], 'Self-monitoring counters for the push scheduled task.', VALUE_OPTIONAL),
+            'service_account' => new external_single_structure([
+                'found' => new external_value(PARAM_BOOL, 'Whether a setup-created service account holds a Sentinel token.'),
+                'username' => new external_value(PARAM_RAW, 'Its username (empty if not found).'),
+                'fully_set_up' => new external_value(PARAM_BOOL, 'False if Moodle would refuse its WS token (usernotfullysetup).'),
+                'blocking_fields' => new external_multiple_structure(
+                    new external_value(PARAM_RAW, 'Custom profile field shortname.'),
+                    'Required profile fields left empty that block WS access.'
+                ),
+            ], 'State of the WS service account the dashboard pulls as.', VALUE_OPTIONAL),
         ]);
     }
 

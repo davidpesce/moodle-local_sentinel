@@ -169,22 +169,17 @@ class helper {
 
         // 5b. Required custom profile fields would otherwise make the service
         // account "not fully set up", which Moodle rejects WS auth for
-        // (errorcode usernotfullysetup) — seen on sites with a required custom
-        // user profile field. The account never uses the site UI, so fill any
-        // required/visible/unlocked-but-empty field with a placeholder.
-        $filled = self::satisfy_required_profile_fields($user->id);
-        if ($filled) {
+        // (errorcode usernotfullysetup). The account never uses the site UI, so
+        // fill each blocking field with a value valid for its type. The same
+        // repair runs at request time (external\base) for fields added later.
+        $repair = self::satisfy_required_profile_fields((int) $user->id);
+        if ($repair['filled']) {
             $result->steps[] = 'Filled required profile field(s) for the service user: '
-                . implode(', ', $filled) . '.';
+                . implode(', ', $repair['filled']) . '.';
         }
-        // Safety net: surface the rare case a (third-party) field type's
-        // is_empty() validates the value rather than just checking presence, so
-        // the placeholder didn't satisfy it — better a visible warning than a
-        // silent usernotfullysetup at pull time.
-        require_once($CFG->dirroot . '/lib/moodlelib.php');
-        if (user_not_fully_set_up(\core_user::get_user($user->id))) {
-            $result->steps[] = 'WARNING: the service user is still not fully set up — a required '
-                . 'profile field likely needs a manual value (its field type rejects the placeholder).';
+        if ($repair['unfillable']) {
+            $result->steps[] = 'WARNING: the service user is still not fully set up. Set a value by hand on '
+                . "the '{$user->username}' user for: " . implode(', ', $repair['unfillable']) . '.';
         }
 
         // 6. Role assignment at system context.
@@ -373,45 +368,159 @@ class helper {
         return $user->auth === 'webservice' && strtolower((string) $user->email) === $expectedemail;
     }
 
-    /** Placeholder stored in required profile fields for the service account. */
+    /** Value stored in required free-text profile fields for the service account. */
     protected const PROFILE_PLACEHOLDER = 'n/a';
 
+    /** Core free-text field types, where any non-empty value is valid. */
+    protected const TEXT_FIELD_CLASSES = ['profile_field_text', 'profile_field_textarea', 'profile_field_social'];
+
     /**
-     * Give the service account a placeholder for any required custom profile
-     * field it has left empty, so `user_not_fully_set_up()` passes and WS auth
-     * isn't rejected with `usernotfullysetup`. Mirrors the condition in
-     * `profile_has_required_custom_fields_set()` (required, not locked, empty).
-     * The value is immaterial — the account never uses the site UI.
+     * True if the user record is a service account created by {@see run()}.
+     *
+     * @param \stdClass $user Needs 'username', 'auth' and 'email'.
+     * @return bool
+     */
+    public static function is_service_account(\stdClass $user): bool {
+        return isset($user->username, $user->auth, $user->email) && self::owns_user($user);
+    }
+
+    /**
+     * Shortnames of the custom profile fields that make the user "not fully set
+     * up" — the condition in core's `profile_has_required_custom_fields_set()`.
      *
      * @param int $userid
-     * @return string[] shortnames of the fields filled (empty if none needed)
+     * @return string[]
      */
-    protected static function satisfy_required_profile_fields(int $userid): array {
-        global $CFG, $DB;
-
+    public static function blocking_profile_fields(int $userid): array {
+        global $CFG;
         require_once($CFG->dirroot . '/user/profile/lib.php');
 
-        $filled = [];
+        $blocking = [];
         foreach (profile_get_user_fields_with_data($userid) as $field) {
-            if (!$field->is_required() || $field->is_locked() || !$field->is_empty()) {
+            if (self::is_blocking($field)) {
+                $blocking[] = $field->field->shortname;
+            }
+        }
+        return $blocking;
+    }
+
+    /**
+     * Fill every custom profile field that blocks WS access for the service
+     * account with a value valid for the field's type, so
+     * `user_not_fully_set_up()` passes and WS auth isn't rejected with
+     * `usernotfullysetup`.
+     *
+     * A field only blocks when it is required, unlocked, visible and empty —
+     * and an unset field already shows its default, so a blocking field has no
+     * usable default. Values by type:
+     *  - dropdown (core `menu`, or any type using its public `$options`
+     *    convention): the first real option;
+     *  - checkbox: the field's default (a saved row is what counts);
+     *  - date/time: now;
+     *  - core free-text types: {@see PROFILE_PLACEHOLDER};
+     *  - anything else: left alone and reported as unfillable — no guessing at
+     *    what a third-party type accepts.
+     *
+     * Also repairs the placeholder an earlier release wrote into dropdowns,
+     * which passed Moodle's emptiness check but isn't one of the options.
+     *
+     * @param int $userid
+     * @return array{filled: string[], unfillable: string[]} Field shortnames.
+     */
+    public static function satisfy_required_profile_fields(int $userid): array {
+        global $CFG, $DB;
+        require_once($CFG->dirroot . '/user/profile/lib.php');
+
+        $result = ['filled' => [], 'unfillable' => []];
+        foreach (profile_get_user_fields_with_data($userid) as $field) {
+            $blocking = self::is_blocking($field);
+            if (!$blocking && !self::has_invalid_placeholder($field)) {
                 continue;
             }
-            $fieldid = (int) $field->fieldid;
-            $existing = $DB->get_record('user_info_data', ['userid' => $userid, 'fieldid' => $fieldid]);
-            if ($existing) {
-                $existing->data = self::PROFILE_PLACEHOLDER;
-                $existing->dataformat = FORMAT_MOODLE;
-                $DB->update_record('user_info_data', $existing);
-            } else {
-                $DB->insert_record('user_info_data', (object) [
-                    'userid' => $userid,
-                    'fieldid' => $fieldid,
-                    'data' => self::PROFILE_PLACEHOLDER,
-                    'dataformat' => FORMAT_MOODLE,
-                ]);
+            $value = self::fill_value($field);
+            if ($value === null) {
+                if ($blocking) {
+                    $result['unfillable'][] = $field->field->shortname;
+                }
+                continue;
             }
-            $filled[] = $field->field->shortname;
+            $record = [
+                'data' => $value,
+                'dataformat' => get_class($field) === 'profile_field_textarea' ? FORMAT_HTML : FORMAT_MOODLE,
+            ];
+            $keys = ['userid' => $userid, 'fieldid' => (int) $field->fieldid];
+            if ($id = $DB->get_field('user_info_data', 'id', $keys)) {
+                $DB->update_record('user_info_data', (object) (['id' => $id] + $record));
+            } else {
+                $DB->insert_record('user_info_data', (object) ($keys + $record));
+            }
+            $result['filled'][] = $field->field->shortname;
         }
-        return $filled;
+        return $result;
+    }
+
+    /**
+     * Whether the field makes its user "not fully set up" (mirrors core).
+     *
+     * @param \profile_field_base $field
+     * @return bool
+     */
+    protected static function is_blocking(\profile_field_base $field): bool {
+        return $field->is_required() && !$field->is_locked() && $field->is_empty()
+            && !empty($field->get_field_config_for_external()['visible']);
+    }
+
+    /**
+     * A type-valid value for the field, or null if its type is not one we can
+     * fill safely.
+     *
+     * @param \profile_field_base $field
+     * @return string|null
+     */
+    protected static function fill_value(\profile_field_base $field): ?string {
+        $options = self::dropdown_options($field);
+        if ($options !== null) {
+            return $options ? $options[0] : null;
+        }
+        if ($field instanceof \profile_field_checkbox) {
+            return (string) (int) $field->field->defaultdata;
+        }
+        if ($field instanceof \profile_field_datetime) {
+            return (string) time();
+        }
+        if (in_array(get_class($field), self::TEXT_FIELD_CLASSES, true)) {
+            return self::PROFILE_PLACEHOLDER;
+        }
+        return null;
+    }
+
+    /**
+     * The stored values a dropdown-style field accepts, or null if the field is
+     * not a dropdown. Core's menu type — and custom select types that copy it —
+     * expose a public `$options` array keyed by the stored value, with '' as the
+     * "Choose..." entry on required fields.
+     *
+     * @param \profile_field_base $field
+     * @return string[]|null
+     */
+    protected static function dropdown_options(\profile_field_base $field): ?array {
+        if (!($field instanceof \profile_field_menu) && !(property_exists($field, 'options') && is_array($field->options))) {
+            return null;
+        }
+        $values = array_map('strval', array_keys((array) $field->options));
+        return array_values(array_filter($values, static fn(string $v): bool => $v !== ''));
+    }
+
+    /**
+     * True if the field holds the free-text placeholder an earlier release wrote
+     * into every field type, on a dropdown where it isn't a valid option.
+     *
+     * @param \profile_field_base $field
+     * @return bool
+     */
+    protected static function has_invalid_placeholder(\profile_field_base $field): bool {
+        $options = self::dropdown_options($field);
+        return $options !== null && (string) $field->data === self::PROFILE_PLACEHOLDER
+            && !in_array(self::PROFILE_PLACEHOLDER, $options, true);
     }
 }

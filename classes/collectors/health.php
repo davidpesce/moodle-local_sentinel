@@ -47,7 +47,44 @@ class health {
             'flags' => self::collect_footgun_flags(),
             'cache_stores' => self::collect_cache_stores(),
             'push_state' => \local_sentinel\push_state::get(),
+            'service_account' => self::collect_service_account(),
         ];
+    }
+
+    /**
+     * Whether the WS service account the dashboard pulls as can authenticate.
+     *
+     * A required custom profile field left empty makes Moodle refuse its token
+     * (usernotfullysetup). The WS layer repairs what it can on each request;
+     * this reports what it couldn't (a field type with no safe value), so the
+     * dashboard can name the field instead of a generic credential error.
+     *
+     * @return array
+     */
+    protected static function collect_service_account(): array {
+        global $CFG, $DB;
+        require_once($CFG->libdir . '/moodlelib.php');
+
+        $userids = $DB->get_fieldset_sql(
+            'SELECT DISTINCT t.userid
+               FROM {external_tokens} t
+               JOIN {external_services} s ON s.id = t.externalserviceid
+              WHERE s.shortname = ?',
+            ['local_sentinel']
+        );
+        foreach ($userids as $userid) {
+            $user = \core_user::get_user((int) $userid);
+            if (!$user || !empty($user->deleted) || !\local_sentinel\setup\helper::is_service_account($user)) {
+                continue;
+            }
+            return [
+                'found' => true,
+                'username' => $user->username,
+                'fully_set_up' => !user_not_fully_set_up($user, true),
+                'blocking_fields' => \local_sentinel\setup\helper::blocking_profile_fields((int) $user->id),
+            ];
+        }
+        return ['found' => false, 'username' => '', 'fully_set_up' => false, 'blocking_fields' => []];
     }
 
     /**
