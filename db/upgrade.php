@@ -55,5 +55,18 @@ function xmldb_local_sentinel_upgrade($oldversion): bool {
         upgrade_plugin_savepoint(true, 2026061200, 'local', 'sentinel');
     }
 
+    if ($oldversion < 2026111100) {
+        // Moodle 5.3+ refuses WS tokens whose user authenticates through a
+        // disabled auth plugin (wsaccessusernologin). Setup never enabled
+        // 'webservice', so every provisioned service account on 5.3 is locked
+        // out of pull. Enable the auth plugin for our service account, if any.
+        $user = \local_sentinel\setup\helper::provisioned_user();
+        if ($user) {
+            \local_sentinel\setup\helper::ensure_auth_enabled($user);
+        }
+
+        upgrade_plugin_savepoint(true, 2026111100, 'local', 'sentinel');
+    }
+
     return true;
 }

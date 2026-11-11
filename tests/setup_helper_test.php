@@ -113,6 +113,65 @@ final class setup_helper_test extends \advanced_testcase {
     }
 
     /**
+     * Setup enables the 'webservice' auth plugin the service account uses —
+     * Moodle 5.3+ refuses WS tokens for users of a disabled auth plugin
+     * (wsaccessusernologin). Re-running leaves it alone.
+     */
+    public function test_run_enables_webservice_auth(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        set_config('auth', 'email');
+        $this->assertFalse(is_enabled_auth('webservice'));
+
+        $result = setup\helper::run();
+
+        $this->assertTrue(is_enabled_auth('webservice'));
+        $this->assertTrue(is_enabled_auth('email'));
+        $this->assertTrue($result->enabledauthnow);
+        $this->assertContains("Enabled the 'webservice' authentication plugin.", $result->steps);
+
+        $again = setup\helper::run();
+        $this->assertFalse($again->enabledauthnow);
+        $this->assertContains("Authentication plugin 'webservice' already enabled.", $again->steps);
+    }
+
+    /**
+     * ensure_auth_enabled() never enables 'nologin' and is a no-op for 'manual'.
+     */
+    public function test_ensure_auth_enabled_skips_nologin_and_manual(): void {
+        global $CFG;
+        $this->resetAfterTest();
+        set_config('auth', '');
+
+        $this->assertFalse(setup\helper::ensure_auth_enabled((object) ['auth' => 'nologin']));
+        $this->assertFalse(setup\helper::ensure_auth_enabled((object) ['auth' => 'manual']));
+        $this->assertSame('', (string) $CFG->auth);
+    }
+
+    /**
+     * provisioned_user() only returns the account setup created.
+     */
+    public function test_provisioned_user(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $this->assertNull(setup\helper::provisioned_user());
+        $this->getDataGenerator()->create_user(['username' => 'sentinel']);
+        $this->assertNull(setup\helper::provisioned_user());
+    }
+
+    /**
+     * provisioned_user() finds the account setup created.
+     */
+    public function test_provisioned_user_finds_setup_account(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $result = setup\helper::run();
+        $this->assertSame($result->userid, (int) setup\helper::provisioned_user()->id);
+    }
+
+    /**
      * Teardown removes the role and service user that setup created.
      */
     public function test_teardown_removes_provisioned_role_and_user(): void {

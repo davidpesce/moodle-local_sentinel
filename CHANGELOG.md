@@ -13,6 +13,18 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.23.3] — schema_version 3 — 2026-11-11
+
+### Fixed
+- **Pull refused on Moodle 5.3 (`wsaccessusernologin`).** Moodle 5.3 rejects a
+  web service token when its user signs in through a *disabled* authentication
+  plugin, and reports it as `wsaccessusernologin`. Setup created the service
+  account with the `webservice` auth method but never enabled that plugin
+  (earlier Moodle versions didn't check), so on a stock 5.3 site every pull
+  from the dashboard was refused while push kept working. Setup now enables
+  the service account's auth plugin, and the upgrade enables it on sites
+  already provisioned by setup. No schema change.
+
 ## [2.23.2] — schema_version 3 — 2026-11-06
 
 ### Fixed

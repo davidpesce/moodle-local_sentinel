@@ -155,6 +155,18 @@ class helper {
         }
         $result->userid = (int) $user->id;
 
+        // 5a. The service user's auth plugin must be enabled. Moodle 5.3+
+        // (core_auth\validate_user) rejects WS tokens whose user authenticates
+        // through a disabled auth plugin, reported as errorcode
+        // wsaccessusernologin. 'webservice' is disabled on a stock install, and
+        // earlier Moodle versions never checked, so setup didn't enable it.
+        if (self::ensure_auth_enabled($user)) {
+            $result->enabledauthnow = true;
+            $result->steps[] = "Enabled the '{$user->auth}' authentication plugin.";
+        } else {
+            $result->steps[] = "Authentication plugin '{$user->auth}' already enabled.";
+        }
+
         // 5b. Required custom profile fields would otherwise make the service
         // account "not fully set up", which Moodle rejects WS auth for
         // (errorcode usernotfullysetup) — seen on sites with a required custom
@@ -316,6 +328,37 @@ class helper {
         }
 
         return $steps;
+    }
+
+    /**
+     * Enable the auth plugin the given user authenticates through, if it isn't.
+     *
+     * Moodle 5.3+ refuses WS tokens for users whose auth plugin is disabled
+     * (errorcode wsaccessusernologin). 'nologin' is never enabled; 'manual'
+     * is always on, so both are left alone.
+     *
+     * @param \stdClass $user Needs the 'auth' field.
+     * @return bool True if the plugin was enabled by this call.
+     */
+    public static function ensure_auth_enabled(\stdClass $user): bool {
+        $auth = (string) $user->auth;
+        if ($auth === '' || $auth === 'nologin' || is_enabled_auth($auth) || !exists_auth_plugin($auth)) {
+            return false;
+        }
+        \core\plugininfo\auth::enable_plugin($auth, 1);
+        return true;
+    }
+
+    /**
+     * True if a user created by {@see run()} exists under the given username.
+     *
+     * @param string $username
+     * @return \stdClass|null The user record, or null if absent or not ours.
+     */
+    public static function provisioned_user(string $username = 'sentinel'): ?\stdClass {
+        global $DB;
+        $user = $DB->get_record('user', ['username' => $username, 'deleted' => 0]);
+        return ($user && self::owns_user($user)) ? $user : null;
     }
 
     /**

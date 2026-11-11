@@ -41,6 +41,9 @@ class result {
     /** @var bool Whether the REST protocol was added to the enabled list this run. */
     public bool $enabledrestnow = false;
 
+    /** @var bool Whether the service user's auth plugin was enabled this run. */
+    public bool $enabledauthnow = false;
+
     /** @var bool Whether the Sentinel role was created this run. */
     public bool $createdrole = false;
 
