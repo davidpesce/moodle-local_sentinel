@@ -60,6 +60,16 @@ class reports {
      */
     public const CACHED_CHECKS = ['core_dbschema', 'core_environment'];
 
+    /**
+     * Cached checks whose result depends on the PHP that runs them.
+     *
+     * core_environment tests the running PHP (version, extensions, ini). Cron
+     * runs the CLI binary, which on many hosts is a different PHP from the web
+     * server's, so a result computed under cron must never be served to a web
+     * request (or the reverse). These are cached once per SAPI class.
+     */
+    public const SAPI_SENSITIVE_CHECKS = ['core_environment'];
+
     /** Plugin config key holding the cached check results (JSON). */
     public const CACHE_CONFIG_KEY = 'checkcache';
 
@@ -119,9 +129,9 @@ class reports {
             $entries = [];
             foreach ($checks as $check) {
                 if (in_array($check->get_ref(), self::CACHED_CHECKS, true)) {
-                    $entry = self::cached_check_result($check);
+                    $entry = static::cached_check_result($check);
                 } else {
-                    $entry = self::run_check($check);
+                    $entry = static::run_check($check);
                 }
                 $countsbystatus[$entry['status']] = ($countsbystatus[$entry['status']] ?? 0) + 1;
                 $entries[] = $entry;
@@ -176,7 +186,7 @@ class reports {
     protected static function cached_check_result(\core\check\check $check): array {
         $ref = $check->get_ref();
         $cache = self::read_cache();
-        $cached = $cache[$ref] ?? null;
+        $cached = $cache[static::cache_key($ref)] ?? null;
         if (
             is_array($cached)
             && ($cached['hash'] ?? null) === self::version_hash()
@@ -192,7 +202,7 @@ class reports {
             ];
         }
 
-        return self::run_and_store($check);
+        return static::run_and_store($check);
     }
 
     /**
@@ -202,11 +212,15 @@ class reports {
      * @return array Payload entry, same shape as run_check().
      */
     protected static function run_and_store(\core\check\check $check): array {
-        $entry = self::run_check($check);
+        $entry = static::run_check($check);
         // Re-read: another cached check may have been stored meanwhile (both are
         // computed within one snapshot on a cold cache).
         $cache = self::read_cache();
-        $cache[$entry['ref']] = [
+        if (in_array($entry['ref'], self::SAPI_SENSITIVE_CHECKS, true)) {
+            // Drop the pre-2.23.5 entry, which was shared by every SAPI.
+            unset($cache[$entry['ref']]);
+        }
+        $cache[static::cache_key($entry['ref'])] = [
             'status' => $entry['status'],
             'summary' => $entry['summary'],
             'checkedat' => time(),
@@ -238,7 +252,7 @@ class reports {
             );
             foreach ($checks as $check) {
                 if (in_array($check->get_ref(), self::CACHED_CHECKS, true)) {
-                    self::run_and_store($check);
+                    static::run_and_store($check);
                     $refreshed[] = $check->get_ref();
                 }
             }
@@ -264,6 +278,28 @@ class reports {
         $raw = get_config('local_sentinel', self::CACHE_CONFIG_KEY);
         $decoded = is_string($raw) && $raw !== '' ? json_decode($raw, true) : null;
         return is_array($decoded) ? $decoded : [];
+    }
+
+    /**
+     * Cache slot for a check: per SAPI class for SAPI-sensitive checks.
+     *
+     * @param string $ref Check ref.
+     * @return string
+     */
+    protected static function cache_key(string $ref): string {
+        if (in_array($ref, self::SAPI_SENSITIVE_CHECKS, true)) {
+            return $ref . '@' . static::sapi_class();
+        }
+        return $ref;
+    }
+
+    /**
+     * Which PHP is running: 'cli' (cron, CLI scripts) or 'web' (any server SAPI).
+     *
+     * @return string
+     */
+    protected static function sapi_class(): string {
+        return PHP_SAPI === 'cli' ? 'cli' : 'web';
     }
 
     /**

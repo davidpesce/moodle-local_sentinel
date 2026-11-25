@@ -13,6 +13,20 @@ The plugin uses two version dimensions consumers should be aware of:
 A central dashboard should branch its parser on `schema_version`, not on
 plugin release.
 
+## [2.23.5] — schema_version 3 — 2026-11-25
+
+### Fixed
+- **A pull reported cron's environment check result.** Since 2.23.0 the
+  expensive `core_environment` check is cached, and the daily `refresh_checks`
+  task fills that cache from cron. Cron runs the CLI PHP, which on many hosts is
+  a different PHP from the web server's (another version, other extensions). A
+  web service pull was then served cron's result: a site whose web PHP passes
+  Moodle's environment check could report an error because the CLI PHP lacks an
+  extension. `core_environment` is now cached separately for CLI and for web
+  requests, so each reports the PHP that actually ran it. The old shared cache
+  entry is ignored and dropped. `core_dbschema` doesn't depend on the PHP and
+  stays shared.
+
 ## [2.23.4] — schema_version 3 — 2026-11-12
 
 ### Fixed

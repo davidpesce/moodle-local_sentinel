@@ -75,8 +75,10 @@ final class report_check_cache_test extends \advanced_testcase {
 
         $cache = json_decode(get_config('local_sentinel', reports::CACHE_CONFIG_KEY), true);
         foreach (reports::CACHED_CHECKS as $ref) {
-            $this->assertArrayHasKey($ref, $cache);
-            $this->assertGreaterThan(time() - 60, $cache[$ref]['checkedat']);
+            // Tests run under CLI; SAPI-sensitive checks are cached per SAPI.
+            $key = in_array($ref, reports::SAPI_SENSITIVE_CHECKS, true) ? $ref . '@cli' : $ref;
+            $this->assertArrayHasKey($key, $cache);
+            $this->assertGreaterThan(time() - 60, $cache[$key]['checkedat']);
         }
 
         $before = $DB->perf_get_queries();
@@ -146,5 +148,85 @@ final class report_check_cache_test extends \advanced_testcase {
         $this->assertStringContainsString('core_dbschema', $output);
         $entry = $this->dbschema_entry(reports::collect());
         $this->assertNotSame('cached-marker', $entry['summary']);
+    }
+
+    /**
+     * Find the core_environment entry in a reports slice.
+     *
+     * @param array $slice
+     * @return array
+     */
+    private function environment_entry(array $slice): array {
+        foreach ($slice['system_status']['checks'] as $entry) {
+            if ($entry['ref'] === 'core_environment') {
+                return $entry;
+            }
+        }
+        $this->fail('core_environment missing from the status checks');
+    }
+
+    /**
+     * A reports collector that believes it runs under a web server SAPI.
+     *
+     * @return reports
+     */
+    private function web_reports(): reports {
+        return new class extends reports {
+            /**
+             * Pretend to be a web request.
+             *
+             * @return string
+             */
+            protected static function sapi_class(): string {
+                return 'web';
+            }
+        };
+    }
+
+    public function test_environment_check_is_cached_per_sapi(): void {
+        global $CFG;
+        $this->resetAfterTest();
+        reports::purge_cache();
+
+        // Cron (CLI) computes and caches its own reading.
+        reports::collect();
+        $cache = json_decode(get_config('local_sentinel', reports::CACHE_CONFIG_KEY), true);
+        $this->assertArrayHasKey('core_environment@cli', $cache);
+        $this->assertArrayNotHasKey('core_environment@web', $cache);
+        $this->assertArrayHasKey('core_dbschema', $cache);
+
+        // Mark the CLI reading so we can tell whether a web request is served it.
+        $cache['core_environment@cli']['summary'] = 'cli-marker';
+        set_config(reports::CACHE_CONFIG_KEY, json_encode($cache), 'local_sentinel');
+
+        $web = $this->web_reports();
+        $entry = $this->environment_entry($web::collect());
+        $this->assertNotSame('cli-marker', $entry['summary']);
+
+        $cache = json_decode(get_config('local_sentinel', reports::CACHE_CONFIG_KEY), true);
+        $this->assertArrayHasKey('core_environment@web', $cache);
+        $this->assertSame('cli-marker', $cache['core_environment@cli']['summary']);
+        $this->assertSame((string) $CFG->allversionshash, $cache['core_environment@web']['hash']);
+
+        // CLI is still served its own cached reading.
+        $this->assertSame('cli-marker', $this->environment_entry(reports::collect())['summary']);
+    }
+
+    public function test_legacy_shared_environment_entry_is_ignored_and_dropped(): void {
+        global $CFG;
+        $this->resetAfterTest();
+        set_config(reports::CACHE_CONFIG_KEY, json_encode(['core_environment' => [
+            'status' => 'error',
+            'summary' => 'legacy-marker',
+            'checkedat' => time(),
+            'hash' => (string) $CFG->allversionshash,
+        ]]), 'local_sentinel');
+
+        $web = $this->web_reports();
+        $entry = $this->environment_entry($web::collect());
+
+        $this->assertNotSame('legacy-marker', $entry['summary']);
+        $cache = json_decode(get_config('local_sentinel', reports::CACHE_CONFIG_KEY), true);
+        $this->assertArrayNotHasKey('core_environment', $cache);
     }
 }
